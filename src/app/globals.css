@@ -1,0 +1,126 @@
+@import 'tailwindcss';
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Tokens de marca Ruralanas.
+   Extraídos del prototipo `front-web/Ruralanas_home`. Esta es la única fuente
+   de color y tipografía del sitio: no se escriben colores literales en los
+   componentes.
+   ═══════════════════════════════════════════════════════════════════════════ */
+@theme {
+  /* Oscuros — el registro narrativo de la home */
+  --color-ink: #1b1714;
+  --color-carbon: #14110e;
+  --color-ember: #211a15;
+  --color-bark: #3a2c20;
+
+  /* Claros — el registro de la tienda, donde la lana se tiene que ver */
+  --color-linen: #e9e1d3;
+  --color-linen-soft: #efe9dd;
+  --color-linen-warm: #f3eee3;
+  --color-parchment: #f6f1e7;
+
+  /* Acentos */
+  --color-bronze: #b28a5e;
+  --color-merlot: #6d2433;
+  --color-merlot-bright: #b4132e;
+
+  /* Neutros de texto */
+  --color-stone: #8f867a;
+  --color-graphite: #5c554c;
+
+  --font-display: var(--font-fraunces), 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-sans: var(--font-instrument), 'Instrument Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-space-mono), 'Space Mono', ui-monospace, monospace;
+
+  /* Ritmo vertical compartido por todas las secciones */
+  --spacing-section: clamp(80px, 11vh, 140px);
+  --spacing-gutter: clamp(18px, 5vw, 80px);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-linen);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--color-merlot);
+    color: var(--color-linen);
+  }
+
+  /* Foco visible en todo el sitio: requisito AA del módulo 01. */
+  :focus-visible {
+    outline: 2px solid var(--color-bronze);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Etiqueta monoespaciada: el recurso que ordena toda la jerarquía del diseño. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+}
+
+/* ── Reveal on scroll ──────────────────────────────────────────────────────
+   El estado inicial se aplica por CSS para que no haya parpadeo en la
+   hidratación. Sin JavaScript el contenido se ve igual (ver <noscript> en el
+   layout): el diseño no puede depender de que el observer corra.            */
+[data-reveal] {
+  transition:
+    opacity 0.9s cubic-bezier(0.2, 0.7, 0.2, 1),
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-reveal='hidden'] {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+}
+
+@keyframes rl-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(9px);
+  }
+}
+
+.animate-float {
+  animation: rl-float 2.2s ease-in-out infinite;
+}
+
+/* Ocultar la barra de scroll horizontal en los carruseles de la tienda. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
