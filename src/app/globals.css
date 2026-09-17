@@ -103,20 +103,6 @@
   }
 }
 
-@keyframes rl-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(9px);
-  }
-}
-
-.animate-float {
-  animation: rl-float 2.2s ease-in-out infinite;
-}
-
 /* Ocultar la barra de scroll horizontal en los carruseles de la tienda. */
 .no-scrollbar {
   scrollbar-width: none;

@@ -27,7 +27,6 @@ export const es = {
     titleTop: 'Tejemos',
     titleBottom: 'calidad de vida',
     lead: 'Cada prenda nace de la lana merino más pura y de las manos de más de 150 mujeres rurales del Uruguay.',
-    scroll: 'Scroll para descubrir',
     videoCaption: 'El campo uruguayo · ovejas merino · lana cruda al viento',
   },
 

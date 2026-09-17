@@ -24,7 +24,6 @@ export const en: Dictionary = {
     titleTop: 'We weave',
     titleBottom: 'quality of life',
     lead: 'Every garment is born from the purest merino wool and from the hands of more than 150 rural women in Uruguay.',
-    scroll: 'Scroll to discover',
     videoCaption: 'The Uruguayan countryside · merino sheep · raw wool in the wind',
   },
 
