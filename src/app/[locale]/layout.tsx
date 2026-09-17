@@ -8,8 +8,11 @@ import { CartProvider } from '@/components/cart/cart-provider'
 import { commerce } from '@/lib/commerce'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
+import { about } from '@/lib/about'
 import { getDictionary } from '@/lib/i18n'
 import { isLocale, localeHtmlLang, locales, type Locale } from '@/lib/i18n/config'
+import { routes } from '@/lib/routes'
+import { site } from '@/lib/site'
 
 /* Autoalojadas por next/font: sin request bloqueante a Google y sin CLS al
    cambiar de fuente. El prototipo las cargaba por CDN. */
@@ -46,7 +49,7 @@ export async function generateMetadata({
   const dict = getDictionary(locale)
 
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://ruralanas.com'),
+    metadataBase: new URL(site.url),
     title: dict.meta.title,
     description: dict.meta.description,
     alternates: {
@@ -76,6 +79,10 @@ export default async function LocaleLayout({
   if (!isLocale(raw)) notFound()
   const locale = raw as Locale
   const dict = getDictionary(locale)
+  const aboutLinks = (await about.listSections(locale)).map((section) => ({
+    href: routes.about(locale, section.slug),
+    label: section.eyebrow,
+  }))
 
   return (
     <html
@@ -98,7 +105,7 @@ export default async function LocaleLayout({
         <CartProvider locale={locale} mode={commerce.kind}>
           <SiteHeader locale={locale} dict={dict} />
           <main id="contenido">{children}</main>
-          <SiteFooter locale={locale} dict={dict} />
+          <SiteFooter locale={locale} dict={dict} aboutLinks={aboutLinks} />
           <CartDrawer locale={locale} dict={dict} />
         </CartProvider>
       </body>

@@ -39,3 +39,16 @@ export function formatMonthYear(iso: string, locale: Locale): string {
     year: 'numeric',
   }).format(date)
 }
+
+/** Fecha completa de una nota: "7 de diciembre de 2019". */
+export function formatDate(iso: string, locale: Locale): string {
+  const date = new Date(iso)
+  if (Number.isNaN(date.getTime())) return ''
+  return new Intl.DateTimeFormat(LOCALE_TAGS[locale], {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+    // La fecha de publicación es la de Uruguay, no la del servidor.
+    timeZone: 'America/Montevideo',
+  }).format(date)
+}

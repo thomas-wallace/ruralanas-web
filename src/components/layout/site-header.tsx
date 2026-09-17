@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { useCart } from '@/components/cart/cart-provider'
 import type { Dictionary } from '@/lib/i18n'
 import { locales, plannedLocales, type Locale } from '@/lib/i18n/config'
+import { routes } from '@/lib/routes'
 
 function HeartIcon({ filled = false }: { filled?: boolean }) {
   return (
@@ -51,14 +52,14 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
     setMenuOpen(false)
   }, [pathname])
 
-  const isShop = pathname?.includes('/tienda')
-  const home = `/${locale}`
+  const home = routes.home(locale)
+  const isUnder = (href: string) => pathname === href || Boolean(pathname?.startsWith(`${href}/`))
 
   const links = [
-    { href: home, label: dict.nav.home, active: !isShop },
-    { href: `${home}#nosotros`, label: dict.nav.about, active: false },
-    { href: `${home}/tienda`, label: dict.nav.shop, active: Boolean(isShop) },
-    { href: `${home}#noticias`, label: dict.nav.news, active: false },
+    { href: home, label: dict.nav.home, active: pathname === home },
+    { href: routes.about(locale), label: dict.nav.about, active: isUnder(routes.about(locale)) },
+    { href: routes.shop(locale), label: dict.nav.shop, active: isUnder(routes.shop(locale)) },
+    { href: routes.blog(locale), label: dict.nav.news, active: isUnder(routes.blog(locale)) },
   ]
 
   /** Mismo camino, otro idioma. */
@@ -71,7 +72,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
 
   return (
     <nav className="fixed inset-x-0 top-0 z-[60] border-b border-stone/20 bg-carbon/72 backdrop-blur-lg">
-      <div className="flex items-center justify-between gap-6 px-[var(--spacing-gutter)] py-4">
+      <div className="flex h-[var(--spacing-header)] items-center justify-between gap-6 px-[var(--spacing-gutter)]">
         <Link
           href={home}
           className="shrink-0 font-display text-[clamp(16px,4.4vw,22px)] font-semibold tracking-[0.14em] text-linen"
@@ -84,6 +85,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
             <Link
               key={link.label}
               href={link.href}
+              aria-current={link.active ? 'page' : undefined}
               className={`transition-colors hover:text-linen ${
                 link.active ? 'text-linen' : 'text-stone'
               }`}

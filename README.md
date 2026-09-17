@@ -39,7 +39,11 @@ pisan. Parar el dev primero, o compilar desde otra copia del repo.
 
 | Ruta | Estado |
 |---|---|
-| `/[locale]` | Home narrativa completa: hero, Capítulo I con video scroll-scrub, seis pasos del proceso, Capítulo II, cifras, alcance mundial, sostenibilidad, por qué la lana, colección, cuidados, testimonios, reconocimientos, noticias y footer con formularios |
+| `/[locale]` | Home (v0.2): video de fondo, tres pilares, adelanto del catálogo con líneas Deco y Cuero, mapa, local de Punta del Este, galería de cuatro paneles y últimas noticias del blog |
+| `/[locale]/nosotros` | Portada institucional: cifras, quiénes somos, historia, filosofía y equipo |
+| `/[locale]/nosotros/[slug]` | Secciones de Nosotros: `materiales`, `procesos`, `sustentabilidad`, `artesanas` |
+| `/[locale]/noticias` | Blog: notas publicadas en WordPress, con filtro por tema y paginación |
+| `/[locale]/noticias/[slug]` | Nota completa, con el HTML de WordPress saneado y el diseño del sitio |
 | `/[locale]/tienda` | Listado con filtros por categoría y técnica, solo disponibles, orden, y dos vistas (grilla y lista) |
 | `/[locale]/tienda/[slug]` | Ficha con galería, caja de compra, trazabilidad de la artesana, ficha técnica, cuidados y relacionados |
 | `/[locale]/carrito` | Carrito propio, con cantidades limitadas por el stock real y totales del motor |
@@ -48,10 +52,36 @@ pisan. Parar el dev primero, o compilar desde otra copia del repo.
 | `/[locale]/admin/resenas` | Admin interno: cargar reseñas, protegido por contraseña |
 | `/api/cart` · `/api/checkout` · `/api/orders` | Capa BFF del motor transaccional |
 | `/api/admin/*` | Sesión del admin y alta de reseñas |
-| `/api/revalidate` | Endpoint para que el servicio de integración invalide el catálogo tras sincronizar stock |
+| `/api/revalidate` | Invalida caché por etiqueta: `catalog` tras sincronizar stock, `blog` tras publicar una nota |
+| `/sitemap.xml` · `/robots.txt` | Generados: productos, Nosotros y notas en los dos idiomas |
 
 Idiomas: ES y EN completos. FR y DE aparecen en el selector como planificados; agregarlos
 es escribir un diccionario más en `src/lib/i18n/dictionaries/`.
+
+## Dónde se cambia cada cosa
+
+Ningún texto, foto ni URL vive dentro de un componente. Cada cosa tiene un único lugar:
+
+| Qué | Dónde |
+|---|---|
+| Textos de interfaz y de la home (ES/EN) | `src/lib/i18n/dictionaries/` |
+| Fotos, video, producto destacado y cantidades de la home | `src/content/home.ts` |
+| Páginas de Nosotros: secciones, bloques y fotos | `src/content/about/{es,en}.ts` |
+| Notas del blog | Admin de WordPress → Entradas (no se toca código) |
+| Productos, precios y stock | Dolibarr → WooCommerce (no se toca código) |
+| URLs internas | `src/lib/routes.ts` |
+| Contacto, redes y URL pública | `src/lib/site.ts` y `NEXT_PUBLIC_SITE_URL` |
+
+**Agregar una sección a Nosotros** es sumar un objeto a `sections` en los dos archivos de
+`src/content/about`, con el mismo `slug`. La página, el menú de secciones, las tarjetas, el
+footer y el sitemap la toman solos. Los bloques disponibles están tipados en
+`src/lib/about/types.ts`; dos de ellos se ocultan mientras no tengan datos reales:
+`certifications` (lista vacía) y `artisans` (el catálogo todavía no trae artesanas).
+
+**Publicar una nota** se hace en WordPress, como siempre. Aparece en menos de una hora, o
+al instante con `POST /api/revalidate { "tags": ["blog"] }`. El HTML de Elementor se limpia
+en `src/lib/blog/sanitize.ts`: sólo pasan párrafos, títulos, listas, enlaces, imágenes y
+videos de YouTube. Las notas están en español; la versión en inglés lo avisa.
 
 ## Arquitectura de datos
 
@@ -164,6 +194,10 @@ servicio, que los deja en HubSpot. El navegador nunca ve un token.
   confirmarse el pago por webhook, no desde la página de gracias.
 - Analítica. Los siete eventos del módulo 05 no están instrumentados: falta decidir el
   destino antes de escribir el `track()`.
-- Página de artesanas, blog y regalo corporativo.
+- Regalo corporativo.
+- Certificados de la lana: el bloque existe en `/nosotros/materiales` y se muestra en cuanto
+  se carguen datos verificados.
+- Fichas individuales de artesanas: la sección `/nosotros/artesanas` ya las muestra si el
+  catálogo las trae, pero hoy no llegan (esperan al ERP y al consentimiento).
 - Datos reales. Los nombres y zonas de las artesanas en `mock-repository.ts` son de
   muestra y **requieren consentimiento** antes de publicarse.

@@ -30,156 +30,99 @@ export const es = {
     videoCaption: 'El campo uruguayo · ovejas merino · lana cruda al viento',
   },
 
-  origin: {
-    eyebrow: 'Capítulo I',
-    title: 'El origen',
-    lead: 'El campo uruguayo, la oveja merino, la fibra cruda. Todo empieza donde el pasto, el viento y el tiempo hacen su trabajo.',
-    videoCaption: 'El campo · la fibra cruda',
-    processTitle: 'El proceso · seis pasos sobre el hilo',
-    steps: [
+  pillars: {
+    ariaLabel: 'Materiales, producción y compromiso',
+    items: [
       {
-        title: 'Esquila',
-        text: 'Cada primavera la oveja entrega su vellón. Un recurso que vuelve a nacer, año tras año.',
+        title: '100% fibras naturales',
+        text: 'Trabajamos con lana merino uruguaya: natural, renovable y biodegradable, sin liberar microplásticos.',
+        cta: 'Descubrí nuestros materiales',
+        section: 'materiales',
       },
       {
-        title: 'Lavado y peinado',
-        text: 'La fibra se limpia y se ordena. Empieza a revelar su suavidad natural.',
+        title: 'Hecho a mano por artesanas rurales',
+        text: 'Más de 150 mujeres tejen en telar, dos agujas y crochet desde sus casas en el campo, en una cadena corta y cercana.',
+        cta: 'Conocé cómo producimos',
+        section: 'procesos',
       },
       {
-        title: 'Hilado y teñido',
-        text: 'El hilo toma cuerpo y color. Aquí nace el tono merlot de nuestra línea.',
-      },
-      {
-        title: 'Diseño',
-        text: 'Piezas atemporales, pensadas para durar. La mano de Virginia Montoro.',
-      },
-      {
-        title: 'Confección',
-        text: 'Más de 150 manos tejen, punto a punto, en las zonas rurales del país.',
-      },
-      {
-        title: 'Terminaciones',
-        text: 'El último detalle. La prenda lista para abrazar a quien la vista.',
+        title: 'Con menor impacto',
+        text: 'Producimos piezas únicas y series cortas al ritmo de las artesanas, sin sobreproducción ni stock que termine descartado.',
+        cta: 'Conocé nuestro compromiso',
+        section: 'sustentabilidad',
       },
     ],
   },
 
-  hands: {
-    eyebrow: 'Capítulo II',
-    title: 'Las manos',
-    lead: 'Una empresa social que teje el vínculo entre el campo y la ciudad. Detrás de cada prenda hay una mujer, una historia, una vida que mejora.',
-    shots: ['Artesana tejiendo', 'Detalle del tejido a mano', 'Manos y agujas'],
+  peek: {
+    eyebrow: 'Un adelanto del catálogo',
+    prev: 'Productos anteriores',
+    next: 'Más productos',
+    cta: 'Ver todos los productos',
+    lines: {
+      deco: { title: 'Deco', shot: 'Foto textura manta' },
+      leather: {
+        title: 'Cuero',
+        shot: 'Foto zoom logo cartera',
+        alt: 'Cartera de cuero marrón con el logo de Ruralanas grabado',
+      },
+    },
   },
 
-  stats: [
-    { value: 150, prefix: '+', suffix: '', label: 'Mujeres rurales' },
-    { value: 23, prefix: '', suffix: '', label: 'Años tejiendo' },
-    { value: 4, prefix: '', suffix: '', label: 'Continentes' },
-    { value: 100, prefix: '', suffix: '%', label: 'Lana merino' },
-  ],
+  store: {
+    eyebrow: 'Tienda Ruralanas',
+    title: 'Punta del Este',
+    text: 'Un espacio para ver y tocar la lana merino de cerca, conocer el trabajo de nuestras artesanas y elegir la pieza que te acompañe por años.',
+    cta: 'Visitanos digitalmente',
+    videoPending: 'Recorrido en video por el local',
+    photoAlt: 'Fachada del local de Ruralanas en Punta del Este, entre pinos',
+  },
+
+  gallery: {
+    ariaLabel: 'Materiales, compromiso, trazabilidad y artesanas',
+    items: [
+      {
+        title: 'Fibras naturales seleccionadas',
+        cta: 'Descubrí nuestros materiales',
+        section: 'materiales',
+        shot: 'Foto manos con lana cruda',
+        photoAlt: 'Manos sosteniendo un vellón de lana merino cruda',
+      },
+      {
+        title: 'Con raíz en la sustentabilidad',
+        cta: 'Conocé nuestro compromiso',
+        section: 'sustentabilidad',
+        shot: 'Foto prenda colgada',
+        photoAlt: 'Prenda de lana merino colgada en una percha',
+      },
+      {
+        title: 'Transparencia y trazabilidad',
+        cta: 'Conocé nuestra cadena',
+        section: 'procesos',
+        shot: 'Foto etiqueta de la prenda',
+        photoAlt: 'Etiqueta de Ruralanas sobre una prenda tejida',
+      },
+      {
+        title: 'Las personas detrás de cada tejido',
+        cta: 'Conocé a las artesanas',
+        section: 'artesanas',
+        shot: 'Foto detalle de etiqueta cosida',
+        photoAlt: 'Manos mostrando la etiqueta cosida de una prenda tejida a mano',
+      },
+    ],
+  },
 
   world: {
     titleTop: 'Nuestras prendas',
     titleBottom: 'abrazan al mundo',
-    mapCaption: 'Mapa estilizado · países alcanzados marcados con nodos merlot',
+    mapCaption: 'Mapa en relieve · países a los que llegan nuestras prendas',
     markets: ['Uruguay', 'Argentina', 'Brasil', 'Norteamérica', 'Europa'],
     replicas: ['Ecuador · réplica del modelo', 'Colombia · réplica del modelo'],
-  },
-
-  sustainability: {
-    eyebrow: 'Sostenibilidad',
-    title: 'Vestir sin dejar huella',
-    cards: [
-      {
-        figure: '3-4',
-        unit: 'Meses',
-        text: 'La lana es 100% biodegradable: se descompone en 3-4 meses devolviendo nutrientes al suelo. El poliéster persiste cientos de años.',
-      },
-      {
-        figure: '700K',
-        unit: 'Microfibras / carga',
-        text: 'Una sola carga de ropa sintética libera hasta 700.000 fibras de microplástico. La lana no aporta microplásticos.',
-      },
-      {
-        figure: '1/año',
-        unit: 'Vellón renovable',
-        text: 'Recurso natural y renovable: la oveja produce un nuevo vellón cada año.',
-      },
-    ],
-    seals: ['Uruguay Natural', 'Marca País', 'Sostenibilidad'],
-  },
-
-  wool: {
-    eyebrow: 'Por qué la lana',
-    title: 'Una fibra que sabe lo que hace',
-    features: [
-      {
-        title: 'Termorregulación',
-        text: 'Mantiene el cuerpo en su zona de confort: cálido en el frío, fresco en el calor.',
-      },
-      {
-        title: 'Absorbe humedad',
-        text: 'Hasta 35% de su peso sin sentirse mojada. Amortiguación 96% superior al poliéster (NC State University).',
-      },
-      {
-        title: 'Anti-olor natural',
-        text: 'Se lava con mucha menos frecuencia. La fibra se mantiene fresca por más tiempo.',
-      },
-      {
-        title: 'Suave, no pica',
-        text: 'Fibra merino ultrafina, pensada para el contacto directo con la piel.',
-      },
-    ],
-  },
-
-  collection: {
-    eyebrow: 'La colección',
-    title: 'Piezas para toda la vida',
-    cta: 'Ver toda la colección',
-  },
-
-  care: {
-    eyebrow: 'Cuidados',
-    title: 'Cómo cuidar tu lana',
-    lead: 'Bien cuidada, una prenda de lana merino te acompaña décadas. Tres gestos simples.',
-    items: [
-      { title: 'Lavado', text: 'A mano, con agua fría y jabón neutro. Sin retorcer.' },
-      { title: 'Secado', text: 'En horizontal, a la sombra. Nunca colgada ni al sol directo.' },
-      { title: 'Guardado', text: 'Doblada, en lugar seco y aireado. Con lavanda para cuidarla.' },
-    ],
-  },
-
-  testimonials: {
-    eyebrow: 'Clientes',
-    title: 'Lo que dicen quienes nos visten',
-    summary: '{average} de 5 · {count} reseñas',
-    verified: 'Compra verificada',
-    demoNotice: 'Datos de muestra · estas reseñas no son de clientes reales',
-    aboutPiece: 'Sobre',
-  },
-
-  awards: {
-    title: 'Reconocimientos y prensa',
-    items: ['Premio', 'Marca País', 'Prensa', 'Prensa', 'Feria'],
   },
 
   news: {
     title: 'Noticias',
     cta: 'Ver el blog',
-    items: [
-      {
-        tag: 'Sostenibilidad',
-        title: 'Por qué la lana merino es el futuro del slow fashion',
-      },
-      {
-        tag: 'Comunidad',
-        title: '150 mujeres, una red que crece en el campo uruguayo',
-      },
-      {
-        tag: 'Prensa',
-        title: 'Ruralanas, reconocida nuevamente como Marca País',
-      },
-    ],
   },
 
   footer: {
@@ -200,6 +143,14 @@ export const es = {
     instagram: '@ruralanas',
     payments: 'Medios de pago',
     tagline: 'Tejemos calidad de vida',
+    explore: 'Explorar',
+  },
+
+  notFound: {
+    title: 'Esta hebra no lleva a ningún lado',
+    text: 'La página que buscás no existe o cambió de dirección.',
+    home: 'Volver al inicio',
+    shop: 'Ir a la tienda',
   },
 
   shop: {
@@ -367,6 +318,32 @@ export const es = {
       'No se cobró nada. Este pedido existe sólo para revisar el flujo de compra antes de conectar la pasarela real.',
     missing: 'No encontramos ese pedido.',
     backToShop: 'Volver a la tienda',
+  },
+
+  about: {
+    breadcrumb: 'Nosotros',
+    sectionsNav: 'Secciones de Nosotros',
+    overview: 'Nosotros',
+    discover: 'Conocer más',
+    next: 'Seguí leyendo',
+  },
+
+  blog: {
+    title: 'Noticias',
+    lead: 'Novedades, reconocimientos y la historia detrás de cada tejido.',
+    all: 'Todas',
+    categories: 'Temas',
+    readMore: 'Leer nota',
+    readingTime: '{n} min de lectura',
+    empty: 'Todavía no hay notas en este tema.',
+    unavailable: 'Las noticias no están disponibles en este momento. Probá de nuevo en unos minutos.',
+    pagination: 'Páginas de noticias',
+    previous: 'Anteriores',
+    nextPage: 'Siguientes',
+    pageOf: 'Página {page} de {total}',
+    back: 'Volver a noticias',
+    more: 'Más noticias',
+    originalLanguage: '',
   },
 
   common: {

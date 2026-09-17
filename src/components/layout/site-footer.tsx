@@ -1,11 +1,19 @@
 'use client'
 
+import Link from 'next/link'
 import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
 
 import { sendContact, subscribeNewsletter, type FormState } from '@/lib/leads/actions'
 import type { Dictionary } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n/config'
+import { routes } from '@/lib/routes'
+import { site } from '@/lib/site'
+
+export interface FooterLink {
+  href: string
+  label: string
+}
 
 const INITIAL: FormState = { status: 'idle' }
 
@@ -40,7 +48,23 @@ function FormMessage({ state }: { state: FormState }) {
   )
 }
 
-export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function SiteFooter({
+  locale,
+  dict,
+  aboutLinks,
+}: {
+  locale: Locale
+  dict: Dictionary
+  /** Secciones de Nosotros: vienen del contenido, así una nueva aparece sola. */
+  aboutLinks: FooterLink[]
+}) {
+  const explore: FooterLink[] = [
+    { href: routes.shop(locale), label: dict.nav.shop },
+    { href: routes.about(locale), label: dict.nav.about },
+    ...aboutLinks,
+    { href: routes.blog(locale), label: dict.nav.news },
+  ]
+
   const [contactState, contactAction] = useActionState(sendContact, INITIAL)
   const [newsletterState, newsletterAction] = useActionState(subscribeNewsletter, INITIAL)
 
@@ -129,6 +153,21 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
             </div>
           </div>
 
+          <nav aria-label={dict.footer.explore}>
+            <div className="mb-3.5 font-mono text-[11px] tracking-[0.15em] text-linen">
+              {dict.footer.explore.toUpperCase()}
+            </div>
+            <ul className="m-0 grid list-none grid-cols-2 gap-x-6 gap-y-2 p-0 text-sm">
+              {explore.map((link) => (
+                <li key={link.href}>
+                  <Link href={link.href} className="text-stone transition-colors hover:text-linen">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <address className="text-sm not-italic leading-[1.9] text-stone">
             <div className="mb-2.5 font-mono text-[11px] tracking-[0.15em] text-linen">
               {dict.footer.contact.toUpperCase()}
@@ -137,12 +176,12 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
             <br />
             {dict.footer.city}
             <br />
-            <a href="https://wa.me/59842476969" className="text-bronze hover:text-linen">
+            <a href={site.whatsapp} className="text-bronze hover:text-linen">
               {dict.footer.phone}
             </a>
             <br />
             <a
-              href="https://instagram.com/ruralanas"
+              href={site.instagram}
               className="text-bronze hover:text-linen"
               rel="me noopener"
             >

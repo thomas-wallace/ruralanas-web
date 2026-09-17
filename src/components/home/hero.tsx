@@ -1,6 +1,7 @@
+import { homeContent } from '@/content/home'
 import type { Dictionary } from '@/lib/i18n'
 
-const HERO_VIDEO_ID = 'GjAvKP7R8dY'
+const HERO_VIDEO_ID = homeContent.hero.youtubeId
 
 // `loop` en YouTube sólo funciona si `playlist` repite el mismo id. `mute=1` es
 // obligatorio: los navegadores bloquean el autoplay con sonido.

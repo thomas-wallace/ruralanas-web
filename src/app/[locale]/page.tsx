@@ -1,43 +1,46 @@
-import { ChapterHands } from '@/components/home/chapter-hands'
-import { ChapterOrigin } from '@/components/home/chapter-origin'
-import { Collection } from '@/components/home/collection'
+import { CatalogPeek } from '@/components/home/catalog-peek'
 import { Hero } from '@/components/home/hero'
 import { News } from '@/components/home/news'
-import { StatsBand } from '@/components/home/stats-band'
-import { Sustainability } from '@/components/home/sustainability'
-import { Testimonials } from '@/components/home/testimonials'
-import { WhyWool } from '@/components/home/why-wool'
-import { WoolCare } from '@/components/home/wool-care'
+import { Pillars } from '@/components/home/pillars'
+import { PillarsGallery } from '@/components/home/pillars-gallery'
+import { StoreVisit } from '@/components/home/store-visit'
 import { WorldReach } from '@/components/home/world-reach'
-import { ThreadTrail } from '@/components/ui/thread-trail'
+import { homeContent } from '@/content/home'
+import { blog } from '@/lib/blog'
 import { catalog } from '@/lib/catalog'
-import { listReviews } from '@/lib/reviews'
 import { getDictionary, resolveLocale } from '@/lib/i18n'
+import { site } from '@/lib/site'
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const locale = resolveLocale((await params).locale)
   const dict = getDictionary(locale)
-  const [featured, reviewsPage] = await Promise.all([
-    catalog.listProducts({ locale, sort: 'featured', limit: 8 }),
-    // Reales, de WooCommerce. Si todavía no hay ninguna, cae a las curadas y,
-    // si tampoco hay, la sección se dibuja sin el bloque de testimonios.
-    listReviews({ locale, limit: 3 }),
+  const { catalogPeek } = homeContent
+
+  const [featured, decoProduct, latest] = await Promise.all([
+    catalog.listProducts({ locale, sort: 'featured', limit: catalogPeek.limit }),
+    catalog.getProduct(catalogPeek.lines.deco.productSlug, locale),
+    // Si WordPress no responde, la home se sirve igual, sin la sección de noticias.
+    blog.listPosts({ locale, perPage: homeContent.news.limit }).catch((error: unknown) => {
+      console.error('[home] no se pudieron leer las noticias', error)
+      return null
+    }),
   ])
 
   const organization = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Ruralanas',
+    name: site.name,
+    url: site.url,
     description: dict.meta.description,
-    foundingDate: '2003',
+    foundingDate: site.foundingDate,
     address: {
       '@type': 'PostalAddress',
       streetAddress: dict.footer.address,
-      addressLocality: 'Punta del Este',
-      addressCountry: 'UY',
+      addressLocality: site.locality,
+      addressCountry: site.country,
     },
-    telephone: '+59842476969',
-    sameAs: ['https://instagram.com/ruralanas'],
+    telephone: site.phone,
+    sameAs: [site.instagram],
   }
 
   return (
@@ -48,21 +51,30 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       />
 
       <Hero dict={dict} />
-
-      {/* Ancla de arranque del hilo de lana que recorre la home. */}
-      <div id="threadStart" />
-      <ThreadTrail startId="threadStart" endId="threadEnd" />
-
-      <ChapterOrigin dict={dict} />
-      <ChapterHands dict={dict} />
-      <StatsBand dict={dict} />
+      <Pillars dict={dict} locale={locale} />
+      <CatalogPeek
+        products={featured.slice(0, catalogPeek.limit)}
+        lines={[
+          {
+            key: 'deco',
+            ...dict.peek.lines.deco,
+            image: decoProduct?.images[0] ?? null,
+            category: catalogPeek.lines.deco.category,
+          },
+          {
+            key: 'leather',
+            ...dict.peek.lines.leather,
+            image: { src: catalogPeek.lines.leather.image, alt: dict.peek.lines.leather.alt },
+            category: catalogPeek.lines.leather.category,
+          },
+        ]}
+        locale={locale}
+        dict={dict}
+      />
       <WorldReach dict={dict} />
-      <Sustainability dict={dict} />
-      <WhyWool dict={dict} />
-      <Collection products={featured} locale={locale} dict={dict} />
-      <WoolCare dict={dict} />
-      <Testimonials page={reviewsPage} locale={locale} dict={dict} />
-      <News dict={dict} />
+      <StoreVisit dict={dict} />
+      <PillarsGallery dict={dict} locale={locale} />
+      <News posts={latest?.posts ?? []} locale={locale} dict={dict} />
     </div>
   )
 }

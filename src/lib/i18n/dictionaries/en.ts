@@ -27,156 +27,99 @@ export const en: Dictionary = {
     videoCaption: 'The Uruguayan countryside · merino sheep · raw wool in the wind',
   },
 
-  origin: {
-    eyebrow: 'Chapter I',
-    title: 'The origin',
-    lead: 'The Uruguayan countryside, the merino sheep, the raw fibre. It all begins where grass, wind and time do their work.',
-    videoCaption: 'The land · the raw fibre',
-    processTitle: 'The process · six steps along the yarn',
-    steps: [
+  pillars: {
+    ariaLabel: 'Materials, production and commitment',
+    items: [
       {
-        title: 'Shearing',
-        text: 'Every spring the sheep gives up its fleece. A resource that is born again, year after year.',
+        title: '100% natural fibers',
+        text: 'We work with Uruguayan merino wool: natural, renewable and biodegradable, with no microplastic release.',
+        cta: 'Discover our materials',
+        section: 'materiales',
       },
       {
-        title: 'Washing and combing',
-        text: 'The fibre is cleaned and aligned. It starts to reveal its natural softness.',
+        title: 'Handmade by rural artisans',
+        text: 'More than 150 women knit on looms, with two needles and crochet from their homes in the countryside, in a short, close-knit supply chain.',
+        cta: 'See how we make it',
+        section: 'procesos',
       },
       {
-        title: 'Spinning and dyeing',
-        text: 'The yarn takes on body and colour. This is where our merlot tone is born.',
-      },
-      {
-        title: 'Design',
-        text: 'Timeless pieces, made to last. The hand of Virginia Montoro.',
-      },
-      {
-        title: 'Making',
-        text: 'More than 150 hands knit, stitch by stitch, across the rural areas of the country.',
-      },
-      {
-        title: 'Finishing',
-        text: 'The last detail. The garment ready to wrap around whoever wears it.',
+        title: 'With a lower impact',
+        text: 'We make one-of-a-kind pieces and short runs at our artisans’ pace, with no overproduction and no stock left to waste.',
+        cta: 'Discover our commitment',
+        section: 'sustentabilidad',
       },
     ],
   },
 
-  hands: {
-    eyebrow: 'Chapter II',
-    title: 'The hands',
-    lead: 'A social enterprise weaving the link between countryside and city. Behind every garment there is a woman, a story, a life that improves.',
-    shots: ['Artisan knitting', 'Close-up of the hand knit', 'Hands and needles'],
+  peek: {
+    eyebrow: 'A sneak peek at the catalog',
+    prev: 'Previous products',
+    next: 'More products',
+    cta: 'See all products',
+    lines: {
+      deco: { title: 'Home', shot: 'Blanket texture photo' },
+      leather: {
+        title: 'Leather',
+        shot: 'Handbag logo close-up photo',
+        alt: 'Brown leather handbag with the Ruralanas logo embossed',
+      },
+    },
   },
 
-  stats: [
-    { value: 150, prefix: '+', suffix: '', label: 'Rural women' },
-    { value: 23, prefix: '', suffix: '', label: 'Years weaving' },
-    { value: 4, prefix: '', suffix: '', label: 'Continents' },
-    { value: 100, prefix: '', suffix: '%', label: 'Merino wool' },
-  ],
+  store: {
+    eyebrow: 'Ruralanas store',
+    title: 'Punta del Este',
+    text: 'A space to see and touch merino wool up close, get to know our artisans’ work and choose the piece that will stay with you for years.',
+    cta: 'Visit us digitally',
+    videoPending: 'Video tour of the store',
+    photoAlt: 'Front of the Ruralanas store in Punta del Este, among pine trees',
+  },
+
+  gallery: {
+    ariaLabel: 'Materials, commitment, traceability and artisans',
+    items: [
+      {
+        title: 'Carefully selected natural fibers',
+        cta: 'Discover our materials',
+        section: 'materiales',
+        shot: 'Photo of hands with raw wool',
+        photoAlt: 'Hands holding a raw merino wool fleece',
+      },
+      {
+        title: 'Rooted in sustainability',
+        cta: 'Discover our commitment',
+        section: 'sustentabilidad',
+        shot: 'Photo of a garment on a hanger',
+        photoAlt: 'Merino wool garment on a hanger',
+      },
+      {
+        title: 'Transparency and traceability',
+        cta: 'Discover our supply chain',
+        section: 'procesos',
+        shot: 'Photo of the garment tag',
+        photoAlt: 'Ruralanas tag on a knitted garment',
+      },
+      {
+        title: 'The people behind our knitwear',
+        cta: 'Meet our artisans',
+        section: 'artesanas',
+        shot: 'Photo of a sewn-in label close-up',
+        photoAlt: 'Hands showing the sewn-in label of a hand-knitted garment',
+      },
+    ],
+  },
 
   world: {
     titleTop: 'Our garments',
     titleBottom: 'wrap the world',
-    mapCaption: 'Stylised map · countries reached, marked with merlot nodes',
+    mapCaption: 'Relief map · countries our garments reach',
     markets: ['Uruguay', 'Argentina', 'Brazil', 'North America', 'Europe'],
     replicas: ['Ecuador · model replicated', 'Colombia · model replicated'],
-  },
-
-  sustainability: {
-    eyebrow: 'Sustainability',
-    title: 'Dress without leaving a trace',
-    cards: [
-      {
-        figure: '3-4',
-        unit: 'Months',
-        text: 'Wool is 100% biodegradable: it breaks down in 3-4 months, returning nutrients to the soil. Polyester lasts for centuries.',
-      },
-      {
-        figure: '700K',
-        unit: 'Microfibres / load',
-        text: 'A single load of synthetic clothing releases up to 700,000 microplastic fibres. Wool adds no microplastics.',
-      },
-      {
-        figure: '1/year',
-        unit: 'Renewable fleece',
-        text: 'A natural, renewable resource: the sheep grows a new fleece every year.',
-      },
-    ],
-    seals: ['Uruguay Natural', 'Country Brand', 'Sustainability'],
-  },
-
-  wool: {
-    eyebrow: 'Why wool',
-    title: 'A fibre that knows what it is doing',
-    features: [
-      {
-        title: 'Thermoregulation',
-        text: 'It keeps the body in its comfort zone: warm in the cold, cool in the heat.',
-      },
-      {
-        title: 'Absorbs moisture',
-        text: 'Up to 35% of its weight without feeling wet. 96% better cushioning than polyester (NC State University).',
-      },
-      {
-        title: 'Naturally odour-free',
-        text: 'It needs washing far less often. The fibre stays fresh for longer.',
-      },
-      {
-        title: 'Soft, never itchy',
-        text: 'Ultrafine merino fibre, made for direct contact with the skin.',
-      },
-    ],
-  },
-
-  collection: {
-    eyebrow: 'The collection',
-    title: 'Pieces for a lifetime',
-    cta: 'See the whole collection',
-  },
-
-  care: {
-    eyebrow: 'Care',
-    title: 'How to care for your wool',
-    lead: 'Cared for properly, a merino garment stays with you for decades. Three simple habits.',
-    items: [
-      { title: 'Washing', text: 'By hand, cold water and neutral soap. Never wring it.' },
-      { title: 'Drying', text: 'Flat, in the shade. Never hung or in direct sun.' },
-      { title: 'Storing', text: 'Folded, somewhere dry and airy. With lavender to protect it.' },
-    ],
-  },
-
-  testimonials: {
-    eyebrow: 'Customers',
-    title: 'What the people who wear us say',
-    summary: '{average} out of 5 · {count} reviews',
-    verified: 'Verified purchase',
-    demoNotice: 'Sample data · these reviews are not from real customers',
-    aboutPiece: 'On',
-  },
-
-  awards: {
-    title: 'Awards and press',
-    items: ['Award', 'Country Brand', 'Press', 'Press', 'Trade fair'],
   },
 
   news: {
     title: 'News',
     cta: 'Read the blog',
-    items: [
-      {
-        tag: 'Sustainability',
-        title: 'Why merino wool is the future of slow fashion',
-      },
-      {
-        tag: 'Community',
-        title: '150 women, a network growing across rural Uruguay',
-      },
-      {
-        tag: 'Press',
-        title: 'Ruralanas, once again recognised as Country Brand',
-      },
-    ],
   },
 
   footer: {
@@ -197,6 +140,14 @@ export const en: Dictionary = {
     instagram: '@ruralanas',
     payments: 'Payment methods',
     tagline: 'We weave quality of life',
+    explore: 'Explore',
+  },
+
+  notFound: {
+    title: 'This thread leads nowhere',
+    text: 'The page you are looking for does not exist or has moved.',
+    home: 'Back to home',
+    shop: 'Go to the shop',
   },
 
   shop: {
@@ -363,6 +314,32 @@ export const en: Dictionary = {
       'Nothing was charged. This order exists only to review the purchase flow before the real gateway is connected.',
     missing: 'We could not find that order.',
     backToShop: 'Back to the shop',
+  },
+
+  about: {
+    breadcrumb: 'About us',
+    sectionsNav: 'About us sections',
+    overview: 'About us',
+    discover: 'Learn more',
+    next: 'Keep reading',
+  },
+
+  blog: {
+    title: 'News',
+    lead: 'News, recognitions and the story behind every knit.',
+    all: 'All',
+    categories: 'Topics',
+    readMore: 'Read article',
+    readingTime: '{n} min read',
+    empty: 'There are no articles on this topic yet.',
+    unavailable: 'News is not available right now. Please try again in a few minutes.',
+    pagination: 'News pages',
+    previous: 'Newer',
+    nextPage: 'Older',
+    pageOf: 'Page {page} of {total}',
+    back: 'Back to news',
+    more: 'More news',
+    originalLanguage: 'This article is available in Spanish only.',
   },
 
   common: {

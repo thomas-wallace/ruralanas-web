@@ -1,8 +1,15 @@
-import { PendingShot } from '@/components/ui/pending-shot'
-import { Reveal } from '@/components/ui/reveal'
-import type { Dictionary } from '@/lib/i18n'
+import Link from 'next/link'
 
-export function News({ dict }: { dict: Dictionary }) {
+import { PostCard } from '@/components/blog/post-card'
+import { Reveal } from '@/components/ui/reveal'
+import type { PostSummary } from '@/lib/blog'
+import type { Dictionary, Locale } from '@/lib/i18n'
+import { routes } from '@/lib/routes'
+
+/** Últimas notas del blog. Sin notas (o sin WordPress), la sección no se muestra. */
+export function News({ posts, locale, dict }: { posts: PostSummary[]; locale: Locale; dict: Dictionary }) {
+  if (posts.length === 0) return null
+
   return (
     <section
       id="noticias"
@@ -12,22 +19,21 @@ export function News({ dict }: { dict: Dictionary }) {
         <h2 className="m-0 font-display text-[clamp(32px,5vw,64px)] font-medium leading-none">
           {dict.news.title}
         </h2>
-        <span className="border-b border-bronze pb-1 font-mono text-[13px] text-ink uppercase">
+        <Link
+          href={routes.blog(locale)}
+          className="border-b border-bronze pb-1 font-mono text-[13px] text-ink uppercase transition-colors hover:text-bronze"
+        >
           {dict.news.cta} →
-        </span>
+        </Link>
       </Reveal>
 
-      <div className="mx-auto mt-11 grid max-w-[1100px] gap-6 md:grid-cols-3">
-        {dict.news.items.map((item) => (
-          <Reveal as="article" key={item.title}>
-            <PendingShot label="Foto" ratio="16/10" tone="light" align="center" className="mb-4.5" />
-            <div className="mb-2 font-mono text-[11px] tracking-[0.1em] text-merlot uppercase">
-              {item.tag}
-            </div>
-            <h3 className="m-0 font-display text-[22px] font-medium leading-tight">{item.title}</h3>
+      <ul className="mx-auto mt-11 grid max-w-[1100px] list-none gap-x-6 gap-y-12 p-0 md:grid-cols-3">
+        {posts.map((post, index) => (
+          <Reveal as="li" key={post.slug} delayMs={index * 80}>
+            <PostCard post={post} locale={locale} />
           </Reveal>
         ))}
-      </div>
+      </ul>
     </section>
   )
 }

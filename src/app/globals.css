@@ -18,6 +18,7 @@
   --color-linen-soft: #efe9dd;
   --color-linen-warm: #f3eee3;
   --color-parchment: #f6f1e7;
+  --color-sand: #e4dbcf;
 
   /* Acentos */
   --color-bronze: #b28a5e;
@@ -35,6 +36,8 @@
   /* Ritmo vertical compartido por todas las secciones */
   --spacing-section: clamp(80px, 11vh, 140px);
   --spacing-gutter: clamp(18px, 5vw, 80px);
+  /* Alto del header fijo: lo usan las barras que se pegan debajo de él. */
+  --spacing-header: 64px;
 }
 
 @layer base {
@@ -109,4 +112,101 @@
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* ── Cuerpo de las notas del blog ───────────────────────────────────────────
+   El HTML llega de WordPress ya saneado (lib/blog/sanitize.ts): sin clases ni
+   estilos propios. Toda su tipografía se define acá.                        */
+.post-body {
+  color: var(--color-graphite);
+  font-size: 18px;
+  line-height: 1.8;
+}
+.post-body > * + * {
+  margin-top: 1.4em;
+}
+.post-body p,
+.post-body ul,
+.post-body ol,
+.post-body figure,
+.post-body blockquote {
+  margin-bottom: 0;
+}
+.post-body h2,
+.post-body h3,
+.post-body h4 {
+  margin-bottom: 0;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.2;
+}
+.post-body h2 {
+  margin-top: 2.2em;
+  font-size: clamp(26px, 3vw, 34px);
+}
+.post-body h3 {
+  margin-top: 1.9em;
+  font-size: clamp(22px, 2.4vw, 27px);
+}
+.post-body h4 {
+  margin-top: 1.6em;
+  font-size: 21px;
+}
+.post-body strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+.post-body a {
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--color-bronze);
+}
+.post-body a:hover {
+  color: var(--color-bark);
+}
+.post-body ul,
+.post-body ol {
+  padding-left: 1.3em;
+}
+.post-body ul {
+  list-style: disc;
+}
+.post-body ol {
+  list-style: decimal;
+}
+.post-body li + li {
+  margin-top: 0.5em;
+}
+.post-body li::marker {
+  color: var(--color-bronze);
+}
+.post-body blockquote {
+  border-left: 2px solid var(--color-bronze);
+  padding-left: 1.2em;
+  color: var(--color-ink);
+  font-family: var(--font-display);
+  font-size: 1.2em;
+  line-height: 1.5;
+}
+.post-body img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: 2em;
+}
+.post-body figcaption {
+  margin-top: 0.6em;
+  color: var(--color-stone);
+  font-size: 14px;
+}
+.post-body iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+}
+.post-body hr {
+  border: 0;
+  border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
 }
