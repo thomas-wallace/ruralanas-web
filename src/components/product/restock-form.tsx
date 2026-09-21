@@ -15,7 +15,7 @@ function Submit({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="cursor-pointer bg-ink px-5 py-3 font-mono text-[11px] tracking-[0.1em] text-linen uppercase transition-colors hover:bg-merlot disabled:opacity-60"
+      className="cursor-pointer bg-earth px-5 py-3 font-mono text-[11px] tracking-[0.1em] text-paper uppercase transition-colors hover:bg-olive disabled:opacity-60"
     >
       {pending ? '…' : label}
     </button>
@@ -40,7 +40,7 @@ export function RestockForm({
 
   if (state.status === 'ok') {
     return (
-      <p role="status" className="m-0 font-mono text-xs text-merlot">
+      <p role="status" className="m-0 font-mono text-xs text-olive">
         {state.message}
       </p>
     )
@@ -60,12 +60,12 @@ export function RestockForm({
           type="email"
           required
           placeholder={dict.product.notifyPlaceholder}
-          className="flex-1 border border-ink/30 bg-transparent px-4 py-3 text-sm text-ink placeholder:text-stone focus:border-merlot focus:outline-none"
+          className="flex-1 border border-earth/30 bg-transparent px-4 py-3 text-sm text-earth placeholder:text-slate focus:border-olive focus:outline-none"
         />
         <Submit label={dict.product.notifyCta} />
       </div>
       {state.status === 'error' && (
-        <p role="alert" className="m-0 font-mono text-xs text-merlot-bright">
+        <p role="alert" className="m-0 font-mono text-xs text-olive">
           {state.message}
         </p>
       )}

@@ -26,7 +26,7 @@ export function SortSelect({
         onChange={(event) =>
           router.push(shopHref(locale, params, { sort: event.target.value as SortOrder }))
         }
-        className="cursor-pointer rounded-sm border border-ink/30 bg-transparent px-3 py-2 font-mono text-[11px] tracking-[0.06em] text-ink uppercase"
+        className="cursor-pointer rounded-sm border border-earth/30 bg-transparent px-3 py-2 font-mono text-[11px] tracking-[0.06em] text-earth uppercase"
       >
         <option value="featured">{dict.shop.sortFeatured}</option>
         <option value="price-asc">{dict.shop.sortPriceAsc}</option>

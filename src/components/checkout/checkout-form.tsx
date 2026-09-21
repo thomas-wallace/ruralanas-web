@@ -204,10 +204,10 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
   if (ready && lines.length === 0) {
     return (
       <div className="py-20 text-center">
-        <p className="m-0 font-display text-[24px] text-ink">{dict.cart.empty}</p>
+        <p className="m-0 font-display text-[24px] text-earth">{dict.cart.empty}</p>
         <Link
           href={`/${locale}/tienda`}
-          className="mt-8 inline-block bg-ink px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-linen uppercase hover:bg-merlot"
+          className="mt-8 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
         >
           {dict.cart.continueShopping}
         </Link>
@@ -223,7 +223,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
     options: { type?: string; required?: boolean; onBlur?: () => void; className?: string } = {},
   ) => (
     <label className={`flex flex-col gap-1.5 ${options.className ?? ''}`}>
-      <span className="font-mono text-[11px] tracking-[0.1em] text-graphite uppercase">{label}</span>
+      <span className="font-mono text-[11px] tracking-[0.1em] text-slate uppercase">{label}</span>
       <input
         type={options.type ?? 'text'}
         name={name}
@@ -232,7 +232,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
         onBlur={options.onBlur}
         required={options.required}
         autoComplete={AUTOCOMPLETE[name]}
-        className="border border-ink/25 bg-linen-warm px-3 py-2.5 text-[15px] text-ink outline-none focus:border-merlot"
+        className="border border-earth/25 bg-paper px-3 py-2.5 text-[15px] text-earth outline-none focus:border-olive"
       />
     </label>
   )
@@ -241,7 +241,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
     <form onSubmit={placeOrder} className="grid gap-12 py-12 lg:grid-cols-[1fr_380px]">
       <div className="flex flex-col gap-10">
         <section className="flex flex-col gap-4">
-          <h2 className="eyebrow m-0 text-graphite">{dict.checkout.contact}</h2>
+          <h2 className="eyebrow m-0 text-slate">{dict.checkout.contact}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {field('email', dict.checkout.email, { type: 'email', required: true })}
             {field('phone', dict.checkout.phone, { type: 'tel' })}
@@ -249,14 +249,14 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="eyebrow m-0 text-graphite">{dict.checkout.address}</h2>
+          <h2 className="eyebrow m-0 text-slate">{dict.checkout.address}</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {field('firstName', dict.checkout.firstName, { required: true })}
             {field('lastName', dict.checkout.lastName, { required: true })}
           </div>
 
           <label className="flex flex-col gap-1.5">
-            <span className="font-mono text-[11px] tracking-[0.1em] text-graphite uppercase">
+            <span className="font-mono text-[11px] tracking-[0.1em] text-slate uppercase">
               {dict.checkout.country}
             </span>
             <select
@@ -265,7 +265,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
               onChange={set('country')}
               required
               autoComplete="country"
-              className="border border-ink/25 bg-linen-warm px-3 py-2.5 text-[15px] text-ink outline-none focus:border-merlot"
+              className="border border-earth/25 bg-paper px-3 py-2.5 text-[15px] text-earth outline-none focus:border-olive"
             >
               <option value="">{dict.checkout.chooseCountry}</option>
               {countries.priority.map((country) => (
@@ -293,19 +293,19 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="eyebrow m-0 text-graphite">{dict.checkout.shippingMethod}</h2>
+          <h2 className="eyebrow m-0 text-slate">{dict.checkout.shippingMethod}</h2>
 
           {!form.country ? (
-            <p className="m-0 text-[14px] text-graphite">{dict.checkout.shippingHint}</p>
+            <p className="m-0 text-[14px] text-slate">{dict.checkout.shippingHint}</p>
           ) : cart && cart.shippingRates.length === 0 ? (
-            <p className="m-0 text-[14px] text-merlot">{dict.checkout.noRates}</p>
+            <p className="m-0 text-[14px] text-olive">{dict.checkout.noRates}</p>
           ) : (
             <ul className="m-0 flex list-none flex-col gap-2 p-0">
               {cart?.shippingRates.map((rate) => (
                 <li key={rate.id}>
                   <label
                     className={`flex cursor-pointer items-center justify-between gap-4 border px-4 py-3 transition-colors ${
-                      rate.selected ? 'border-merlot bg-merlot/6' : 'border-ink/20 hover:border-ink/45'
+                      rate.selected ? 'border-olive bg-olive/6' : 'border-earth/20 hover:border-earth/45'
                     }`}
                   >
                     <span className="flex items-center gap-3">
@@ -315,16 +315,16 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
                         value={rate.id}
                         checked={rate.selected}
                         onChange={() => void selectRate(rate.id)}
-                        className="accent-merlot"
+                        className="accent-earth"
                       />
                       <span className="flex flex-col">
-                        <span className="text-[15px] text-ink">{rate.name}</span>
+                        <span className="text-[15px] text-earth">{rate.name}</span>
                         {rate.description && (
-                          <span className="text-[13px] text-graphite">{rate.description}</span>
+                          <span className="text-[13px] text-slate">{rate.description}</span>
                         )}
                       </span>
                     </span>
-                    <span className="font-mono text-[13px] text-ink">
+                    <span className="font-mono text-[13px] text-earth">
                       {rate.price > 0
                         ? formatPrice({ amount: rate.price, currency: rate.currency }, locale)
                         : dict.cart.free}
@@ -337,17 +337,17 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
         </section>
 
         <section className="flex flex-col gap-4">
-          <h2 className="eyebrow m-0 text-graphite">{dict.checkout.payment}</h2>
+          <h2 className="eyebrow m-0 text-slate">{dict.checkout.payment}</h2>
 
           {methods.length === 0 ? (
-            <p className="m-0 text-[14px] text-merlot">{dict.checkout.noMethods}</p>
+            <p className="m-0 text-[14px] text-olive">{dict.checkout.noMethods}</p>
           ) : (
             <ul className="m-0 flex list-none flex-col gap-2 p-0">
               {methods.map((option) => (
                 <li key={option.id}>
                   <label
                     className={`flex cursor-pointer flex-col gap-1 border px-4 py-3 transition-colors ${
-                      method === option.id ? 'border-merlot bg-merlot/6' : 'border-ink/20 hover:border-ink/45'
+                      method === option.id ? 'border-olive bg-olive/6' : 'border-earth/20 hover:border-earth/45'
                     }`}
                   >
                     <span className="flex items-center gap-3">
@@ -357,12 +357,12 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
                         value={option.id}
                         checked={method === option.id}
                         onChange={() => setMethod(option.id)}
-                        className="accent-merlot"
+                        className="accent-earth"
                       />
-                      <span className="text-[15px] text-ink">{option.title}</span>
+                      <span className="text-[15px] text-earth">{option.title}</span>
                     </span>
                     {option.description && (
-                      <span className="pl-7 text-[13px] leading-relaxed text-graphite">
+                      <span className="pl-7 text-[13px] leading-relaxed text-slate">
                         {option.description}
                       </span>
                     )}
@@ -373,7 +373,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
           )}
 
           <label className="flex flex-col gap-1.5">
-            <span className="font-mono text-[11px] tracking-[0.1em] text-graphite uppercase">
+            <span className="font-mono text-[11px] tracking-[0.1em] text-slate uppercase">
               {dict.checkout.note}
             </span>
             <textarea
@@ -382,23 +382,23 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
               onChange={set('note')}
               rows={3}
               placeholder={dict.checkout.notePlaceholder}
-              className="border border-ink/25 bg-linen-warm px-3 py-2.5 text-[15px] text-ink outline-none focus:border-merlot"
+              className="border border-earth/25 bg-paper px-3 py-2.5 text-[15px] text-earth outline-none focus:border-olive"
             />
           </label>
         </section>
       </div>
 
-      <aside className="h-fit border border-ink/15 bg-parchment p-6 lg:sticky lg:top-28">
-        <h2 className="eyebrow m-0 mb-4 text-graphite">{dict.checkout.summary}</h2>
+      <aside className="h-fit border border-earth/15 bg-paper p-6 lg:sticky lg:top-28">
+        <h2 className="eyebrow m-0 mb-4 text-slate">{dict.checkout.summary}</h2>
 
         <ul className="m-0 mb-4 flex list-none flex-col gap-3 p-0">
           {lines.map((line) => (
             <li key={line.key} className="flex items-baseline justify-between gap-3 text-[14px]">
-              <span className="text-ink">
+              <span className="text-earth">
                 {line.name}
-                {line.quantity > 1 && <span className="text-graphite"> × {line.quantity}</span>}
+                {line.quantity > 1 && <span className="text-slate"> × {line.quantity}</span>}
               </span>
-              <span className="shrink-0 font-mono text-[13px] text-ink">
+              <span className="shrink-0 font-mono text-[13px] text-earth">
                 {formatPrice(line.lineTotal, locale)}
               </span>
             </li>
@@ -415,7 +415,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
         )}
 
         {error && (
-          <p role="alert" className="mt-4 mb-0 border-l-2 border-merlot bg-merlot/8 px-3 py-2 text-[13px] text-merlot">
+          <p role="alert" className="mt-4 mb-0 border-l-2 border-olive bg-olive/8 px-3 py-2 text-[13px] text-olive">
             {error}
           </p>
         )}
@@ -423,14 +423,14 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
         <button
           type="submit"
           disabled={!canSubmit}
-          className="mt-5 w-full cursor-pointer bg-merlot py-4 font-mono text-[11px] tracking-[0.12em] text-linen uppercase transition-colors hover:bg-merlot-bright disabled:cursor-not-allowed disabled:opacity-45"
+          className="mt-5 w-full cursor-pointer bg-earth py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive disabled:cursor-not-allowed disabled:opacity-45"
         >
           {placing ? dict.checkout.placing : dict.checkout.placeOrder}
         </button>
 
         <Link
           href={`/${locale}/carrito`}
-          className="mt-3 block text-center font-mono text-[11px] tracking-[0.12em] text-graphite uppercase underline underline-offset-4 hover:text-ink"
+          className="mt-3 block text-center font-mono text-[11px] tracking-[0.12em] text-slate uppercase underline underline-offset-4 hover:text-earth"
         >
           {dict.checkout.backToCart}
         </Link>

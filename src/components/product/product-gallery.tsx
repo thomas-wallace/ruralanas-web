@@ -17,7 +17,7 @@ export function ProductGallery({ product, dict }: { product: Product; dict: Dict
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="relative aspect-4/5 overflow-hidden bg-parchment">
+      <div className="relative aspect-4/5 overflow-hidden bg-paper">
         {main ? (
           <Image
             src={main.src}
@@ -34,7 +34,7 @@ export function ProductGallery({ product, dict }: { product: Product; dict: Dict
 
       <div className="grid grid-cols-2 gap-3">
         {extra.map((image) => (
-          <div key={image.src} className="relative aspect-square overflow-hidden bg-parchment">
+          <div key={image.src} className="relative aspect-square overflow-hidden bg-paper">
             <Image
               src={image.src}
               alt={image.alt}

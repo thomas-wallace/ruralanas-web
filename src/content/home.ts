@@ -26,11 +26,6 @@ export const homeContent = {
     },
   },
 
-  worldReach: {
-    /** Mapa en relieve. `null` = espacio reservado con textura. */
-    mapImage: null as string | null,
-  },
-
   store: {
     /** Fotos del local, en el orden en que se pasan. `position` elige el recorte. */
     photos: [{ src: '/media/foto-local.jpg', position: 'center 62%' }],

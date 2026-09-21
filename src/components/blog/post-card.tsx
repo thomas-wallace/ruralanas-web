@@ -24,7 +24,7 @@ export function PostCard({
   return (
     <article className="group flex flex-col">
       <Link href={routes.post(locale, post.slug)} className="flex flex-col" lang={post.language}>
-        <div className="relative aspect-16/10 overflow-hidden bg-sand">
+        <div className="relative aspect-16/10 overflow-hidden bg-ash">
           {post.image && (
             <Image
               src={post.image.src}
@@ -37,12 +37,12 @@ export function PostCard({
           )}
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] tracking-[0.1em] uppercase">
-          {topic && <span className="text-bronze">{topic}</span>}
-          <time dateTime={post.publishedAt} className="text-stone">
+          {topic && <span className="text-olive">{topic}</span>}
+          <time dateTime={post.publishedAt} className="text-slate">
             {formatDate(post.publishedAt, locale)}
           </time>
         </div>
-        <Heading className="mb-0 mt-2 font-display text-[22px] font-medium leading-tight text-ink transition-colors group-hover:text-bark">
+        <Heading className="mb-0 mt-2 font-display text-[22px] font-medium leading-tight text-earth transition-colors group-hover:text-earth">
           {post.title}
         </Heading>
       </Link>

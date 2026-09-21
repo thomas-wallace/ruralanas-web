@@ -99,16 +99,16 @@ export default async function ProductPage({
   }
 
   const specRow = (label: string, value: string) => (
-    <div className="flex justify-between gap-6 border-b border-ink/10 py-3">
-      <dt className="font-mono text-[11px] tracking-[0.14em] text-stone uppercase">{label}</dt>
-      <dd className="m-0 text-right text-sm text-ink">{value}</dd>
+    <div className="flex justify-between gap-6 border-b border-earth/10 py-3">
+      <dt className="font-mono text-[11px] tracking-[0.14em] text-slate uppercase">{label}</dt>
+      <dd className="m-0 text-right text-sm text-earth">{value}</dd>
     </div>
   )
 
   const artisan = product.artisan
 
   return (
-    <div className="bg-linen-warm text-ink">
+    <div className="bg-paper text-earth">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -116,7 +116,7 @@ export default async function ProductPage({
 
       <div className="mx-auto max-w-[1240px] px-[var(--spacing-gutter)] pb-16 pt-[104px] lg:px-8">
         <nav aria-label="breadcrumb" className="mb-8 font-mono text-[11px] tracking-[0.14em] uppercase">
-          <Link href={`/${locale}/tienda`} className="text-stone hover:text-merlot">
+          <Link href={`/${locale}/tienda`} className="text-slate hover:text-olive">
             ← {dict.product.backToShop}
           </Link>
         </nav>
@@ -125,7 +125,7 @@ export default async function ProductPage({
           <ProductGallery product={product} dict={dict} />
 
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <div className="font-mono text-[10px] tracking-[0.2em] text-stone uppercase">
+            <div className="font-mono text-[10px] tracking-[0.2em] text-slate uppercase">
               {product.category.name}
               {product.technique ? ` · ${dict.techniques[product.technique]}` : ''}
             </div>
@@ -135,16 +135,16 @@ export default async function ProductPage({
             </h1>
 
             <div className="mt-4 flex flex-wrap items-center gap-3">
-              <span className="font-mono text-2xl text-merlot">
+              <span className="font-mono text-2xl text-olive">
                 {formatPrice(product.price, locale)}
               </span>
               <AvailabilityBadge availability={product.availability} dict={dict} />
             </div>
 
-            <p className="mt-5 text-[15px] leading-relaxed text-graphite">{product.summary}</p>
+            <p className="mt-5 text-[15px] leading-relaxed text-slate">{product.summary}</p>
 
             {note && (
-              <p className="mt-4 border-l-2 border-merlot bg-merlot/5 py-3 pl-4 text-sm leading-relaxed text-ink">
+              <p className="mt-4 border-l-2 border-olive bg-olive/5 py-3 pl-4 text-sm leading-relaxed text-earth">
                 {note}
               </p>
             )}
@@ -173,45 +173,45 @@ export default async function ProductPage({
       {/* Sin datos de artesana el bloque no se dibuja. No se inventa un nombre:
           la trazabilidad es un argumento de venta sólo si es cierta. */}
       {artisan && (
-        <section className="bg-ink px-[var(--spacing-gutter)] py-[clamp(60px,8vh,110px)] text-linen">
+        <section className="bg-shell px-[var(--spacing-gutter)] py-[clamp(60px,8vh,110px)] text-earth">
           <Reveal className="mx-auto max-w-[900px]">
-            <div className="mb-4 font-mono text-[11px] tracking-[0.2em] text-bronze uppercase">
+            <div className="mb-4 font-mono text-[11px] tracking-[0.2em] text-olive uppercase">
               {dict.product.artisanTitle}
             </div>
 
             <h2 className="m-0 font-display text-[clamp(28px,4vw,52px)] font-medium leading-tight">
               {dict.product.madeBy} {artisan.name}
-              <span className="text-stone">
+              <span className="text-slate">
                 {' '}
                 {dict.product.inRegion} {artisan.region}
               </span>
             </h2>
 
             {artisan.bio && (
-              <p className="mt-5 max-w-[620px] text-[15px] leading-relaxed text-linen/75">
+              <p className="mt-5 max-w-[620px] text-[15px] leading-relaxed text-slate">
                 {artisan.bio}
               </p>
             )}
 
-            <div className="mt-8 flex flex-wrap gap-x-10 gap-y-4 border-t border-stone/20 pt-6 font-mono text-[11px] tracking-[0.14em] text-stone uppercase">
+            <div className="mt-8 flex flex-wrap gap-x-10 gap-y-4 border-t border-slate/20 pt-6 font-mono text-[11px] tracking-[0.14em] text-slate uppercase">
               {artisan.hoursForPiece ? (
                 <span>
-                  <span className="text-bronze">{artisan.hoursForPiece}</span>{' '}
+                  <span className="text-olive">{artisan.hoursForPiece}</span>{' '}
                   {dict.product.hours}
                 </span>
               ) : null}
               {product.technique && (
                 <span>
                   {dict.product.technique}:{' '}
-                  <span className="text-bronze">{dict.techniques[product.technique]}</span>
+                  <span className="text-olive">{dict.techniques[product.technique]}</span>
                 </span>
               )}
               <span>
-                {dict.product.composition}: <span className="text-bronze">{product.composition}</span>
+                {dict.product.composition}: <span className="text-olive">{product.composition}</span>
               </span>
             </div>
 
-            <p className="mt-6 max-w-[560px] text-xs leading-relaxed text-stone">
+            <p className="mt-6 max-w-[560px] text-xs leading-relaxed text-slate">
               {dict.product.artisanNote}
             </p>
           </Reveal>
@@ -223,15 +223,15 @@ export default async function ProductPage({
         <div className="mx-auto grid max-w-[1000px] gap-12 md:grid-cols-2">
           <Reveal>
             <h2 className="m-0 font-display text-3xl font-medium">{dict.product.processTitle}</h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-graphite">{product.story}</p>
+            <p className="mt-4 text-[15px] leading-relaxed text-slate">{product.story}</p>
           </Reveal>
 
           <Reveal>
             <h2 className="m-0 font-display text-3xl font-medium">{dict.product.care}</h2>
             <ul className="mt-4 list-none space-y-2.5 p-0">
               {product.care.map((item) => (
-                <li key={item} className="flex gap-3 text-[15px] leading-relaxed text-graphite">
-                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-merlot" />
+                <li key={item} className="flex gap-3 text-[15px] leading-relaxed text-slate">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-earth" />
                   {item}
                 </li>
               ))}
@@ -241,12 +241,12 @@ export default async function ProductPage({
       </section>
 
       {related.length > 0 && (
-        <section className="border-t border-ink/10 px-[var(--spacing-gutter)] py-[clamp(60px,8vh,110px)] lg:px-8">
+        <section className="border-t border-earth/10 px-[var(--spacing-gutter)] py-[clamp(60px,8vh,110px)] lg:px-8">
           <div className="mx-auto max-w-[1240px]">
             <h2 className="m-0 mb-9 font-display text-[clamp(26px,3.5vw,40px)] font-medium">
               {dict.product.relatedTitle}
             </h2>
-            <div className="grid grid-cols-2 gap-x-6 gap-y-9 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-9 lg:grid-cols-4">
               {related.map((item) => (
                 <ProductCard
                   key={item.id}

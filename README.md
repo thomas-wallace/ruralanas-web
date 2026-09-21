@@ -66,9 +66,12 @@ Ningún texto, foto ni URL vive dentro de un componente. Cada cosa tiene un úni
 |---|---|
 | Textos de interfaz y de la home (ES/EN) | `src/lib/i18n/dictionaries/` |
 | Fotos, video, producto destacado y cantidades de la home | `src/content/home.ts` |
+| Países del mapa de alcance | `src/content/world-reach.ts` |
 | Páginas de Nosotros: secciones, bloques y fotos | `src/content/about/{es,en}.ts` |
 | Notas del blog | Admin de WordPress → Entradas (no se toca código) |
 | Productos, precios y stock | Dolibarr → WooCommerce (no se toca código) |
+| Colores de marca | `src/app/globals.css`, bloque `@theme` |
+| Logo | `public/logo.png` (maestro) + `node scripts/generar-logo.mjs` |
 | URLs internas | `src/lib/routes.ts` |
 | Contacto, redes y URL pública | `src/lib/site.ts` y `NEXT_PUBLIC_SITE_URL` |
 
@@ -77,6 +80,111 @@ Ningún texto, foto ni URL vive dentro de un componente. Cada cosa tiene un úni
 footer y el sitemap la toman solos. Los bloques disponibles están tipados en
 `src/lib/about/types.ts`; dos de ellos se ocultan mientras no tengan datos reales:
 `certifications` (lista vacía) y `artisans` (el catálogo todavía no trae artesanas).
+
+### El logo
+
+El maestro es `public/logo.png`, tal como lo entregó el estudio. **No se usa directamente**:
+viene con el trazo en gris `#373435` sobre un fondo **blanco opaco**, y sobre `paper` o
+`ash` eso se vería como un recuadro blanco alrededor del logo.
+
+`node scripts/generar-logo.mjs` deriva de él las tres piezas que sí se usan, y hay que
+volver a correrlo sólo si cambia el maestro:
+
+| Archivo | Para qué |
+|---|---|
+| `public/logo-ruralanas.png` | Huso + palabra. Encabezado y pie |
+| `public/isotipo.png` | Sólo el huso, para espacios angostos |
+| `src/app/icon.png` | Favicon. Next lo toma de esa ruta, no hay que declararlo |
+
+Lo que hace el script es volver transparente el blanco y recortar los márgenes. El alfa sale
+de la luminancia de cada píxel, no de un umbral, porque el logo es casi todo curva fina y un
+recorte duro le comería el antialiasing. **El color no se toca**: el logo es blanco y negro
+y así se usa. Es el único gris del sitio que no sale de la paleta, y es deliberado.
+
+Un detalle de tamaño que no es obvio: el huso es más alto que las letras, así que la palabra
+ocupa sólo el **41%** del alto del archivo. Por eso el logo va a 36px en el encabezado —no a
+28— para tener la misma presencia que el texto que reemplazó.
+
+### La marca de agua
+
+El huso aparece de fondo, muy tenue, en **tres lugares de Nosotros y en ninguno más**
+(`src/components/ui/watermark.tsx`):
+
+| Dónde | Por qué ahí |
+|---|---|
+| Encabezado de las 5 secciones | Hay vacío real entre las migas y el título, y es un lugar estructural: una vez por página |
+| La cita de *Las artesanas* | El único punto donde significa algo: el símbolo del oficio detrás de la voz de quien teje |
+| La línea de tiempo de la portada | Un recorrido vertical largo, con el margen derecho vacío |
+
+Tres reglas que conviene no romper al agregar un uso nuevo:
+
+- **Poca cantidad.** Una marca de agua en cada bloque deja de ser un gesto y pasa a ser papel
+  tapiz. La tentación es el bloque `cta`, que se repite en las cuatro secciones: ahí
+  justamente no va.
+- **Grande o nada.** El huso es casi todo trazo fino. Medido: por debajo de unos 250px de
+  alto se deshace y se lee como suciedad. Donde el bloque es más bajo que el huso, conviene
+  agrandarlo y dejar que `overflow-hidden` corte las dos puntas: queda sólo la espiral, que
+  funciona como textura. Con las puntas a la vista parecen un rasguño sobre el texto.
+- **Nunca sobre una foto**, y nunca sobre una grilla densa. Sólo sobre fondo liso con aire.
+
+Opacidad: **7% sobre `paper`, 9% sobre `ash`**, que es más oscuro y deja menos margen. Medido
+también: al 4% desaparece y al 14% ya pelea con el texto. Va en el gris del logo, sin teñir.
+
+### La paleta
+
+Siete colores y ninguno más. Están en el bloque `@theme` de `src/app/globals.css` y no se
+escribe un hex en ningún otro lado:
+
+| Token | Hex | Para qué |
+|---|---|---|
+| `shell` | `#e4dcce` | Secciones narrativas, cabeceras de página y el pie |
+| `paper` | `#f0eeea` | Fondo del cuerpo y de la tienda |
+| `ash` | `#ccc7c0` | Bordes y huecos de foto. **No como fondo de texto**, ver abajo |
+| `earth` | `#5a3f26` | Títulos, texto principal, botón primario y velo sobre las fotos |
+| `olive` | `#806f38` | El dato: precio, volanta, disponibilidad, destacados |
+| `caramel` | `#a58057` | Detalles que no cargan información. **Nunca texto ni foco**, ver abajo |
+| `slate` | `#656058` | Texto secundario |
+
+El sitio **no tiene bloques oscuros**. La única excepción son los lugares donde el texto va
+encima de una foto o del video del hero: ahí el velo sigue siendo oscuro —`earth`, no
+negro— porque sin él el texto no se lee. Es una restricción de contraste, no una decisión
+de estilo.
+
+Dos reglas que salieron de medir y conviene no volver a romper:
+
+- **`caramel` no se usa como color de texto sobre los tres fondos claros.** Da entre 2,1:1
+  y 2,6:1 cuando AA pide 4,5:1. Tampoco sirve como fondo de botón —`earth` encima da
+  2,68:1— ni como anillo de foco, que necesita 3:1. Funcionaba cuando el sitio era oscuro.
+  Sobre foto o video sí se lee, y ahí se sigue usando.
+- **`slate` va entero, sin opacidad.** `text-slate/75` daba 3,5:1 sobre papel; entero da
+  5,5:1. La paleta tiene un solo gris, así que hay un solo escalón de texto secundario.
+- **`ash` no lleva texto encima.** Es el más oscuro de los tres fondos y no deja margen:
+  el gris cae a 3,7:1 y el oliva a 2,9:1. Sirve para bordes y para el hueco que ocupa una
+  foto mientras carga. Donde había texto sobre `ash` —el pie del sitio— el fondo pasó a
+  `shell`, que da 7,1:1 con `earth` en lugar de 5,8:1.
+
+Contrastes de `earth` sobre cada fondo, por si hace falta decidir rápido: **8,3:1** sobre
+`paper`, **7,1:1** sobre `shell`, **5,8:1** sobre `ash`. Los del gris: 5,4 / 4,6 / 3,7.
+
+Ojo con un falso amigo: `merlot` sigue existiendo en `src/lib/catalog/colors.ts`, pero ahí
+es el color de una lana teñida —un dato de producto—, no un color de interfaz.
+
+**Marcar un país en el mapa** es agregar su código ISO alfa-2 a `shipped` en
+`src/content/world-reach.ts`, o sumarlo a `stores` si además hay local. Nada más: el mapa,
+la leyenda y el conteo salen de ahí. El dato es **provisional** hasta que lo confirme el
+negocio; el mapa es una afirmación comercial, no una lista de deseos.
+
+El mapa en sí —`src/lib/world/geometry.ts`— es un archivo generado, no se edita a mano. Lo
+produce `node scripts/generar-mapa-mundial.mjs` desde Natural Earth 110m, y sólo hay que
+volver a correrlo si se cambia la proyección o el nivel de detalle. Se resolvió así, y no
+con una librería de mapas, por tres razones: las fronteras son dato estático, el storefront
+no tiene ninguna dependencia de UI, y el SVG lo arma el servidor, de modo que los 118 KB de
+siluetas viajan en el HTML y **nunca** en el bundle de JavaScript. Lo único que se hidrata
+es la etiqueta que sigue al mouse.
+
+A esa resolución no existen los micro-estados (Singapur, Malta, Andorra). Si se envía a uno,
+va en `shippedNodes` con sus coordenadas y se dibuja como nodo; si alguien lo olvida, la
+consola de desarrollo lo avisa.
 
 **Publicar una nota** se hace en WordPress, como siempre. Aparece en menos de una hora, o
 al instante con `POST /api/revalidate { "tags": ["blog"] }`. El HTML de Elementor se limpia

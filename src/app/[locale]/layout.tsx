@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Fraunces, Instrument_Sans, Space_Mono } from 'next/font/google'
+import { Cormorant_Garamond, Instrument_Sans, Space_Mono } from 'next/font/google'
 import { notFound } from 'next/navigation'
 
 import '../globals.css'
@@ -16,9 +16,14 @@ import { site } from '@/lib/site'
 
 /* Autoalojadas por next/font: sin request bloqueante a Google y sin CLS al
    cambiar de fuente. El prototipo las cargaba por CDN. */
-const fraunces = Fraunces({
+/* La serif de los títulos sigue al logo: contraste alto, remates finos y
+   proporciones anchas. Cormorant tiene la altura de x baja, así que en cuerpos
+   chicos se compensa con un peso mayor — ver `--font-display` en globals.css. */
+const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
-  variable: '--font-fraunces',
+  // Los únicos dos que usa el sitio: 500 en casi todos los títulos, 400 suelto.
+  weight: ['400', '500'],
+  variable: '--font-cormorant',
   display: 'swap',
 })
 
@@ -87,7 +92,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={localeHtmlLang[locale]}
-      className={`${fraunces.variable} ${instrument.variable} ${spaceMono.variable}`}
+      className={`${cormorant.variable} ${instrument.variable} ${spaceMono.variable}`}
     >
       <body>
         {/* Sin JavaScript los bloques con reveal deben verse igual. */}
@@ -97,7 +102,7 @@ export default async function LocaleLayout({
 
         <a
           href="#contenido"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-linen focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:text-ink"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-paper focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:text-earth"
         >
           {dict.nav.skipToContent}
         </a>

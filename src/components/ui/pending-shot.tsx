@@ -9,19 +9,19 @@ const TONES = {
   dark: {
     border: 'rgba(143,134,122,.4)',
     stripe: 'repeating-linear-gradient(125deg,#211b16 0 22px,#1a1611 22px 44px)',
-    text: 'text-stone',
+    text: 'text-slate',
   },
   light: {
     border: '#8F867A',
     stripe:
       'repeating-linear-gradient(135deg,rgba(143,134,122,.14) 0 30px,rgba(143,134,122,.05) 30px 60px)',
-    text: 'text-stone',
+    text: 'text-slate',
   },
   warm: {
     border: 'rgba(20,17,14,.4)',
     stripe:
       'repeating-linear-gradient(120deg,rgba(20,17,14,.12) 0 26px,rgba(20,17,14,.04) 26px 52px)',
-    text: 'text-ink',
+    text: 'text-earth',
   },
 } as const
 

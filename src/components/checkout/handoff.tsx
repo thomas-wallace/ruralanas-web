@@ -76,10 +76,10 @@ export function CheckoutHandoff({ locale, dict }: { locale: Locale; dict: Dictio
   if (ready && lines.length === 0) {
     return (
       <div className="py-20 text-center">
-        <p className="m-0 font-display text-[24px] text-ink">{dict.cart.empty}</p>
+        <p className="m-0 font-display text-[24px] text-earth">{dict.cart.empty}</p>
         <Link
           href={`/${locale}/tienda`}
-          className="mt-8 inline-block bg-ink px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-linen uppercase hover:bg-merlot"
+          className="mt-8 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
         >
           {dict.cart.continueShopping}
         </Link>
@@ -89,32 +89,32 @@ export function CheckoutHandoff({ locale, dict }: { locale: Locale; dict: Dictio
 
   return (
     <div className="mx-auto max-w-[560px] py-24 text-center">
-      <p className="eyebrow m-0 text-graphite">{dict.checkout.handoffTitle}</p>
-      <p className="mx-auto mt-4 mb-0 max-w-[46ch] text-[16px] leading-relaxed text-ink">
+      <p className="eyebrow m-0 text-slate">{dict.checkout.handoffTitle}</p>
+      <p className="mx-auto mt-4 mb-0 max-w-[46ch] text-[16px] leading-relaxed text-earth">
         {dict.checkout.handoffBody}
       </p>
 
       {error ? (
         <>
-          <p role="alert" className="mt-8 mb-0 border-l-2 border-merlot bg-merlot/8 px-4 py-3 text-left text-[14px] text-merlot">
+          <p role="alert" className="mt-8 mb-0 border-l-2 border-olive bg-olive/8 px-4 py-3 text-left text-[14px] text-olive">
             {error}
           </p>
           <Link
             href={`/${locale}/carrito`}
-            className="mt-6 inline-block bg-ink px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-linen uppercase hover:bg-merlot"
+            className="mt-6 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
           >
             {dict.checkout.backToCart}
           </Link>
         </>
       ) : (
         <>
-          <p className="mt-8 mb-0 font-mono text-[12px] tracking-[0.12em] text-graphite uppercase">
+          <p className="mt-8 mb-0 font-mono text-[12px] tracking-[0.12em] text-slate uppercase">
             {dict.checkout.handoffWait}
           </p>
           {target && (
             <a
               href={target}
-              className="mt-6 inline-block font-mono text-[11px] tracking-[0.12em] text-merlot uppercase underline underline-offset-4"
+              className="mt-6 inline-block font-mono text-[11px] tracking-[0.12em] text-olive uppercase underline underline-offset-4"
             >
               {dict.checkout.handoffFallback}
             </a>

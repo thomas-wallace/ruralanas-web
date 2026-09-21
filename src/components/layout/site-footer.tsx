@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
@@ -39,10 +40,10 @@ function SubmitButton({
 function FormMessage({ state }: { state: FormState }) {
   if (state.status === 'idle' || !state.message) return null
   return (
-    <p
-      role="status"
-      className={`font-mono text-xs ${state.status === 'ok' ? 'text-bronze' : 'text-merlot-bright'}`}
-    >
+    // Éxito y error comparten color: la paleta no tiene un rojo, y de los
+    // acentos que quedan ninguno llega a 4,5:1 sobre este fondo. Lo que pasó lo
+    // dice el mensaje, que es además lo que lee un lector de pantalla.
+    <p role="status" className="font-mono text-xs text-earth">
       {state.message}
     </p>
   )
@@ -69,16 +70,16 @@ export function SiteFooter({
   const [newsletterState, newsletterAction] = useActionState(subscribeNewsletter, INITIAL)
 
   const field =
-    'w-full border border-stone/40 bg-transparent px-4 py-3 text-sm text-linen placeholder:text-stone focus:border-bronze focus:outline-none'
+    'w-full border border-slate/40 bg-transparent px-4 py-3 text-sm text-earth placeholder:text-slate focus:border-earth focus:outline-none'
 
   return (
-    <footer className="bg-carbon px-[var(--spacing-gutter)] pb-10 pt-[clamp(70px,10vh,120px)] text-linen">
+    <footer className="border-t border-earth/20 bg-shell px-[var(--spacing-gutter)] pb-10 pt-[clamp(70px,10vh,120px)] text-earth">
       <div className="mx-auto grid max-w-[1100px] gap-[clamp(40px,6vw,80px)] md:grid-cols-2">
         <div>
           <h2 className="mb-5 font-display text-[clamp(30px,4vw,50px)] font-medium leading-none">
             {dict.footer.contactTitle}
           </h2>
-          <p className="mb-6 max-w-[360px] text-[15px] leading-relaxed text-stone">
+          <p className="mb-6 max-w-[360px] text-[15px] leading-relaxed text-slate">
             {dict.footer.contactLead}
           </p>
 
@@ -118,7 +119,7 @@ export function SiteFooter({
             <SubmitButton
               label={dict.footer.send}
               pendingLabel={dict.footer.sending}
-              className="cursor-pointer bg-merlot py-3 font-mono text-xs tracking-[0.1em] text-linen transition-colors hover:bg-merlot-bright disabled:opacity-60"
+              className="cursor-pointer bg-earth py-3 font-mono text-xs tracking-[0.1em] text-paper transition-colors hover:bg-olive disabled:opacity-60"
             />
             <FormMessage state={contactState} />
           </form>
@@ -126,7 +127,7 @@ export function SiteFooter({
 
         <div className="flex flex-col gap-8">
           <div>
-            <div className="mb-3.5 font-mono text-[11px] tracking-[0.15em] text-stone">
+            <div className="mb-3.5 font-mono text-[11px] tracking-[0.15em] text-slate">
               {dict.footer.newsletter.toUpperCase()}
             </div>
             <form action={newsletterAction} className="flex max-w-[340px] gap-2">
@@ -145,7 +146,7 @@ export function SiteFooter({
               <SubmitButton
                 label="→"
                 pendingLabel="…"
-                className="cursor-pointer bg-bronze px-5 font-mono text-xs text-ink transition-opacity hover:opacity-90 disabled:opacity-60"
+                className="cursor-pointer bg-earth px-5 font-mono text-xs text-paper transition-colors hover:bg-olive disabled:opacity-60"
               />
             </form>
             <div className="mt-2">
@@ -154,13 +155,13 @@ export function SiteFooter({
           </div>
 
           <nav aria-label={dict.footer.explore}>
-            <div className="mb-3.5 font-mono text-[11px] tracking-[0.15em] text-linen">
+            <div className="mb-3.5 font-mono text-[11px] tracking-[0.15em] text-earth">
               {dict.footer.explore.toUpperCase()}
             </div>
             <ul className="m-0 grid list-none grid-cols-2 gap-x-6 gap-y-2 p-0 text-sm">
               {explore.map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-stone transition-colors hover:text-linen">
+                  <Link href={link.href} className="text-earth transition-colors hover:text-olive">
                     {link.label}
                   </Link>
                 </li>
@@ -168,21 +169,21 @@ export function SiteFooter({
             </ul>
           </nav>
 
-          <address className="text-sm not-italic leading-[1.9] text-stone">
-            <div className="mb-2.5 font-mono text-[11px] tracking-[0.15em] text-linen">
+          <address className="text-sm not-italic leading-[1.9] text-slate">
+            <div className="mb-2.5 font-mono text-[11px] tracking-[0.15em] text-earth">
               {dict.footer.contact.toUpperCase()}
             </div>
             {dict.footer.address}
             <br />
             {dict.footer.city}
             <br />
-            <a href={site.whatsapp} className="text-bronze hover:text-linen">
+            <a href={site.whatsapp} className="text-earth underline underline-offset-4 hover:text-olive">
               {dict.footer.phone}
             </a>
             <br />
             <a
               href={site.instagram}
-              className="text-bronze hover:text-linen"
+              className="text-earth underline underline-offset-4 hover:text-olive"
               rel="me noopener"
             >
               {dict.footer.instagram}
@@ -190,14 +191,14 @@ export function SiteFooter({
           </address>
 
           <div>
-            <div className="mb-3 font-mono text-[11px] tracking-[0.15em] text-stone">
+            <div className="mb-3 font-mono text-[11px] tracking-[0.15em] text-slate">
               {dict.footer.payments.toUpperCase()}
             </div>
             <div className="flex flex-wrap gap-2">
               {PAYMENT_METHODS.map((method) => (
                 <span
                   key={method}
-                  className="rounded border border-dashed border-stone/40 px-3 py-1.5 font-mono text-[10px] text-stone"
+                  className="rounded border border-dashed border-slate/40 px-3 py-1.5 font-mono text-[10px] text-slate"
                 >
                   {method}
                 </span>
@@ -207,12 +208,18 @@ export function SiteFooter({
         </div>
       </div>
 
-      <div className="mx-auto mt-14 flex max-w-[1100px] flex-wrap items-center justify-between gap-4 border-t border-stone/20 pt-6">
-        <div className="font-display text-xl tracking-[0.12em]">RURALANAS</div>
-        <div className="font-mono text-[11px] text-stone">
+      <div className="mx-auto mt-14 flex max-w-[1100px] flex-wrap items-center justify-between gap-4 border-t border-slate/20 pt-6">
+        <Image
+          src="/logo-ruralanas.png"
+          alt={site.name}
+          width={1119}
+          height={278}
+          className="h-9 w-auto"
+        />
+        <div className="font-mono text-[11px] text-slate">
           {dict.footer.tagline.toUpperCase()} · © {new Date().getFullYear()}
         </div>
-        <div className="font-mono text-[11px] text-stone">ES · EN · FR · DE</div>
+        <div className="font-mono text-[11px] text-slate">ES · EN · FR · DE</div>
       </div>
     </footer>
   )

@@ -39,9 +39,9 @@ export function CatalogPeek({
   const shop = routes.shop(locale)
 
   return (
-    <section className="bg-linen-warm px-[var(--spacing-gutter)] py-[var(--spacing-section)] text-ink">
+    <section className="bg-paper px-[var(--spacing-gutter)] py-[var(--spacing-section)] text-earth">
       <div className="mx-auto max-w-[1240px]">
-        <Reveal as="h2" className="eyebrow m-0 mb-8 text-graphite">
+        <Reveal as="h2" className="eyebrow m-0 mb-8 text-slate">
           {dict.peek.eyebrow}
         </Reveal>
 
@@ -65,7 +65,7 @@ export function CatalogPeek({
         <Reveal className="mt-12 flex justify-center">
           <Link
             href={shop}
-            className="inline-block w-full max-w-[440px] bg-bark px-8 py-3.5 text-center text-[13px] font-semibold tracking-[0.08em] text-linen uppercase transition-colors hover:bg-ink"
+            className="inline-block w-full max-w-[440px] bg-earth px-8 py-3.5 text-center text-[13px] font-semibold tracking-[0.08em] text-paper uppercase transition-colors hover:bg-earth"
           >
             {dict.peek.cta}
           </Link>
@@ -89,7 +89,7 @@ export function CatalogPeek({
                     />
                     <span
                       aria-hidden="true"
-                      className="absolute inset-0 bg-linear-to-t from-carbon/65 via-carbon/10 to-transparent"
+                      className="absolute inset-0 bg-linear-to-t from-earth/65 via-earth/10 to-transparent"
                     />
                   </>
                 ) : (
@@ -104,7 +104,7 @@ export function CatalogPeek({
                 )}
                 <span
                   className={`absolute bottom-[clamp(20px,3vw,36px)] left-[clamp(20px,3vw,36px)] font-display text-[clamp(30px,3.6vw,48px)] font-medium leading-none transition-transform group-hover:-translate-y-1 ${
-                    line.image ? 'text-linen' : 'text-ink'
+                    line.image ? 'text-paper' : 'text-earth'
                   }`}
                 >
                   {line.title}

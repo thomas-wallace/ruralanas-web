@@ -43,7 +43,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
   const [hub, sections] = await Promise.all([about.getHub(locale), about.listSections(locale)])
 
   return (
-    <div className="bg-linen-warm text-ink">
+    <div className="bg-paper text-earth">
       <PageHero
         eyebrow={hub.eyebrow}
         title={hub.title}

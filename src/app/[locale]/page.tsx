@@ -71,7 +71,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         locale={locale}
         dict={dict}
       />
-      <WorldReach dict={dict} />
+      <WorldReach dict={dict} locale={locale} />
       <StoreVisit dict={dict} />
       <PillarsGallery dict={dict} locale={locale} />
       <News posts={latest?.posts ?? []} locale={locale} dict={dict} />

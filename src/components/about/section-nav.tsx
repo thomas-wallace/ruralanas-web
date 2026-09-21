@@ -32,7 +32,7 @@ export function SectionNav({
   return (
     <nav
       aria-label={dict.about.sectionsNav}
-      className="sticky top-[calc(var(--spacing-header)+1px)] z-40 border-y border-ink/10 bg-linen-warm/92 backdrop-blur-md"
+      className="sticky top-[calc(var(--spacing-header)+1px)] z-40 border-y border-earth/10 bg-paper/92 backdrop-blur-md"
     >
       <ul className="no-scrollbar mx-auto m-0 flex max-w-[1100px] list-none gap-7 overflow-x-auto px-[var(--spacing-gutter)] py-0 md:px-0">
         {items.map((item) => (
@@ -42,8 +42,8 @@ export function SectionNav({
               aria-current={item.active ? 'page' : undefined}
               className={`block border-b-2 py-4 text-[13px] tracking-[0.04em] whitespace-nowrap transition-colors ${
                 item.active
-                  ? 'border-ink text-ink'
-                  : 'border-transparent text-graphite hover:text-ink'
+                  ? 'border-earth text-earth'
+                  : 'border-transparent text-slate hover:text-earth'
               }`}
             >
               {item.label}

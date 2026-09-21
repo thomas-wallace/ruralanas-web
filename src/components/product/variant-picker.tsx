@@ -30,9 +30,9 @@ export function VariantPicker({
 }) {
   return (
     <fieldset className="m-0 border-0 p-0">
-      <legend className="mb-2.5 p-0 font-mono text-[11px] tracking-[0.14em] text-graphite uppercase">
+      <legend className="mb-2.5 p-0 font-mono text-[11px] tracking-[0.14em] text-slate uppercase">
         {label}
-        {selected && <span className="ml-2 normal-case tracking-normal text-ink">{selected.colorName}</span>}
+        {selected && <span className="ml-2 normal-case tracking-normal text-earth">{selected.colorName}</span>}
       </legend>
 
       <div className="flex flex-wrap gap-2">
@@ -49,15 +49,15 @@ export function VariantPicker({
               aria-pressed={active}
               title={variant.colorName}
               className={`flex cursor-pointer items-center gap-2 border px-2.5 py-1.5 transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${
-                active ? 'border-merlot bg-merlot/6' : 'border-ink/20 hover:border-ink/50'
+                active ? 'border-olive bg-olive/6' : 'border-earth/20 hover:border-earth/50'
               }`}
             >
               <span
                 aria-hidden="true"
-                className="h-4 w-4 shrink-0 rounded-full border border-ink/20"
+                className="h-4 w-4 shrink-0 rounded-full border border-earth/20"
                 style={swatch ? { backgroundColor: swatch } : undefined}
               />
-              <span className="text-[13px] text-ink">{variant.colorName}</span>
+              <span className="text-[13px] text-earth">{variant.colorName}</span>
             </button>
           )
         })}

@@ -21,7 +21,7 @@ export function SectionCards({
   if (sections.length === 0) return null
 
   return (
-    <section className="bg-linen-warm px-[var(--spacing-gutter)] py-[clamp(64px,10vh,120px)] text-ink">
+    <section className="bg-paper px-[var(--spacing-gutter)] py-[clamp(64px,10vh,120px)] text-earth">
       <div className="mx-auto max-w-[1100px]">
         <Reveal as="h2" className="m-0 font-display text-[clamp(28px,3.8vw,48px)] font-medium leading-tight">
           {title}
@@ -34,7 +34,7 @@ export function SectionCards({
           {sections.map((section, index) => (
             <Reveal as="li" key={section.slug} delayMs={index * 70}>
               <Link href={routes.about(locale, section.slug)} className="group block">
-                <div className="relative aspect-3/2 overflow-hidden bg-sand">
+                <div className="relative aspect-3/2 overflow-hidden bg-ash">
                   <Image
                     src={section.image.src}
                     alt={section.image.alt}
@@ -44,12 +44,12 @@ export function SectionCards({
                     style={{ objectPosition: section.image.position ?? 'center' }}
                   />
                 </div>
-                <div className="eyebrow mt-5 text-graphite">{section.eyebrow}</div>
+                <div className="eyebrow mt-5 text-slate">{section.eyebrow}</div>
                 <h3 className="mb-0 mt-2 font-display text-[26px] font-medium leading-tight">{section.title}</h3>
-                <p className="mb-0 mt-2 max-w-[460px] text-[15px] leading-relaxed text-graphite">
+                <p className="mb-0 mt-2 max-w-[460px] text-[15px] leading-relaxed text-slate">
                   {section.summary}
                 </p>
-                <span className="mt-4 inline-block text-[13px] tracking-[0.06em] uppercase underline underline-offset-4 transition-colors group-hover:text-bronze">
+                <span className="mt-4 inline-block text-[13px] tracking-[0.06em] uppercase underline underline-offset-4 transition-colors group-hover:text-olive">
                   {dict.about.discover}
                 </span>
               </Link>

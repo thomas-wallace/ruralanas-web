@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -8,6 +9,7 @@ import { useCart } from '@/components/cart/cart-provider'
 import type { Dictionary } from '@/lib/i18n'
 import { locales, plannedLocales, type Locale } from '@/lib/i18n/config'
 import { routes } from '@/lib/routes'
+import { site } from '@/lib/site'
 
 function HeartIcon({ filled = false }: { filled?: boolean }) {
   return (
@@ -71,13 +73,27 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
   }
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-[60] border-b border-stone/20 bg-carbon/72 backdrop-blur-lg">
+    <nav className="fixed inset-x-0 top-0 z-[60] border-b border-slate/20 bg-paper/80 backdrop-blur-lg">
       <div className="flex h-[var(--spacing-header)] items-center justify-between gap-6 px-[var(--spacing-gutter)]">
-        <Link
-          href={home}
-          className="shrink-0 font-display text-[clamp(16px,4.4vw,22px)] font-semibold tracking-[0.14em] text-linen"
-        >
-          RURALANAS
+        <Link href={home} className="shrink-0" aria-label={site.name}>
+          {/*
+            El logo viene en su gris original, que no es un color de la paleta:
+            es blanco y negro y así se usa. `priority` porque entra en el primer
+            pantallazo y su carga tardía correría el resto del encabezado.
+          */}
+          <Image
+            src="/logo-ruralanas.png"
+            alt={site.name}
+            width={1119}
+            height={278}
+            priority
+            /*
+              El huso es más alto que las letras: la palabra ocupa sólo el 41%
+              del alto del archivo. Por eso 36px acá equivalen a los 22px de
+              tipografía que había antes, y no 28.
+            */
+            className="h-7 w-auto sm:h-9"
+          />
         </Link>
 
         <div className="hidden items-center gap-8 text-sm tracking-[0.02em] md:flex">
@@ -86,8 +102,8 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
               key={link.label}
               href={link.href}
               aria-current={link.active ? 'page' : undefined}
-              className={`transition-colors hover:text-linen ${
-                link.active ? 'text-linen' : 'text-stone'
+              className={`transition-colors hover:text-earth ${
+                link.active ? 'text-earth' : 'text-slate'
               }`}
             >
               {link.label}
@@ -97,7 +113,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
 
         <div className="flex shrink-0 items-center gap-3">
           <div
-            className="hidden items-center gap-1.5 rounded-full border border-stone/35 px-2.5 py-1 font-mono text-xs text-stone md:flex"
+            className="hidden items-center gap-1.5 rounded-full border border-slate/35 px-2.5 py-1 font-mono text-xs text-slate md:flex"
             aria-label={dict.common.language}
           >
             {plannedLocales.map((item, index) => {
@@ -109,7 +125,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                   {available ? (
                     <Link
                       href={switchTo(item)}
-                      className={current ? 'text-linen' : 'text-stone hover:text-linen'}
+                      className={current ? 'text-earth' : 'text-slate hover:text-earth'}
                       hrefLang={item}
                     >
                       {item.toUpperCase()}
@@ -127,11 +143,11 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
           <button
             type="button"
             aria-label={dict.nav.wishlist}
-            className="relative cursor-pointer p-1 leading-none text-linen"
+            className="relative cursor-pointer p-1 leading-none text-earth"
           >
             <HeartIcon filled={ready && wishlist.length > 0} />
             {ready && wishlist.length > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-merlot px-1 font-mono text-[10px] text-linen">
+              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-earth px-1 font-mono text-[10px] text-paper">
                 {wishlist.length}
               </span>
             )}
@@ -142,11 +158,11 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
             onClick={openDrawer}
             aria-label={dict.nav.cart}
             aria-haspopup="dialog"
-            className="relative cursor-pointer p-1 leading-none text-linen"
+            className="relative cursor-pointer p-1 leading-none text-earth"
           >
             <BagIcon />
             {ready && count > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-bronze px-1 font-mono text-[10px] font-bold text-ink">
+              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-caramel px-1 font-mono text-[10px] font-bold text-earth">
                 {count}
               </span>
             )}
@@ -157,7 +173,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
             onClick={() => setMenuOpen((open) => !open)}
             aria-label={menuOpen ? dict.nav.close : dict.nav.menu}
             aria-expanded={menuOpen}
-            className="cursor-pointer p-1.5 leading-none text-linen md:hidden"
+            className="cursor-pointer p-1.5 leading-none text-earth md:hidden"
           >
             <svg
               width="22"
@@ -186,19 +202,19 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
       </div>
 
       {menuOpen && (
-        <div className="flex flex-col border-t border-stone/20 bg-carbon/97 py-2 backdrop-blur-lg md:hidden">
+        <div className="flex flex-col border-t border-slate/20 bg-paper/97 py-2 backdrop-blur-lg md:hidden">
           {links.map((link) => (
             <Link
               key={link.label}
               href={link.href}
               className={`px-[var(--spacing-gutter)] py-4 text-base ${
-                link.active ? 'text-linen' : 'text-stone'
+                link.active ? 'text-earth' : 'text-slate'
               }`}
             >
               {link.label}
             </Link>
           ))}
-          <div className="mt-1.5 flex gap-4 border-t border-stone/20 px-[var(--spacing-gutter)] pb-2.5 pt-4 font-mono text-[13px] text-stone">
+          <div className="mt-1.5 flex gap-4 border-t border-slate/20 px-[var(--spacing-gutter)] pb-2.5 pt-4 font-mono text-[13px] text-slate">
             {plannedLocales.map((item) => {
               const available = (locales as readonly string[]).includes(item)
               return available ? (
@@ -206,7 +222,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
                   key={item}
                   href={switchTo(item)}
                   hrefLang={item}
-                  className={item === locale ? 'text-linen' : 'text-stone'}
+                  className={item === locale ? 'text-earth' : 'text-slate'}
                 >
                   {item.toUpperCase()}
                 </Link>

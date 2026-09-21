@@ -11,10 +11,10 @@ import { interpolate } from '@/lib/format'
  */
 
 const TONE = {
-  in_stock: 'border-stone/40 text-stone',
-  last_one: 'border-merlot bg-merlot text-linen',
-  made_to_order: 'border-bronze text-bronze',
-  sold_out: 'border-stone/40 text-stone',
+  in_stock: 'border-slate/40 text-slate',
+  last_one: 'border-olive bg-earth text-paper',
+  made_to_order: 'border-caramel text-olive',
+  sold_out: 'border-slate/40 text-slate',
 } as const
 
 export function availabilityLabel(availability: Availability, dict: Dictionary): string {

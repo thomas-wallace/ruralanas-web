@@ -83,13 +83,13 @@ export default async function PostPage({
   }
 
   return (
-    <div className="bg-linen-warm text-ink">
+    <div className="bg-paper text-earth">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
 
       <article>
         <header className="px-[var(--spacing-gutter)] pt-[clamp(120px,16vh,160px)]">
           <div className="mx-auto max-w-[760px]">
-            <div className="text-graphite">
+            <div className="text-slate">
               <Breadcrumbs
                 items={[
                   { label: dict.nav.home, href: routes.home(locale) },
@@ -103,15 +103,15 @@ export default async function PostPage({
                 <Link
                   key={category.slug}
                   href={routes.blog(locale, { category: category.slug })}
-                  className="text-bronze hover:text-ink"
+                  className="text-olive hover:text-earth"
                 >
                   {category.name}
                 </Link>
               ))}
-              <time dateTime={post.publishedAt} className="text-stone">
+              <time dateTime={post.publishedAt} className="text-slate">
                 {formatDate(post.publishedAt, locale)}
               </time>
-              <span className="text-stone">{interpolate(dict.blog.readingTime, { n: post.readingMinutes })}</span>
+              <span className="text-slate">{interpolate(dict.blog.readingTime, { n: post.readingMinutes })}</span>
             </div>
 
             <h1
@@ -122,7 +122,7 @@ export default async function PostPage({
             </h1>
 
             {post.language !== locale && dict.blog.originalLanguage && (
-              <p className="mb-0 mt-6 inline-block border border-ink/15 px-4 py-2 text-[13px] text-graphite">
+              <p className="mb-0 mt-6 inline-block border border-earth/15 px-4 py-2 text-[13px] text-slate">
                 {dict.blog.originalLanguage}
               </p>
             )}
@@ -131,7 +131,7 @@ export default async function PostPage({
 
         {post.image && (
           <div className="mt-12 px-[var(--spacing-gutter)]">
-            <div className="relative mx-auto aspect-16/9 max-w-[1100px] overflow-hidden bg-sand">
+            <div className="relative mx-auto aspect-16/9 max-w-[1100px] overflow-hidden bg-ash">
               <Image
                 src={post.image.src}
                 alt={post.image.alt}
@@ -151,10 +151,10 @@ export default async function PostPage({
             // HTML saneado en `lib/blog/sanitize.ts`: sólo etiquetas editoriales.
             dangerouslySetInnerHTML={{ __html: post.html }}
           />
-          <div className="mx-auto mt-14 max-w-[680px] border-t border-ink/12 pt-6">
+          <div className="mx-auto mt-14 max-w-[680px] border-t border-earth/12 pt-6">
             <Link
               href={routes.blog(locale)}
-              className="text-[13px] tracking-[0.06em] uppercase hover:text-bronze"
+              className="text-[13px] tracking-[0.06em] uppercase hover:text-olive"
             >
               ← {dict.blog.back}
             </Link>
@@ -163,7 +163,7 @@ export default async function PostPage({
       </article>
 
       {more.length > 0 && (
-        <section className="bg-linen-soft px-[var(--spacing-gutter)] py-[clamp(64px,10vh,112px)]">
+        <section className="bg-paper px-[var(--spacing-gutter)] py-[clamp(64px,10vh,112px)]">
           <div className="mx-auto max-w-[1100px]">
             <h2 className="m-0 font-display text-[clamp(28px,3.6vw,44px)] font-medium">{dict.blog.more}</h2>
             <ul className="mt-10 grid list-none gap-x-6 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-3">

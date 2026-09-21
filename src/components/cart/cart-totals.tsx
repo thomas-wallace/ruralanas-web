@@ -29,11 +29,11 @@ export function CartTotalsPanel({
   const row = (label: string, value: string, strong = false) => (
     <div
       className={`flex items-baseline justify-between gap-4 py-2 ${
-        strong ? 'border-t border-ink/20 pt-3 text-[17px]' : 'text-[14px]'
+        strong ? 'border-t border-earth/20 pt-3 text-[17px]' : 'text-[14px]'
       }`}
     >
-      <span className={strong ? 'font-display text-ink' : 'text-graphite'}>{label}</span>
-      <span className={`font-mono ${strong ? 'text-ink' : 'text-ink/80'}`}>{value}</span>
+      <span className={strong ? 'font-display text-earth' : 'text-slate'}>{label}</span>
+      <span className={`font-mono ${strong ? 'text-earth' : 'text-earth/80'}`}>{value}</span>
     </div>
   )
 
@@ -57,7 +57,7 @@ export function CartTotalsPanel({
       {row(dict.cart.total, money(totals.total), true)}
 
       {totals.tax > 0 && totals.taxIncluded && (
-        <p className="mt-1.5 mb-0 text-right text-[12px] text-graphite">
+        <p className="mt-1.5 mb-0 text-right text-[12px] text-slate">
           {interpolate(dict.cart.taxIncluded, { amount: money(totals.tax) })}
         </p>
       )}

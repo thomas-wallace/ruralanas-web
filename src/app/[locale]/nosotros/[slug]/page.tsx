@@ -66,7 +66,7 @@ export default async function AboutSectionPage({
   const others = sections.filter((item) => item.slug !== slug)
 
   return (
-    <div className="bg-linen-warm text-ink">
+    <div className="bg-paper text-earth">
       <PageHero
         eyebrow={section.eyebrow}
         title={section.title}

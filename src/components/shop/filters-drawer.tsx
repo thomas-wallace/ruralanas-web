@@ -39,11 +39,11 @@ export function FiltersDrawer({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex cursor-pointer items-center gap-2 rounded-sm border border-ink/30 px-4 py-2.5 font-mono text-[11px] tracking-[0.1em] text-ink uppercase"
+        className="flex cursor-pointer items-center gap-2 rounded-sm border border-earth/30 px-4 py-2.5 font-mono text-[11px] tracking-[0.1em] text-earth uppercase"
       >
         {label}
         {activeCount > 0 && (
-          <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-merlot px-1 text-[10px] text-linen">
+          <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-earth px-1 text-[10px] text-paper">
             {activeCount}
           </span>
         )}
@@ -55,16 +55,16 @@ export function FiltersDrawer({
             type="button"
             aria-label={closeLabel}
             onClick={() => setOpen(false)}
-            className="absolute inset-0 cursor-pointer bg-carbon/70"
+            className="absolute inset-0 cursor-pointer bg-earth/40"
           />
-          <div className="relative max-h-[85vh] overflow-y-auto rounded-t-xl bg-linen-soft px-6 pb-8 pt-5">
+          <div className="relative max-h-[85vh] overflow-y-auto rounded-t-xl bg-paper px-6 pb-8 pt-5">
             <div className="mb-5 flex items-center justify-between">
-              <span className="font-display text-2xl text-ink">{label}</span>
+              <span className="font-display text-2xl text-earth">{label}</span>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label={closeLabel}
-                className="cursor-pointer p-1 text-ink"
+                className="cursor-pointer p-1 text-earth"
               >
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
                   <path d="M5 5l14 14" />

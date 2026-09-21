@@ -41,13 +41,13 @@ export default async function CheckoutPage({ params }: { params: Promise<{ local
   const dict = getDictionary(locale)
 
   return (
-    <div className="min-h-screen bg-linen-warm text-ink">
-      <div className="bg-ink px-[var(--spacing-gutter)] pb-10 pt-[104px] text-linen">
+    <div className="min-h-screen bg-paper text-earth">
+      <div className="bg-shell px-[var(--spacing-gutter)] pb-10 pt-[104px] text-earth">
         <div className="mx-auto max-w-[1240px]">
           <h1 className="m-0 font-display text-[clamp(32px,5vw,56px)] font-medium leading-none">
             {dict.checkout.title}
           </h1>
-          <p className="mt-4 mb-0 max-w-[560px] text-[15px] leading-relaxed text-linen/70">
+          <p className="mt-4 mb-0 max-w-[560px] text-[15px] leading-relaxed text-slate/70">
             {dict.checkout.lead}
           </p>
         </div>
@@ -58,9 +58,9 @@ export default async function CheckoutPage({ params }: { params: Promise<{ local
             checkout que no cobra y no lo aclara es una trampa para quien lo
             prueba. */}
         {commerce.kind === 'local' && (
-          <div className="mt-8 border-l-2 border-bronze bg-bronze/10 px-5 py-4">
-            <p className="m-0 font-display text-[17px] text-ink">{dict.checkout.prototypeTitle}</p>
-            <p className="mt-2 mb-0 max-w-[70ch] text-[14px] leading-relaxed text-graphite">
+          <div className="mt-8 border-l-2 border-caramel bg-caramel/10 px-5 py-4">
+            <p className="m-0 font-display text-[17px] text-earth">{dict.checkout.prototypeTitle}</p>
+            <p className="mt-2 mb-0 max-w-[70ch] text-[14px] leading-relaxed text-slate">
               {dict.checkout.prototypeBody}
             </p>
           </div>
@@ -69,9 +69,9 @@ export default async function CheckoutPage({ params }: { params: Promise<{ local
         {/* Con el cobro alojado en Woo no hay formulario propio: se entrega
             el carrito y la pasarela pide lo que necesita (D-017). */}
         {commerce.kind === 'woo-hosted' && process.env.NODE_ENV !== 'production' && originMismatch() && (
-          <div className="mt-8 border-l-2 border-bronze bg-bronze/10 px-5 py-4">
-            <p className="m-0 font-display text-[17px] text-ink">Origen distinto al de WooCommerce</p>
-            <p className="mt-2 mb-0 max-w-[70ch] text-[14px] leading-relaxed text-graphite">
+          <div className="mt-8 border-l-2 border-caramel bg-caramel/10 px-5 py-4">
+            <p className="m-0 font-display text-[17px] text-earth">Origen distinto al de WooCommerce</p>
+            <p className="mt-2 mb-0 max-w-[70ch] text-[14px] leading-relaxed text-slate">
               {originMismatch()}. La cookie de sesión del carrito no cruza entre dominios, así que
               el checkout de Woo va a abrirse vacío. Es esperable en desarrollo: se resuelve
               sirviendo el storefront desde el mismo origen que WooCommerce.

@@ -2,34 +2,39 @@
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Tokens de marca Ruralanas.
-   Extraídos del prototipo `front-web/Ruralanas_home`. Esta es la única fuente
-   de color y tipografía del sitio: no se escriben colores literales en los
-   componentes.
+   Los siete colores de la paleta oficial, tal cual: tres fondos claros, tres
+   acentos y un gris de texto. Esta es la única fuente de color del sitio: no
+   se escriben colores literales en los componentes, y no hay ningún tono
+   derivado —lo que parece un octavo color es siempre uno de estos siete con
+   opacidad o mezclado con el fondo.
    ═══════════════════════════════════════════════════════════════════════════ */
 @theme {
-  /* Oscuros — el registro narrativo de la home */
-  --color-ink: #1b1714;
-  --color-carbon: #14110e;
-  --color-ember: #211a15;
-  --color-bark: #3a2c20;
+  /* ── Fondos ───────────────────────────────────────────────────────────────
+     Los tres claros de la paleta de marca. La alternancia entre `shell` y
+     `paper` es lo que separa una sección de la siguiente: no hay bloques
+     oscuros salvo donde el texto va encima de una foto.                      */
+  --color-shell: #e4dcce;
+  --color-paper: #f0eeea;
+  --color-ash: #ccc7c0;
 
-  /* Claros — el registro de la tienda, donde la lana se tiene que ver */
-  --color-linen: #e9e1d3;
-  --color-linen-soft: #efe9dd;
-  --color-linen-warm: #f3eee3;
-  --color-parchment: #f6f1e7;
-  --color-sand: #e4dbcf;
+  /* ── Acentos ──────────────────────────────────────────────────────────────
+     `earth` hace tres trabajos: titular, botón primario y velo sobre las
+     fotos. `olive` es el color del dato —precio, volanta, disponibilidad—.
 
-  /* Acentos */
-  --color-bronze: #b28a5e;
-  --color-merlot: #6d2433;
-  --color-merlot-bright: #b4132e;
+     `caramel` NO se usa como color de texto sobre los fondos claros: contra
+     los tres da entre 2,1:1 y 2,6:1, muy por debajo del 4,5:1 que pide AA.
+     Queda para superficies (el botón del newsletter), bordes, el anillo de
+     foco y el mapa. Sobre foto o video sí se lee, y ahí se usa.              */
+  --color-earth: #5a3f26;
+  --color-olive: #806f38;
+  --color-caramel: #a58057;
 
-  /* Neutros de texto */
-  --color-stone: #8f867a;
-  --color-graphite: #5c554c;
+  /* ── Texto secundario ─────────────────────────────────────────────────────
+     El gris de la paleta. El escalón más tenue no es un color nuevo: es este
+     mismo mezclado con el fondo (`text-slate/70`).                           */
+  --color-slate: #656058;
 
-  --font-display: var(--font-fraunces), 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-sans: var(--font-instrument), 'Instrument Sans', system-ui, -apple-system, sans-serif;
   --font-mono: var(--font-space-mono), 'Space Mono', ui-monospace, monospace;
 
@@ -46,21 +51,25 @@
   }
 
   body {
-    background-color: var(--color-ink);
-    color: var(--color-linen);
+    background-color: var(--color-paper);
+    color: var(--color-earth);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     overflow-x: hidden;
   }
 
   ::selection {
-    background: var(--color-merlot);
-    color: var(--color-linen);
+    background: var(--color-earth);
+    color: var(--color-paper);
   }
 
-  /* Foco visible en todo el sitio: requisito AA del módulo 01. */
+  /*
+   * Foco visible en todo el sitio: requisito AA del módulo 01.
+   * Va en `earth` y no en `caramel`: un indicador de foco necesita 3:1 contra
+   * el fondo, y el caramelo se queda entre 2,1:1 y 3,1:1 según el fondo.
+   */
   :focus-visible {
-    outline: 2px solid var(--color-bronze);
+    outline: 2px solid var(--color-earth);
     outline-offset: 3px;
   }
 
@@ -118,7 +127,7 @@
    El HTML llega de WordPress ya saneado (lib/blog/sanitize.ts): sin clases ni
    estilos propios. Toda su tipografía se define acá.                        */
 .post-body {
-  color: var(--color-graphite);
+  color: var(--color-slate);
   font-size: 18px;
   line-height: 1.8;
 }
@@ -136,7 +145,7 @@
 .post-body h3,
 .post-body h4 {
   margin-bottom: 0;
-  color: var(--color-ink);
+  color: var(--color-earth);
   font-family: var(--font-display);
   font-weight: 500;
   line-height: 1.2;
@@ -154,17 +163,17 @@
   font-size: 21px;
 }
 .post-body strong {
-  color: var(--color-ink);
+  color: var(--color-earth);
   font-weight: 600;
 }
 .post-body a {
-  color: var(--color-ink);
+  color: var(--color-earth);
   text-decoration: underline;
   text-underline-offset: 3px;
-  text-decoration-color: var(--color-bronze);
+  text-decoration-color: var(--color-caramel);
 }
 .post-body a:hover {
-  color: var(--color-bark);
+  color: var(--color-earth);
 }
 .post-body ul,
 .post-body ol {
@@ -180,12 +189,12 @@
   margin-top: 0.5em;
 }
 .post-body li::marker {
-  color: var(--color-bronze);
+  color: var(--color-caramel);
 }
 .post-body blockquote {
-  border-left: 2px solid var(--color-bronze);
+  border-left: 2px solid var(--color-caramel);
   padding-left: 1.2em;
-  color: var(--color-ink);
+  color: var(--color-earth);
   font-family: var(--font-display);
   font-size: 1.2em;
   line-height: 1.5;
@@ -198,7 +207,7 @@
 }
 .post-body figcaption {
   margin-top: 0.6em;
-  color: var(--color-stone);
+  color: color-mix(in srgb, var(--color-slate) 75%, var(--color-paper));
   font-size: 14px;
 }
 .post-body iframe {
@@ -208,5 +217,84 @@
 }
 .post-body hr {
   border: 0;
-  border-top: 1px solid color-mix(in srgb, var(--color-ink) 15%, transparent);
+  border-top: 1px solid var(--color-ash);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Mapa de alcance de la home.
+   El SVG lo arma el servidor (`components/home/world-map.tsx`) y pinta cada
+   país según su `data-status`. El color vive acá y no en el componente porque
+   el realce al pasar el mouse tiene que ser CSS: así funciona sin JavaScript y
+   no hay un re-render por cada país que se toca.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.world-map {
+  cursor: default;
+}
+.world-map path {
+  stroke: var(--color-shell);
+  stroke-width: 0.6;
+  stroke-linejoin: round;
+  transition: fill 0.18s ease;
+}
+.world-map path[data-status='none'] {
+  fill: var(--color-ash);
+}
+.world-map path[data-status='shipped'] {
+  fill: var(--color-caramel);
+}
+.world-map path[data-status='store'] {
+  fill: var(--color-earth);
+}
+
+/* Sólo con mouse: en una pantalla táctil el "hover" se queda pegado. */
+@media (hover: hover) {
+  .world-map path[data-status='none']:hover {
+    fill: color-mix(in srgb, var(--color-slate) 40%, var(--color-ash));
+  }
+  .world-map path[data-status='shipped']:hover {
+    fill: color-mix(in srgb, var(--color-caramel) 70%, var(--color-earth));
+  }
+  .world-map path[data-status='store']:hover {
+    fill: var(--color-olive);
+  }
+}
+
+/* El disco claro despega el nodo del relleno del país, que es del mismo rojo. */
+.world-map [data-node='store'] .halo {
+  fill: var(--color-shell);
+  stroke: color-mix(in srgb, var(--color-earth) 45%, transparent);
+  stroke-width: 1.2;
+}
+.world-map [data-node] circle:not(.halo) {
+  stroke: var(--color-shell);
+  stroke-width: 1.2;
+}
+.world-map [data-node='store'] circle:not(.halo) {
+  fill: var(--color-olive);
+}
+.world-map [data-node='shipped'] circle:not(.halo) {
+  fill: var(--color-earth);
+}
+
+/* Muestras de la leyenda: los mismos colores, para que se lean como el mapa. */
+.world-legend-swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+}
+.world-legend-swatch[data-status='none'] {
+  background: var(--color-ash);
+}
+.world-legend-swatch[data-status='shipped'] {
+  background: var(--color-caramel);
+}
+.world-legend-swatch[data-status='store'] {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--color-olive);
+  box-shadow:
+    0 0 0 2.5px var(--color-shell),
+    0 0 0 4px color-mix(in srgb, var(--color-earth) 45%, transparent);
 }

@@ -58,7 +58,7 @@ export function OrderStatus({ locale, dict }: { locale: Locale; dict: Dictionary
 
   if (state === 'loading') {
     return (
-      <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-graphite uppercase">
+      <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-slate uppercase">
         {dict.cart.updating}
       </p>
     )
@@ -67,10 +67,10 @@ export function OrderStatus({ locale, dict }: { locale: Locale; dict: Dictionary
   if (state === 'missing' || !order) {
     return (
       <div className="py-20 text-center">
-        <p className="m-0 font-display text-[24px] text-ink">{dict.thanks.missing}</p>
+        <p className="m-0 font-display text-[24px] text-earth">{dict.thanks.missing}</p>
         <Link
           href={`/${locale}/tienda`}
-          className="mt-8 inline-block bg-ink px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-linen uppercase hover:bg-merlot"
+          className="mt-8 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
         >
           {dict.thanks.backToShop}
         </Link>
@@ -92,38 +92,38 @@ export function OrderStatus({ locale, dict }: { locale: Locale; dict: Dictionary
 
   return (
     <div className="mx-auto max-w-[620px] py-16">
-      <h1 className="m-0 font-display text-[clamp(30px,5vw,46px)] font-medium leading-tight text-ink">
+      <h1 className="m-0 font-display text-[clamp(30px,5vw,46px)] font-medium leading-tight text-earth">
         {dict.thanks.title}
       </h1>
-      <p className="mt-3 mb-0 text-[16px] leading-relaxed text-graphite">{dict.thanks.subtitle}</p>
+      <p className="mt-3 mb-0 text-[16px] leading-relaxed text-slate">{dict.thanks.subtitle}</p>
 
-      <dl className="mt-10 grid grid-cols-2 gap-y-3 border-y border-ink/15 py-5 text-[15px]">
-        <dt className="m-0 font-mono text-[11px] tracking-[0.1em] text-graphite uppercase">
+      <dl className="mt-10 grid grid-cols-2 gap-y-3 border-y border-earth/15 py-5 text-[15px]">
+        <dt className="m-0 font-mono text-[11px] tracking-[0.1em] text-slate uppercase">
           {dict.thanks.orderNumber}
         </dt>
-        <dd className="m-0 text-right font-mono text-ink">{order.orderId}</dd>
-        <dt className="m-0 font-mono text-[11px] tracking-[0.1em] text-graphite uppercase">
+        <dd className="m-0 text-right font-mono text-earth">{order.orderId}</dd>
+        <dt className="m-0 font-mono text-[11px] tracking-[0.1em] text-slate uppercase">
           {dict.thanks.total}
         </dt>
-        <dd className="m-0 text-right font-mono text-ink">{formatPrice(order.total, locale)}</dd>
+        <dd className="m-0 text-right font-mono text-earth">{formatPrice(order.total, locale)}</dd>
       </dl>
 
       <div
         className={`mt-8 border-l-2 px-5 py-4 ${
           order.simulated
-            ? 'border-bronze bg-bronze/10'
+            ? 'border-caramel bg-caramel/10'
             : order.paid
-              ? 'border-merlot bg-merlot/6'
-              : 'border-bronze bg-bronze/10'
+              ? 'border-olive bg-olive/6'
+              : 'border-caramel bg-caramel/10'
         }`}
       >
-        <p className="m-0 font-display text-[18px] text-ink">{statusTitle}</p>
-        <p className="mt-2 mb-0 text-[14px] leading-relaxed text-graphite">{statusBody}</p>
+        <p className="m-0 font-display text-[18px] text-earth">{statusTitle}</p>
+        <p className="mt-2 mb-0 text-[14px] leading-relaxed text-slate">{statusBody}</p>
       </div>
 
       <Link
         href={`/${locale}/tienda`}
-        className="mt-10 inline-block bg-ink px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-linen uppercase hover:bg-merlot"
+        className="mt-10 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
       >
         {dict.thanks.backToShop}
       </Link>

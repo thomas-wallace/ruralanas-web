@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { Reveal } from '@/components/ui/reveal'
+import { Watermark } from '@/components/ui/watermark'
 import type { ContentBlock } from '@/lib/about/types'
 import { catalog } from '@/lib/catalog'
 import type { Locale } from '@/lib/i18n'
@@ -27,20 +28,20 @@ function Heading({ eyebrow, title, lead }: { eyebrow?: string; title?: string; l
   if (!eyebrow && !title) return null
   return (
     <div className="max-w-[640px]">
-      {eyebrow && <div className="eyebrow mb-4 text-graphite">{eyebrow}</div>}
+      {eyebrow && <div className="eyebrow mb-4 text-slate">{eyebrow}</div>}
       {title && (
-        <h2 className="m-0 font-display text-[clamp(28px,3.8vw,48px)] font-medium leading-[1.05] text-ink">
+        <h2 className="m-0 font-display text-[clamp(28px,3.8vw,48px)] font-medium leading-[1.05] text-earth">
           {title}
         </h2>
       )}
-      {lead && <p className="mb-0 mt-5 text-[17px] leading-relaxed text-graphite">{lead}</p>}
+      {lead && <p className="mb-0 mt-5 text-[17px] leading-relaxed text-slate">{lead}</p>}
     </div>
   )
 }
 
 function Paragraphs({ items }: { items: string[] }) {
   return (
-    <div className="flex flex-col gap-5 text-[17px] leading-[1.75] text-graphite">
+    <div className="flex flex-col gap-5 text-[17px] leading-[1.75] text-slate">
       {items.map((text) => (
         <p key={text} className="m-0">
           {text}
@@ -68,7 +69,7 @@ async function Artisans({
         <ul className="mt-12 grid list-none gap-8 p-0 sm:grid-cols-2 lg:grid-cols-4">
           {artisans.map((artisan) => (
             <Reveal as="li" key={artisan.id}>
-              <div className="relative aspect-4/5 overflow-hidden bg-sand">
+              <div className="relative aspect-4/5 overflow-hidden bg-ash">
                 {artisan.portrait && (
                   <Image
                     src={artisan.portrait}
@@ -79,11 +80,11 @@ async function Artisans({
                   />
                 )}
               </div>
-              <h3 className="mb-1 mt-4 font-display text-xl font-medium text-ink">{artisan.name}</h3>
-              <div className="font-mono text-[11px] tracking-[0.12em] text-stone uppercase">
+              <h3 className="mb-1 mt-4 font-display text-xl font-medium text-earth">{artisan.name}</h3>
+              <div className="font-mono text-[11px] tracking-[0.12em] text-slate uppercase">
                 {artisan.region}
               </div>
-              {artisan.bio && <p className="mb-0 mt-3 text-sm leading-relaxed text-graphite">{artisan.bio}</p>}
+              {artisan.bio && <p className="mb-0 mt-3 text-sm leading-relaxed text-slate">{artisan.bio}</p>}
             </Reveal>
           ))}
         </ul>
@@ -110,7 +111,7 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
         <section className={WRAP}>
           <div className={`${INNER} grid items-center gap-10 md:grid-cols-2 md:gap-[clamp(40px,6vw,96px)]`}>
             <Reveal
-              className={`relative aspect-4/5 overflow-hidden bg-sand ${imageLeft ? '' : 'md:order-2'}`}
+              className={`relative aspect-4/5 overflow-hidden bg-ash ${imageLeft ? '' : 'md:order-2'}`}
             >
               <Image
                 src={block.image.src}
@@ -135,15 +136,15 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
         <section className="px-[var(--spacing-gutter)]">
           <Reveal
             as="dl"
-            className={`${INNER} m-0 grid grid-cols-2 border-y border-ink/15 py-[clamp(32px,5vh,56px)] ${FIGURE_COLUMNS[Math.min(block.items.length, 4)]}`}
+            className={`${INNER} m-0 grid grid-cols-2 border-y border-earth/15 py-[clamp(32px,5vh,56px)] ${FIGURE_COLUMNS[Math.min(block.items.length, 4)]}`}
           >
             {block.items.map((item) => (
               <div key={item.label} className="px-2 py-4 text-center">
                 <dt className="sr-only">{item.label}</dt>
-                <dd className="m-0 font-display text-[clamp(34px,4.4vw,56px)] font-medium leading-none text-ink">
+                <dd className="m-0 font-display text-[clamp(34px,4.4vw,56px)] font-medium leading-none text-earth">
                   {item.value}
                 </dd>
-                <dd className="mx-auto mb-0 mt-3 max-w-[200px] text-[13px] leading-snug text-graphite">
+                <dd className="mx-auto mb-0 mt-3 max-w-[200px] text-[13px] leading-snug text-slate">
                   {item.label}
                 </dd>
               </div>
@@ -159,12 +160,12 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
             <Heading eyebrow={block.eyebrow} title={block.title} lead={block.lead} />
             <ol className="mt-12 grid list-none gap-x-10 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-3">
               {block.items.map((item, index) => (
-                <Reveal as="li" key={item.title} delayMs={index * 60} className="border-t border-ink/15 pt-6">
-                  <div className="font-mono text-xs tracking-[0.12em] text-bronze">
+                <Reveal as="li" key={item.title} delayMs={index * 60} className="border-t border-earth/15 pt-6">
+                  <div className="font-mono text-xs tracking-[0.12em] text-olive">
                     {String(index + 1).padStart(2, '0')}
                   </div>
-                  <h3 className="mb-3 mt-3 font-display text-2xl font-medium text-ink">{item.title}</h3>
-                  <p className="m-0 text-[15px] leading-relaxed text-graphite">{item.text}</p>
+                  <h3 className="mb-3 mt-3 font-display text-2xl font-medium text-earth">{item.title}</h3>
+                  <p className="m-0 text-[15px] leading-relaxed text-slate">{item.text}</p>
                 </Reveal>
               ))}
             </ol>
@@ -174,16 +175,16 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
 
     case 'features':
       return (
-        <section className={`${WRAP} bg-linen-soft`}>
+        <section className={`${WRAP} bg-paper`}>
           <div className={INNER}>
             <Heading eyebrow={block.eyebrow} title={block.title} lead={block.lead} />
             <ul className="mt-12 grid list-none gap-x-10 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-3">
               {block.items.map((item, index) => (
                 <Reveal as="li" key={item.title} delayMs={index * 60}>
-                  <h3 className="mb-3 mt-0 text-[15px] font-semibold tracking-[0.03em] text-ink uppercase">
+                  <h3 className="mb-3 mt-0 text-[15px] font-semibold tracking-[0.03em] text-earth uppercase">
                     {item.title}
                   </h3>
-                  <p className="m-0 text-[15px] leading-relaxed text-graphite">{item.text}</p>
+                  <p className="m-0 text-[15px] leading-relaxed text-slate">{item.text}</p>
                 </Reveal>
               ))}
             </ul>
@@ -193,7 +194,11 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
 
     case 'timeline':
       return (
-        <section className={WRAP}>
+        <section className={`${WRAP} relative isolate overflow-hidden`}>
+          {/* El recorrido es una lista vertical larga y el huso también es
+              vertical: acompaña por el margen derecho, que queda vacío. */}
+          <Watermark className="-right-12 top-[22%] hidden h-[clamp(300px,50vh,520px)] lg:block" />
+
           <div className={INNER}>
             <Heading eyebrow={block.eyebrow} title={block.title} />
             <ol className="mt-12 list-none p-0">
@@ -201,12 +206,12 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
                 <Reveal
                   as="li"
                   key={`${item.date}-${item.title}`}
-                  className="grid gap-2 border-t border-ink/15 py-7 md:grid-cols-[200px_1fr] md:gap-10"
+                  className="grid gap-2 border-t border-earth/15 py-7 md:grid-cols-[200px_1fr] md:gap-10"
                 >
-                  <div className="font-mono text-[13px] tracking-[0.08em] text-bronze uppercase">{item.date}</div>
+                  <div className="font-mono text-[13px] tracking-[0.08em] text-olive uppercase">{item.date}</div>
                   <div>
-                    <h3 className="m-0 font-display text-2xl font-medium text-ink">{item.title}</h3>
-                    <p className="mb-0 mt-2 max-w-[620px] text-[15px] leading-relaxed text-graphite">{item.text}</p>
+                    <h3 className="m-0 font-display text-2xl font-medium text-earth">{item.title}</h3>
+                    <p className="mb-0 mt-2 max-w-[620px] text-[15px] leading-relaxed text-slate">{item.text}</p>
                   </div>
                 </Reveal>
               ))}
@@ -217,12 +222,23 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
 
     case 'quote':
       return (
-        <section className={`${WRAP} bg-sand`}>
+        <section className={`${WRAP} relative isolate overflow-hidden bg-ash`}>
+          {/*
+            El único lugar donde la marca de agua dice algo además de decorar:
+            el símbolo del oficio detrás de la voz de quien teje.
+
+            Va más alta que la sección a propósito: así el `overflow-hidden`
+            corta las dos puntas del huso y queda sólo la espiral, que se lee
+            como textura. Con el huso entero, las puntas asomaban por encima y
+            por debajo de la cita y parecían un rasguño sobre el texto.
+          */}
+          <Watermark className="left-1/2 top-1/2 h-[780px] -translate-x-1/2 -translate-y-1/2 opacity-[0.08]" />
+
           <Reveal as="figure" className="mx-auto m-0 max-w-[860px] text-center">
-            <blockquote className="m-0 font-display text-[clamp(24px,3.2vw,38px)] font-normal leading-[1.3] text-ink">
+            <blockquote className="m-0 font-display text-[clamp(24px,3.2vw,38px)] font-normal leading-[1.3] text-earth">
               “{block.text}”
             </blockquote>
-            <figcaption className="eyebrow mt-8 text-graphite">{block.source}</figcaption>
+            <figcaption className="eyebrow mt-8 text-earth/90">{block.source}</figcaption>
           </Reveal>
         </section>
       )
@@ -236,21 +252,21 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
             <Heading eyebrow={block.eyebrow} title={block.title} lead={block.lead} />
             <ul className="mt-12 grid list-none gap-6 p-0 sm:grid-cols-2 lg:grid-cols-3">
               {block.items.map((item) => (
-                <Reveal as="li" key={item.name} className="border border-ink/15 p-7">
+                <Reveal as="li" key={item.name} className="border border-earth/15 p-7">
                   {item.image && (
                     <div className="relative mb-6 h-16 w-28">
                       <Image src={item.image.src} alt={item.image.alt} fill sizes="112px" className="object-contain object-left" />
                     </div>
                   )}
-                  <h3 className="m-0 font-display text-xl font-medium text-ink">{item.name}</h3>
-                  <div className="mt-1 font-mono text-[11px] tracking-[0.1em] text-stone uppercase">{item.issuer}</div>
-                  <p className="mb-0 mt-4 text-[15px] leading-relaxed text-graphite">{item.text}</p>
+                  <h3 className="m-0 font-display text-xl font-medium text-earth">{item.name}</h3>
+                  <div className="mt-1 font-mono text-[11px] tracking-[0.1em] text-slate uppercase">{item.issuer}</div>
+                  <p className="mb-0 mt-4 text-[15px] leading-relaxed text-slate">{item.text}</p>
                   {item.url && (
                     <a
                       href={item.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-4 inline-block text-[13px] text-ink underline underline-offset-4 hover:text-bronze"
+                      className="mt-4 inline-block text-[13px] text-earth underline underline-offset-4 hover:text-olive"
                     >
                       {new URL(item.url).hostname.replace(/^www\./, '')} ↗
                     </a>
@@ -267,15 +283,15 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
 
     case 'cta':
       return (
-        <section className="bg-bark px-[var(--spacing-gutter)] py-[clamp(56px,9vh,96px)] text-linen">
+        <section className="bg-shell px-[var(--spacing-gutter)] py-[clamp(56px,9vh,96px)] text-earth">
           <Reveal className="mx-auto flex max-w-[1100px] flex-col items-start justify-between gap-8 md:flex-row md:items-center">
             <div className="max-w-[620px]">
               <h2 className="m-0 font-display text-[clamp(28px,3.6vw,44px)] font-medium leading-tight">{block.title}</h2>
-              {block.text && <p className="mb-0 mt-3 text-[16px] leading-relaxed text-linen/75">{block.text}</p>}
+              {block.text && <p className="mb-0 mt-3 text-[16px] leading-relaxed text-slate">{block.text}</p>}
             </div>
             <Link
               href={resolveTarget(block.to, locale)}
-              className="shrink-0 border border-linen/80 px-7 py-3.5 text-[13px] tracking-[0.08em] uppercase transition-colors hover:bg-linen hover:text-ink"
+              className="shrink-0 border border-earth/40 px-7 py-3.5 text-[13px] tracking-[0.08em] uppercase transition-colors hover:bg-earth hover:text-paper"
             >
               {block.label}
             </Link>

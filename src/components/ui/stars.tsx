@@ -10,7 +10,7 @@ export function Stars({ rating, className = '' }: { rating: number; className?: 
 
   return (
     <div
-      className={`flex gap-0.5 font-mono text-[13px] leading-none text-bronze ${className}`}
+      className={`flex gap-0.5 font-mono text-[13px] leading-none text-olive ${className}`}
       role="img"
       aria-label={`${rating.toFixed(1)} / 5`}
     >

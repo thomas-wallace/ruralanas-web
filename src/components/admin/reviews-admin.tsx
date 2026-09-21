@@ -33,8 +33,8 @@ interface Payload {
 const EMPTY_FORM = { productId: '', author: '', email: '', text: '', rating: '5' }
 
 const field =
-  'w-full border border-ink/25 bg-linen-warm px-3 py-2.5 text-[15px] text-ink outline-none focus:border-merlot'
-const label = 'font-mono text-[11px] tracking-[0.1em] text-graphite uppercase'
+  'w-full border border-earth/25 bg-paper px-3 py-2.5 text-[15px] text-earth outline-none focus:border-olive'
+const label = 'font-mono text-[11px] tracking-[0.1em] text-slate uppercase'
 
 export function ReviewsAdmin({ locale }: { locale: Locale }) {
   const [state, setState] = useState<'checking' | 'locked' | 'open'>('checking')
@@ -132,7 +132,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
 
   if (state === 'checking') {
     return (
-      <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-graphite uppercase">
+      <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-slate uppercase">
         Cargando…
       </p>
     )
@@ -141,10 +141,10 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
   if (state === 'locked') {
     return (
       <form onSubmit={signIn} className="mx-auto max-w-[380px] py-20">
-        <h2 className="m-0 mb-6 font-display text-[26px] text-ink">Reseñas</h2>
+        <h2 className="m-0 mb-6 font-display text-[26px] text-earth">Reseñas</h2>
 
         {!enabled ? (
-          <p className="m-0 border-l-2 border-bronze bg-bronze/10 px-4 py-3 text-[14px] leading-relaxed text-graphite">
+          <p className="m-0 border-l-2 border-caramel bg-caramel/10 px-4 py-3 text-[14px] leading-relaxed text-slate">
             El admin todavía no está configurado. Hay que poner <code>ADMIN_PASSWORD</code> en el
             entorno, con al menos doce caracteres, y reiniciar.
           </p>
@@ -163,7 +163,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
             </label>
 
             {error && (
-              <p role="alert" className="mt-4 mb-0 text-[13px] text-merlot">
+              <p role="alert" className="mt-4 mb-0 text-[13px] text-olive">
                 {error}
               </p>
             )}
@@ -171,7 +171,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
             <button
               type="submit"
               disabled={busy}
-              className="mt-5 w-full cursor-pointer bg-ink py-3.5 font-mono text-[11px] tracking-[0.12em] text-linen uppercase hover:bg-merlot disabled:opacity-50"
+              className="mt-5 w-full cursor-pointer bg-earth py-3.5 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive disabled:opacity-50"
             >
               {busy ? 'Entrando…' : 'Entrar'}
             </button>
@@ -185,18 +185,18 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
     <div className="grid gap-12 py-12 lg:grid-cols-[380px_1fr]">
       <section>
         <div className="mb-6 flex items-baseline justify-between gap-4">
-          <h2 className="m-0 font-display text-[24px] text-ink">Cargar una reseña</h2>
+          <h2 className="m-0 font-display text-[24px] text-earth">Cargar una reseña</h2>
           <button
             type="button"
             onClick={() => void signOut()}
-            className="cursor-pointer font-mono text-[11px] tracking-[0.1em] text-graphite uppercase underline underline-offset-4 hover:text-merlot"
+            className="cursor-pointer font-mono text-[11px] tracking-[0.1em] text-slate uppercase underline underline-offset-4 hover:text-olive"
           >
             Salir
           </button>
         </div>
 
         {data && !data.canCreate ? (
-          <p className="m-0 border-l-2 border-bronze bg-bronze/10 px-4 py-3 text-[14px] leading-relaxed text-graphite">
+          <p className="m-0 border-l-2 border-caramel bg-caramel/10 px-4 py-3 text-[14px] leading-relaxed text-slate">
             El origen de reseñas activo es el curado, que se edita en el código. Para cargar desde
             acá hay que poner <code>REVIEWS_SOURCE=woo</code>.
           </p>
@@ -242,18 +242,18 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
               <textarea value={form.text} onChange={set('text')} rows={5} required className={field} />
             </label>
 
-            <p className="m-0 text-[12px] leading-relaxed text-graphite">
+            <p className="m-0 text-[12px] leading-relaxed text-slate">
               Cargá sólo texto real, con permiso de quien lo escribió. Va a aparecer con su nombre
               en la portada del sitio.
             </p>
 
             {error && (
-              <p role="alert" className="m-0 border-l-2 border-merlot bg-merlot/8 px-3 py-2 text-[13px] text-merlot">
+              <p role="alert" className="m-0 border-l-2 border-olive bg-olive/8 px-3 py-2 text-[13px] text-olive">
                 {error}
               </p>
             )}
             {notice && (
-              <p role="status" className="m-0 border-l-2 border-bronze bg-bronze/10 px-3 py-2 text-[13px] text-bark">
+              <p role="status" className="m-0 border-l-2 border-caramel bg-caramel/10 px-3 py-2 text-[13px] text-earth">
                 {notice}
               </p>
             )}
@@ -261,7 +261,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
             <button
               type="submit"
               disabled={busy}
-              className="cursor-pointer bg-merlot py-3.5 font-mono text-[11px] tracking-[0.12em] text-linen uppercase hover:bg-merlot-bright disabled:opacity-50"
+              className="cursor-pointer bg-earth py-3.5 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive disabled:opacity-50"
             >
               {busy ? 'Cargando…' : 'Publicar reseña'}
             </button>
@@ -271,40 +271,40 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
 
       <section>
         <div className="mb-6 flex items-baseline gap-4">
-          <h2 className="m-0 font-display text-[24px] text-ink">Publicadas</h2>
+          <h2 className="m-0 font-display text-[24px] text-earth">Publicadas</h2>
           {data && data.summary.count > 0 && data.summary.average !== null && (
-            <span className="font-mono text-[12px] text-graphite">
+            <span className="font-mono text-[12px] text-slate">
               {data.summary.average.toFixed(1)} de 5 · {data.summary.count}
             </span>
           )}
         </div>
 
         {!data || data.reviews.length === 0 ? (
-          <p className="m-0 text-[15px] leading-relaxed text-graphite">
+          <p className="m-0 text-[15px] leading-relaxed text-slate">
             Todavía no hay ninguna. Mientras la lista esté vacía, la sección de la portada no
             muestra testimonios.
           </p>
         ) : (
-          <ul className="m-0 list-none border-t border-ink/12 p-0">
+          <ul className="m-0 list-none border-t border-earth/12 p-0">
             {data.reviews.map((review) => (
-              <li key={review.id} className="border-b border-ink/12 py-5">
+              <li key={review.id} className="border-b border-earth/12 py-5">
                 <div className="flex flex-wrap items-baseline justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <Stars rating={review.rating} />
-                    <span className="text-[15px] text-ink">{review.author}</span>
+                    <span className="text-[15px] text-earth">{review.author}</span>
                   </div>
-                  <span className="font-mono text-[11px] text-graphite">
+                  <span className="font-mono text-[11px] text-slate">
                     {formatMonthYear(review.publishedAt, locale)}
                     {review.product ? ` · ${review.product.name}` : ''}
                   </span>
                 </div>
-                <p className="mt-2 mb-0 text-[15px] leading-relaxed text-graphite">{review.text}</p>
+                <p className="mt-2 mb-0 text-[15px] leading-relaxed text-slate">{review.text}</p>
               </li>
             ))}
           </ul>
         )}
 
-        <p className="mt-8 mb-0 text-[12px] leading-relaxed text-graphite">
+        <p className="mt-8 mb-0 text-[12px] leading-relaxed text-slate">
           Para editar o borrar una reseña, se hace desde WordPress: Productos → Reseñas. Acá sólo
           se cargan.
         </p>

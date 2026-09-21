@@ -79,8 +79,8 @@ export default async function ShopPage({
       title={label}
       className={`flex h-9 w-9 items-center justify-center rounded-sm border transition-colors ${
         shopParams.view === view
-          ? 'border-ink bg-ink text-linen'
-          : 'border-ink/25 text-ink hover:border-ink'
+          ? 'border-earth bg-earth text-paper'
+          : 'border-earth/25 text-earth hover:border-earth'
       }`}
     >
       <span className="sr-only">{label}</span>
@@ -91,17 +91,17 @@ export default async function ShopPage({
   )
 
   return (
-    <div className="bg-linen-warm text-ink">
+    <div className="bg-paper text-earth">
       {/* Encabezado oscuro: separa la tienda del relato y deja respirar la grilla. */}
-      <div className="bg-ink px-[var(--spacing-gutter)] pb-10 pt-[104px] text-linen">
+      <div className="bg-shell px-[var(--spacing-gutter)] pb-10 pt-[104px] text-earth">
         <div className="mx-auto max-w-[1240px]">
           <h1 className="m-0 font-display text-[clamp(38px,6vw,68px)] font-medium leading-none">
             {dict.shop.title}
           </h1>
-          <p className="mt-4 max-w-[560px] text-[15px] leading-relaxed text-linen/70">
+          <p className="mt-4 max-w-[560px] text-[15px] leading-relaxed text-slate">
             {dict.shop.lead}
           </p>
-          <div className="mt-6 font-mono text-[11px] tracking-[0.18em] text-bronze uppercase">
+          <div className="mt-6 font-mono text-[11px] tracking-[0.18em] text-olive uppercase">
             {allProducts.length} {dict.shop.pieces} · {dict.shop.shipping} · {dict.shop.currency}
           </div>
         </div>
@@ -109,11 +109,11 @@ export default async function ShopPage({
 
       <div className="mx-auto max-w-[1240px] px-[var(--spacing-gutter)] py-8 lg:px-8">
         <div className="grid gap-8 lg:grid-cols-[250px_1fr] lg:gap-10">
-          <aside className="hidden border-r border-ink/12 pr-6 lg:block">{filters}</aside>
+          <aside className="hidden border-r border-earth/12 pr-6 lg:block">{filters}</aside>
 
           <div>
-            <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-ink/12 pb-4">
-              <div className="font-mono text-[11px] tracking-[0.18em] text-stone uppercase">
+            <div className="mb-6 flex flex-wrap items-center justify-between gap-3 border-b border-earth/12 pb-4">
+              <div className="font-mono text-[11px] tracking-[0.18em] text-slate uppercase">
                 {products.length} {products.length === 1 ? dict.shop.piece : dict.shop.pieces}
               </div>
 
@@ -138,7 +138,7 @@ export default async function ShopPage({
             {products.length === 0 ? (
               <div className="py-20 text-center">
                 <p className="m-0 font-display text-2xl">{dict.shop.empty}</p>
-                <p className="mx-auto mt-3 max-w-[420px] text-sm text-graphite">
+                <p className="mx-auto mt-3 max-w-[420px] text-sm text-slate">
                   {dict.shop.emptyHint}
                 </p>
                 <Link
@@ -147,13 +147,13 @@ export default async function ShopPage({
                     techniques: [],
                     onlyAvailable: false,
                   })}
-                  className="mt-6 inline-block border-b border-merlot pb-1 font-mono text-[11px] tracking-[0.1em] text-merlot uppercase"
+                  className="mt-6 inline-block border-b border-olive pb-1 font-mono text-[11px] tracking-[0.1em] text-olive uppercase"
                 >
                   {dict.shop.clearFilters}
                 </Link>
               </div>
             ) : shopParams.view === 'grid' ? (
-              <div className="grid grid-cols-2 gap-x-6 gap-y-9 lg:grid-cols-3">
+              <div className="grid grid-cols-2 gap-x-6 gap-y-9 xl:grid-cols-4">
                 {products.map((product, index) => (
                   <ProductCard
                     key={product.id}
@@ -166,7 +166,7 @@ export default async function ShopPage({
                 ))}
               </div>
             ) : (
-              <div className="border-t border-ink/12">
+              <div className="border-t border-earth/12">
                 {products.map((product) => (
                   <ProductRow key={product.id} product={product} locale={locale} dict={dict} />
                 ))}

@@ -64,15 +64,15 @@ export function Hero({ dict }: { dict: Dictionary }) {
       />
 
       <div className="relative z-3 max-w-[1000px]">
-        <div className="mb-6 font-mono text-[13px] tracking-[0.22em] text-bronze uppercase">
+        <div className="mb-6 font-mono text-[13px] tracking-[0.22em] text-caramel uppercase">
           {dict.hero.eyebrow}
         </div>
-        <h1 className="m-0 font-display text-[clamp(52px,9vw,140px)] font-medium leading-[0.95] tracking-[-0.02em] text-linen">
+        <h1 className="m-0 font-display text-[clamp(52px,9vw,140px)] font-medium leading-[0.95] tracking-[-0.02em] text-paper">
           {dict.hero.titleTop}
           <br />
           {dict.hero.titleBottom}
         </h1>
-        <p className="mt-7 max-w-[540px] text-[clamp(16px,1.6vw,20px)] leading-relaxed text-linen/80">
+        <p className="mt-7 max-w-[540px] text-[clamp(16px,1.6vw,20px)] leading-relaxed text-paper/80">
           {dict.hero.lead}
         </p>
       </div>

@@ -13,7 +13,7 @@ export function News({ posts, locale, dict }: { posts: PostSummary[]; locale: Lo
   return (
     <section
       id="noticias"
-      className="bg-linen px-[var(--spacing-gutter)] py-[var(--spacing-section)] text-ink"
+      className="bg-paper px-[var(--spacing-gutter)] py-[var(--spacing-section)] text-earth"
     >
       <Reveal className="mx-auto flex max-w-[1100px] flex-wrap items-end justify-between gap-4">
         <h2 className="m-0 font-display text-[clamp(32px,5vw,64px)] font-medium leading-none">
@@ -21,7 +21,7 @@ export function News({ posts, locale, dict }: { posts: PostSummary[]; locale: Lo
         </h2>
         <Link
           href={routes.blog(locale)}
-          className="border-b border-bronze pb-1 font-mono text-[13px] text-ink uppercase transition-colors hover:text-bronze"
+          className="border-b border-caramel pb-1 font-mono text-[13px] text-earth uppercase transition-colors hover:text-olive"
         >
           {dict.news.cta} →
         </Link>

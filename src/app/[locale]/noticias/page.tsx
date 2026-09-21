@@ -80,7 +80,7 @@ export default async function BlogPage({
           href={routes.blog(locale, { category: slug })}
           aria-current={active ? 'page' : undefined}
           className={`block rounded-full border px-4 py-1.5 text-[13px] transition-colors ${
-            active ? 'border-ink bg-ink text-linen' : 'border-ink/20 text-graphite hover:border-ink hover:text-ink'
+            active ? 'border-earth bg-earth text-paper' : 'border-earth/20 text-slate hover:border-earth hover:text-earth'
           }`}
         >
           {label}
@@ -90,16 +90,16 @@ export default async function BlogPage({
   }
 
   return (
-    <div className="bg-linen-warm text-ink">
+    <div className="bg-paper text-earth">
       <header className="px-[var(--spacing-gutter)] pb-10 pt-[clamp(120px,16vh,160px)]">
         <div className="mx-auto max-w-[1100px]">
-          <div className="text-graphite">
+          <div className="text-slate">
             <Breadcrumbs items={[{ label: dict.nav.home, href: routes.home(locale) }, { label: dict.blog.title }]} />
           </div>
           <h1 className="mb-0 mt-10 font-display text-[clamp(44px,7vw,96px)] font-medium leading-none">
             {dict.blog.title}
           </h1>
-          <p className="mb-0 mt-5 max-w-[540px] text-[clamp(16px,1.5vw,19px)] leading-relaxed text-graphite">
+          <p className="mb-0 mt-5 max-w-[540px] text-[clamp(16px,1.5vw,19px)] leading-relaxed text-slate">
             {dict.blog.lead}
           </p>
 
@@ -115,11 +115,11 @@ export default async function BlogPage({
       </header>
 
       <section className="px-[var(--spacing-gutter)] pb-[clamp(72px,12vh,140px)]">
-        <div className="mx-auto max-w-[1100px] border-t border-ink/12 pt-12">
+        <div className="mx-auto max-w-[1100px] border-t border-earth/12 pt-12">
           {!result ? (
-            <p className="py-16 text-center text-[17px] text-graphite">{dict.blog.unavailable}</p>
+            <p className="py-16 text-center text-[17px] text-slate">{dict.blog.unavailable}</p>
           ) : result.posts.length === 0 ? (
-            <p className="py-16 text-center text-[17px] text-graphite">{dict.blog.empty}</p>
+            <p className="py-16 text-center text-[17px] text-slate">{dict.blog.empty}</p>
           ) : (
             <ul className="m-0 grid list-none gap-x-6 gap-y-14 p-0 sm:grid-cols-2 lg:grid-cols-3">
               {result.posts.map((post, index) => (
@@ -133,20 +133,20 @@ export default async function BlogPage({
           {result && result.totalPages > 1 && (
             <nav
               aria-label={dict.blog.pagination}
-              className="mt-16 flex items-center justify-between gap-4 border-t border-ink/12 pt-6 text-[13px] tracking-[0.06em] uppercase"
+              className="mt-16 flex items-center justify-between gap-4 border-t border-earth/12 pt-6 text-[13px] tracking-[0.06em] uppercase"
             >
               {page > 1 ? (
-                <Link href={routes.blog(locale, { page: page - 1, category })} className="hover:text-bronze">
+                <Link href={routes.blog(locale, { page: page - 1, category })} className="hover:text-olive">
                   ← {dict.blog.previous}
                 </Link>
               ) : (
                 <span />
               )}
-              <span className="font-mono text-[11px] text-stone">
+              <span className="font-mono text-[11px] text-slate">
                 {interpolate(dict.blog.pageOf, { page, total: result.totalPages })}
               </span>
               {page < result.totalPages ? (
-                <Link href={routes.blog(locale, { page: page + 1, category })} className="hover:text-bronze">
+                <Link href={routes.blog(locale, { page: page + 1, category })} className="hover:text-olive">
                   {dict.blog.nextPage} →
                 </Link>
               ) : (

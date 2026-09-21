@@ -43,8 +43,8 @@ export function ProductRow({
   }
 
   return (
-    <div className="grid grid-cols-[64px_1fr_auto] items-center gap-4 border-b border-ink/12 px-2 py-3.5 transition-colors hover:bg-parchment sm:grid-cols-[86px_1.6fr_1fr_110px_130px] sm:gap-5">
-      <Link href={href} className="relative block h-16 w-16 overflow-hidden bg-parchment sm:h-[86px] sm:w-[86px]">
+    <div className="grid grid-cols-[64px_1fr_auto] items-center gap-4 border-b border-earth/12 px-2 py-3.5 transition-colors hover:bg-paper sm:grid-cols-[86px_1.6fr_1fr_110px_130px] sm:gap-5">
+      <Link href={href} className="relative block h-16 w-16 overflow-hidden bg-paper sm:h-[86px] sm:w-[86px]">
         <Image
           src={product.image.src}
           alt={product.image.alt}
@@ -55,23 +55,23 @@ export function ProductRow({
       </Link>
 
       <div className="min-w-0">
-        <Link href={href} className="text-[15px] font-semibold text-ink hover:underline">
+        <Link href={href} className="text-[15px] font-semibold text-earth hover:underline">
           {product.name}
         </Link>
-        <div className="mt-0.5 truncate text-xs text-stone">
+        <div className="mt-0.5 truncate text-xs text-slate">
           {product.colorName}
           {product.technique ? ` · ${dict.techniques[product.technique]}` : ''}
         </div>
-        <div className="mt-1.5 font-mono text-[13px] text-merlot sm:hidden">
+        <div className="mt-1.5 font-mono text-[13px] text-olive sm:hidden">
           {formatPrice(product.price, locale)}
         </div>
       </div>
 
-      <div className="hidden font-mono text-[10px] tracking-[0.2em] text-stone uppercase sm:block">
+      <div className="hidden font-mono text-[10px] tracking-[0.2em] text-slate uppercase sm:block">
         {product.category.name}
       </div>
 
-      <div className="hidden font-mono text-[13px] text-merlot sm:block">
+      <div className="hidden font-mono text-[13px] text-olive sm:block">
         {formatPrice(product.price, locale)}
       </div>
 
@@ -79,7 +79,7 @@ export function ProductRow({
         {soldOut || needsChoice ? (
           <Link
             href={href}
-            className="font-mono text-[10px] tracking-[0.18em] text-stone uppercase underline underline-offset-4"
+            className="font-mono text-[10px] tracking-[0.18em] text-slate uppercase underline underline-offset-4"
           >
             {soldOut ? dict.shop.notifyMe : dict.product.chooseOnProduct}
           </Link>
@@ -91,7 +91,7 @@ export function ProductRow({
             <button
               type="button"
               onClick={handleAdd}
-              className="cursor-pointer rounded-sm bg-merlot px-3.5 py-2 font-mono text-[11px] tracking-[0.1em] text-linen uppercase transition-colors hover:bg-merlot-bright"
+              className="cursor-pointer rounded-sm bg-earth px-3.5 py-2 font-mono text-[11px] tracking-[0.1em] text-paper uppercase transition-colors hover:bg-olive"
             >
               {justAdded ? dict.shop.added : dict.shop.addToCart}
             </button>

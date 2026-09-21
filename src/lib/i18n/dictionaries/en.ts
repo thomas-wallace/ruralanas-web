@@ -112,8 +112,13 @@ export const en: Dictionary = {
   world: {
     titleTop: 'Our garments',
     titleBottom: 'wrap the world',
-    mapCaption: 'Relief map · countries our garments reach',
-    markets: ['Uruguay', 'Argentina', 'Brazil', 'North America', 'Europe'],
+    mapCaption: 'Map of the countries our garments reach',
+    reached: 'Knitted in the Uruguayan countryside, our garments have reached {count} countries.',
+    legend: {
+      none: 'Not yet',
+      shipped: 'Already shipped',
+      store: 'Physical store',
+    },
     replicas: ['Ecuador · model replicated', 'Colombia · model replicated'],
   },
 

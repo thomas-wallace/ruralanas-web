@@ -115,8 +115,13 @@ export const es = {
   world: {
     titleTop: 'Nuestras prendas',
     titleBottom: 'abrazan al mundo',
-    mapCaption: 'Mapa en relieve · países a los que llegan nuestras prendas',
-    markets: ['Uruguay', 'Argentina', 'Brasil', 'Norteamérica', 'Europa'],
+    mapCaption: 'Mapa de los países a los que llegan nuestras prendas',
+    reached: 'Tejidas en el campo uruguayo, nuestras prendas ya llegaron a {count} países.',
+    legend: {
+      none: 'Todavía no',
+      shipped: 'Ya enviamos',
+      store: 'Tienda física',
+    },
     replicas: ['Ecuador · réplica del modelo', 'Colombia · réplica del modelo'],
   },
 

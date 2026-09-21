@@ -20,8 +20,8 @@ export default async function CartPage({ params }: { params: Promise<{ locale: s
   const dict = getDictionary(locale)
 
   return (
-    <div className="min-h-screen bg-linen-warm text-ink">
-      <div className="bg-ink px-[var(--spacing-gutter)] pb-10 pt-[104px] text-linen">
+    <div className="min-h-screen bg-paper text-earth">
+      <div className="bg-shell px-[var(--spacing-gutter)] pb-10 pt-[104px] text-earth">
         <div className="mx-auto max-w-[1240px]">
           <h1 className="m-0 font-display text-[clamp(32px,5vw,56px)] font-medium leading-none">
             {dict.cart.title}

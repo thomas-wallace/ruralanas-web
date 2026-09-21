@@ -50,7 +50,7 @@ export function ScrollRail({
   }
 
   const arrow =
-    'absolute top-[38%] z-2 hidden h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-ink/20 bg-linen-warm/90 text-ink transition-opacity hover:border-ink disabled:pointer-events-none disabled:opacity-0 md:flex'
+    'absolute top-[38%] z-2 hidden h-11 w-11 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full border border-earth/20 bg-paper/90 text-earth transition-opacity hover:border-earth disabled:pointer-events-none disabled:opacity-0 md:flex'
 
   return (
     <div className="relative">

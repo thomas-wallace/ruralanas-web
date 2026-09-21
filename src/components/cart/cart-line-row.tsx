@@ -31,10 +31,10 @@ export function CartLineRow({
   const unique = line.maxUnits <= 1
 
   return (
-    <li className="flex gap-4 border-b border-ink/12 py-4 last:border-b-0">
+    <li className="flex gap-4 border-b border-earth/12 py-4 last:border-b-0">
       <Link
         href={`/${locale}/tienda/${line.slug}`}
-        className="block shrink-0 overflow-hidden bg-parchment"
+        className="block shrink-0 overflow-hidden bg-paper"
         tabIndex={line.slug ? 0 : -1}
       >
         {line.image ? (
@@ -56,28 +56,28 @@ export function CartLineRow({
       <div className="flex min-w-0 flex-1 flex-col gap-1.5">
         <Link
           href={`/${locale}/tienda/${line.slug}`}
-          className="font-display text-[17px] leading-tight text-ink hover:text-merlot"
+          className="font-display text-[17px] leading-tight text-earth hover:text-olive"
         >
           {line.name}
         </Link>
 
-        <p className="m-0 font-mono text-[11px] tracking-[0.08em] text-graphite uppercase">
+        <p className="m-0 font-mono text-[11px] tracking-[0.08em] text-slate uppercase">
           {line.sku}
         </p>
 
         <div className="mt-1 flex flex-wrap items-center gap-3">
           {unique ? (
-            <span className="font-mono text-[11px] tracking-[0.08em] text-merlot uppercase">
+            <span className="font-mono text-[11px] tracking-[0.08em] text-olive uppercase">
               {dict.cart.unique}
             </span>
           ) : (
-            <label className="flex items-center gap-2 font-mono text-[11px] tracking-[0.08em] text-graphite uppercase">
+            <label className="flex items-center gap-2 font-mono text-[11px] tracking-[0.08em] text-slate uppercase">
               {dict.cart.quantity}
               <select
                 value={line.quantity}
                 disabled={busy}
                 onChange={(event) => void setQuantity(line.key, Number(event.target.value))}
-                className="border border-ink/25 bg-transparent px-2 py-1 text-[13px] text-ink disabled:opacity-50"
+                className="border border-earth/25 bg-transparent px-2 py-1 text-[13px] text-earth disabled:opacity-50"
               >
                 {Array.from({ length: line.maxUnits }, (_, index) => index + 1).map((value) => (
                   <option key={value} value={value}>
@@ -92,14 +92,14 @@ export function CartLineRow({
             type="button"
             disabled={busy}
             onClick={() => void remove(line.key)}
-            className="cursor-pointer font-mono text-[11px] tracking-[0.08em] text-graphite underline underline-offset-4 uppercase hover:text-merlot disabled:opacity-50"
+            className="cursor-pointer font-mono text-[11px] tracking-[0.08em] text-slate underline underline-offset-4 uppercase hover:text-olive disabled:opacity-50"
           >
             {dict.cart.remove}
           </button>
         </div>
       </div>
 
-      <p className="m-0 shrink-0 font-mono text-[13px] text-ink">
+      <p className="m-0 shrink-0 font-mono text-[13px] text-earth">
         {formatPrice(line.lineTotal, locale)}
       </p>
     </li>

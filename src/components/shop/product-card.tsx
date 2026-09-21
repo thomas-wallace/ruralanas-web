@@ -22,20 +22,20 @@ import type { Locale } from '@/lib/i18n/config'
 const TONE = {
   dark: {
     surface: 'bg-transparent',
-    title: 'text-linen',
-    meta: 'text-stone',
-    price: 'text-bronze',
-    frame: 'bg-ink/40',
+    title: 'text-paper',
+    meta: 'text-slate',
+    price: 'text-caramel',
+    frame: 'bg-earth/40',
     button:
-      'border border-stone/50 text-linen hover:bg-linen hover:text-ink hover:border-linen',
+      'border border-slate/50 text-paper hover:bg-paper hover:text-earth hover:border-paper',
   },
   light: {
     surface: 'bg-transparent',
-    title: 'text-ink',
-    meta: 'text-stone',
-    price: 'text-merlot',
-    frame: 'bg-parchment',
-    button: 'border border-merlot text-merlot hover:bg-merlot hover:text-linen',
+    title: 'text-earth',
+    meta: 'text-slate',
+    price: 'text-olive',
+    frame: 'bg-paper',
+    button: 'border border-olive text-olive hover:bg-earth hover:text-paper',
   },
 } as const
 
@@ -87,7 +87,7 @@ export function ProductCard({
             alt={product.image.alt}
             fill
             priority={priority}
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 320px"
+            sizes="(max-width: 1280px) 50vw, 260px"
             className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
           />
         </Link>
@@ -97,7 +97,7 @@ export function ProductCard({
           onClick={() => toggleWish(product.slug)}
           aria-label={dict.nav.wishlist}
           aria-pressed={wished}
-          className="absolute right-2.5 top-2.5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-stone/40 bg-carbon/60 leading-none text-linen transition-colors hover:border-linen"
+          className="absolute right-2.5 top-2.5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-slate/40 bg-earth/60 leading-none text-paper transition-colors hover:border-paper"
         >
           <svg
             width="16"
@@ -125,9 +125,26 @@ export function ProductCard({
           {product.technique ? ` · ${dict.techniques[product.technique]}` : ''}
         </div>
 
-        <div className="flex items-baseline justify-between gap-2.5">
-          <h3 className={`font-display text-lg font-medium leading-tight ${style.title}`}>
-            <Link href={href} className="hover:underline hover:underline-offset-4">
+        {/*
+          `mb-3.5` es la separación mínima con el botón; el espacio que sobra lo
+          absorbe el `mt-auto` de abajo. Así, en una fila con nombres de uno,
+          dos y tres renglones, los tres botones quedan a la misma altura.
+        */}
+        <div className="mb-3.5 flex items-baseline justify-between gap-2.5">
+          {/*
+            Dos renglones siempre: recortados si el nombre es largo, reservados
+            si es corto. Es lo que hace que todas las fichas de la grilla midan
+            igual, en vez de que cada fila se estire según el nombre más largo
+            que le haya tocado. El nombre entero está en `title` y en la ficha.
+          */}
+          <h3
+            className={`line-clamp-2 min-h-[2.5em] font-display text-lg font-medium leading-tight ${style.title}`}
+          >
+            <Link
+              href={href}
+              title={product.name}
+              className="hover:underline hover:underline-offset-4"
+            >
               {product.name}
             </Link>
           </h3>
@@ -139,7 +156,7 @@ export function ProductCard({
         {soldOut || needsChoice ? (
           <Link
             href={href}
-            className={`mt-3.5 py-2.5 text-center font-mono text-[11px] tracking-[0.1em] uppercase transition-colors ${style.button}`}
+            className={`mt-auto py-2.5 text-center font-mono text-[11px] tracking-[0.1em] uppercase transition-colors ${style.button}`}
           >
             {soldOut ? dict.shop.notifyMe : dict.product.chooseOnProduct}
           </Link>
@@ -147,7 +164,7 @@ export function ProductCard({
           <button
             type="button"
             onClick={handleAdd}
-            className={`mt-3.5 cursor-pointer py-2.5 font-mono text-[11px] tracking-[0.1em] uppercase transition-colors ${style.button}`}
+            className={`mt-auto cursor-pointer py-2.5 font-mono text-[11px] tracking-[0.1em] uppercase transition-colors ${style.button}`}
           >
             {justAdded ? dict.shop.added : dict.shop.addToCart}
           </button>

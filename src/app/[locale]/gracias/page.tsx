@@ -20,11 +20,11 @@ export default async function ThanksPage({ params }: { params: Promise<{ locale:
   const dict = getDictionary(locale)
 
   return (
-    <div className="min-h-screen bg-linen-warm px-[var(--spacing-gutter)] pt-[104px] text-ink">
+    <div className="min-h-screen bg-paper px-[var(--spacing-gutter)] pt-[104px] text-earth">
       <div className="mx-auto max-w-[1240px]">
         <Suspense
           fallback={
-            <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-graphite uppercase">
+            <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-slate uppercase">
               {dict.cart.updating}
             </p>
           }

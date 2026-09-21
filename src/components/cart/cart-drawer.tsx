@@ -52,7 +52,7 @@ export function CartDrawer({ locale, dict }: { locale: Locale; dict: Dictionary 
         type="button"
         aria-label={dict.cart.close}
         onClick={closeDrawer}
-        className="absolute inset-0 cursor-pointer bg-carbon/60 backdrop-blur-[2px]"
+        className="absolute inset-0 cursor-pointer bg-earth/40 backdrop-blur-[2px]"
       />
 
       <div
@@ -61,15 +61,15 @@ export function CartDrawer({ locale, dict }: { locale: Locale; dict: Dictionary 
         aria-modal="true"
         aria-label={dict.cart.title}
         tabIndex={-1}
-        className="relative flex h-full w-full max-w-[420px] flex-col bg-linen-warm text-ink shadow-2xl outline-none"
+        className="relative flex h-full w-full max-w-[420px] flex-col bg-paper text-earth shadow-2xl outline-none"
       >
-        <header className="flex items-center justify-between border-b border-ink/15 px-6 py-5">
+        <header className="flex items-center justify-between border-b border-earth/15 px-6 py-5">
           <h2 className="m-0 font-display text-[22px] font-medium">{dict.cart.title}</h2>
           <button
             type="button"
             onClick={closeDrawer}
             aria-label={dict.cart.close}
-            className="cursor-pointer p-1 leading-none text-ink hover:text-merlot"
+            className="cursor-pointer p-1 leading-none text-earth hover:text-olive"
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
               <path d="M5 5l14 14" />
@@ -80,27 +80,27 @@ export function CartDrawer({ locale, dict }: { locale: Locale; dict: Dictionary 
 
         <div className="flex-1 overflow-y-auto px-6">
           {error && (
-            <p role="alert" className="mt-4 mb-0 border-l-2 border-merlot bg-merlot/8 px-3 py-2 text-[13px] text-merlot">
+            <p role="alert" className="mt-4 mb-0 border-l-2 border-olive bg-olive/8 px-3 py-2 text-[13px] text-olive">
               {error}
             </p>
           )}
 
           {cart?.notices.map((notice) => (
-            <p key={notice} role="status" className="mt-4 mb-0 border-l-2 border-bronze bg-bronze/10 px-3 py-2 text-[13px] text-bark">
+            <p key={notice} role="status" className="mt-4 mb-0 border-l-2 border-caramel bg-caramel/10 px-3 py-2 text-[13px] text-earth">
               {notice}
             </p>
           ))}
 
           {lines.length === 0 ? (
             <div className="py-16 text-center">
-              <p className="m-0 font-display text-[19px] text-ink">{dict.cart.empty}</p>
-              <p className="mx-auto mt-2 max-w-[26ch] text-[14px] leading-relaxed text-graphite">
+              <p className="m-0 font-display text-[19px] text-earth">{dict.cart.empty}</p>
+              <p className="mx-auto mt-2 max-w-[26ch] text-[14px] leading-relaxed text-slate">
                 {dict.cart.emptyHint}
               </p>
               <Link
                 href={`/${locale}/tienda`}
                 onClick={closeDrawer}
-                className="mt-6 inline-block bg-ink px-6 py-3 font-mono text-[11px] tracking-[0.12em] text-linen uppercase hover:bg-merlot"
+                className="mt-6 inline-block bg-earth px-6 py-3 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
               >
                 {dict.cart.continueShopping}
               </Link>
@@ -115,7 +115,7 @@ export function CartDrawer({ locale, dict }: { locale: Locale; dict: Dictionary 
         </div>
 
         {lines.length > 0 && cart && (
-          <footer className="border-t border-ink/15 px-6 py-5">
+          <footer className="border-t border-earth/15 px-6 py-5">
             <CartTotalsPanel
               totals={cart.totals}
               locale={locale}
@@ -126,14 +126,14 @@ export function CartDrawer({ locale, dict }: { locale: Locale; dict: Dictionary 
               href={`/${locale}/checkout`}
               onClick={closeDrawer}
               aria-disabled={busy}
-              className="mt-4 block bg-merlot py-4 text-center font-mono text-[11px] tracking-[0.12em] text-linen uppercase transition-colors hover:bg-merlot-bright"
+              className="mt-4 block bg-earth py-4 text-center font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive"
             >
               {dict.cart.checkout}
             </Link>
             <Link
               href={`/${locale}/carrito`}
               onClick={closeDrawer}
-              className="mt-2 block py-2 text-center font-mono text-[11px] tracking-[0.12em] text-graphite uppercase underline underline-offset-4 hover:text-ink"
+              className="mt-2 block py-2 text-center font-mono text-[11px] tracking-[0.12em] text-slate uppercase underline underline-offset-4 hover:text-earth"
             >
               {dict.cart.viewCart}
             </Link>

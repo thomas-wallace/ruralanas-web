@@ -81,8 +81,8 @@ export function AddToCart({ product, dict }: { product: Product; dict: Dictionar
             aria-describedby={error ? 'add-to-cart-error' : undefined}
             className={`flex-1 cursor-pointer py-4 font-mono text-xs tracking-[0.12em] uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
               blocked
-                ? 'border border-ink/25 bg-transparent text-ink hover:border-merlot'
-                : 'bg-merlot text-linen hover:bg-merlot-bright'
+                ? 'border border-earth/25 bg-transparent text-earth hover:border-olive'
+                : 'bg-earth text-paper hover:bg-olive'
             }`}
           >
             {added ? dict.shop.added : blocked ? dict.product.pickColor : dict.product.addToCart}
@@ -93,7 +93,7 @@ export function AddToCart({ product, dict }: { product: Product; dict: Dictionar
             onClick={() => toggleWish(product.slug)}
             aria-label={dict.nav.wishlist}
             aria-pressed={wished}
-            className="flex w-14 cursor-pointer items-center justify-center border border-ink/25 text-ink transition-colors hover:border-merlot"
+            className="flex w-14 cursor-pointer items-center justify-center border border-earth/25 text-earth transition-colors hover:border-olive"
           >
             <svg
               width="20"
@@ -110,7 +110,7 @@ export function AddToCart({ product, dict }: { product: Product; dict: Dictionar
         </div>
 
         {error && (
-          <p id="add-to-cart-error" role="alert" className="m-0 font-mono text-[11px] leading-relaxed text-merlot">
+          <p id="add-to-cart-error" role="alert" className="m-0 font-mono text-[11px] leading-relaxed text-olive">
             {error}
           </p>
         )}

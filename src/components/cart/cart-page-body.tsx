@@ -23,7 +23,7 @@ export function CartPageBody({ locale, dict }: { locale: Locale; dict: Dictionar
 
   if (!ready) {
     return (
-      <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-graphite uppercase">
+      <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-slate uppercase">
         {dict.cart.updating}
       </p>
     )
@@ -32,13 +32,13 @@ export function CartPageBody({ locale, dict }: { locale: Locale; dict: Dictionar
   if (lines.length === 0) {
     return (
       <div className="py-20 text-center">
-        <p className="m-0 font-display text-[24px] text-ink">{dict.cart.empty}</p>
-        <p className="mx-auto mt-3 max-w-[38ch] text-[15px] leading-relaxed text-graphite">
+        <p className="m-0 font-display text-[24px] text-earth">{dict.cart.empty}</p>
+        <p className="mx-auto mt-3 max-w-[38ch] text-[15px] leading-relaxed text-slate">
           {dict.cart.emptyHint}
         </p>
         <Link
           href={`/${locale}/tienda`}
-          className="mt-8 inline-block bg-ink px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-linen uppercase hover:bg-merlot"
+          className="mt-8 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
         >
           {dict.cart.continueShopping}
         </Link>
@@ -50,18 +50,18 @@ export function CartPageBody({ locale, dict }: { locale: Locale; dict: Dictionar
     <div className="grid gap-12 py-12 lg:grid-cols-[1fr_360px]">
       <div>
         {error && (
-          <p role="alert" className="mb-6 border-l-2 border-merlot bg-merlot/8 px-4 py-3 text-[14px] text-merlot">
+          <p role="alert" className="mb-6 border-l-2 border-olive bg-olive/8 px-4 py-3 text-[14px] text-olive">
             {error}
           </p>
         )}
 
         {cart?.notices.map((notice) => (
-          <p key={notice} role="status" className="mb-6 border-l-2 border-bronze bg-bronze/10 px-4 py-3 text-[14px] text-bark">
+          <p key={notice} role="status" className="mb-6 border-l-2 border-caramel bg-caramel/10 px-4 py-3 text-[14px] text-earth">
             {notice}
           </p>
         ))}
 
-        <ul className="m-0 list-none border-t border-ink/12 p-0">
+        <ul className="m-0 list-none border-t border-earth/12 p-0">
           {lines.map((line) => (
             <CartLineRow key={line.key} line={line} locale={locale} dict={dict} />
           ))}
@@ -69,14 +69,14 @@ export function CartPageBody({ locale, dict }: { locale: Locale; dict: Dictionar
 
         <Link
           href={`/${locale}/tienda`}
-          className="mt-8 inline-block font-mono text-[11px] tracking-[0.12em] text-graphite uppercase underline underline-offset-4 hover:text-ink"
+          className="mt-8 inline-block font-mono text-[11px] tracking-[0.12em] text-slate uppercase underline underline-offset-4 hover:text-earth"
         >
           {dict.cart.continueShopping}
         </Link>
       </div>
 
       {cart && (
-        <aside className="h-fit border border-ink/15 bg-parchment p-6 lg:sticky lg:top-28">
+        <aside className="h-fit border border-earth/15 bg-paper p-6 lg:sticky lg:top-28">
           <CartTotalsPanel
             totals={cart.totals}
             locale={locale}
@@ -86,11 +86,11 @@ export function CartPageBody({ locale, dict }: { locale: Locale; dict: Dictionar
           <Link
             href={`/${locale}/checkout`}
             aria-disabled={busy}
-            className="mt-5 block bg-merlot py-4 text-center font-mono text-[11px] tracking-[0.12em] text-linen uppercase transition-colors hover:bg-merlot-bright"
+            className="mt-5 block bg-earth py-4 text-center font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive"
           >
             {dict.cart.checkout}
           </Link>
-          <p className="mt-4 mb-0 text-center text-[12px] leading-relaxed text-graphite">
+          <p className="mt-4 mb-0 text-center text-[12px] leading-relaxed text-slate">
             {dict.shop.shipping} · {dict.shop.currency}
           </p>
         </aside>

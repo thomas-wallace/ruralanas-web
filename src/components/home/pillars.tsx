@@ -12,7 +12,7 @@ export function Pillars({ dict, locale }: { dict: Dictionary; locale: Locale }) 
   return (
     <section
       aria-label={dict.pillars.ariaLabel}
-      className="bg-bark px-[var(--spacing-gutter)] py-[clamp(56px,9vh,96px)] text-linen"
+      className="bg-shell px-[var(--spacing-gutter)] py-[clamp(56px,9vh,96px)] text-earth"
     >
       <ul className="mx-auto grid max-w-[1240px] list-none gap-12 p-0 md:grid-cols-3 md:gap-[clamp(32px,4vw,64px)]">
         {dict.pillars.items.map((item) => (
@@ -20,12 +20,12 @@ export function Pillars({ dict, locale }: { dict: Dictionary; locale: Locale }) 
             <h2 className="m-0 font-sans text-[14px] font-medium tracking-[0.04em] uppercase">
               {item.title}
             </h2>
-            <p className="mb-6 mt-5 max-w-[380px] text-[14px] leading-relaxed text-linen/75">
+            <p className="mb-6 mt-5 max-w-[380px] text-[14px] leading-relaxed text-slate">
               {item.text}
             </p>
             <Link
               href={routes.about(locale, item.section)}
-              className="mt-auto text-[13px] font-medium tracking-[0.04em] uppercase underline underline-offset-4 transition-colors hover:text-bronze"
+              className="mt-auto text-[13px] font-medium tracking-[0.04em] uppercase underline underline-offset-4 transition-colors hover:text-olive"
             >
               {item.cta}
             </Link>
