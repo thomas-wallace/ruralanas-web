@@ -34,8 +34,20 @@ export const homeContent = {
   },
 
   gallery: {
-    /** Una foto por panel, en el orden de `dict.gallery.items`. */
-    photos: [null, null, null, null] as (string | null)[],
+    /**
+     * Una foto por panel, en el orden de `dict.gallery.items`. `position` elige
+     * el recorte: los paneles son verticales y una foto apaisada necesita
+     * apuntar a lo importante.
+     */
+    photos: [
+      { src: '/media/lana-fibras.jpg' },
+      null,
+      // Versión vertical armada a partir de la apaisada (`etiqueta-ruralanas.jpg`):
+      // recortada sobre la etiqueta y extendida con el mismo gris del fondo, para
+      // que el panel no la agrande hasta cortar el texto.
+      { src: '/media/etiqueta-ruralanas-vertical.jpg', position: 'center 35%' },
+      null,
+    ] as ({ src: string; position?: string } | null)[],
   },
 
   news: {

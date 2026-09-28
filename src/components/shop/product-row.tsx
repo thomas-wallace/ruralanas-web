@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 import { useCart } from '@/components/cart/cart-provider'
 import { AvailabilityBadge } from '@/components/shop/availability-badge'
-import { formatPrice } from '@/lib/format'
+import { useFormatPrice } from '@/components/currency/currency-provider'
 import type { ProductSummary } from '@/lib/catalog/types'
 import type { Dictionary } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n/config'
@@ -25,6 +25,7 @@ export function ProductRow({
   dict: Dictionary
 }) {
   const { add, openDrawer } = useCart()
+  const formatPrice = useFormatPrice(locale)
   const [justAdded, setJustAdded] = useState(false)
   const href = `/${locale}/tienda/${product.slug}`
   const soldOut = product.availability.state === 'sold_out'
@@ -63,7 +64,7 @@ export function ProductRow({
           {product.technique ? ` · ${dict.techniques[product.technique]}` : ''}
         </div>
         <div className="mt-1.5 font-mono text-[13px] text-olive sm:hidden">
-          {formatPrice(product.price, locale)}
+          {formatPrice(product.price)}
         </div>
       </div>
 
@@ -72,7 +73,7 @@ export function ProductRow({
       </div>
 
       <div className="hidden font-mono text-[13px] text-olive sm:block">
-        {formatPrice(product.price, locale)}
+        {formatPrice(product.price)}
       </div>
 
       <div className="text-right">
@@ -91,7 +92,7 @@ export function ProductRow({
             <button
               type="button"
               onClick={handleAdd}
-              className="cursor-pointer rounded-sm bg-earth px-3.5 py-2 font-mono text-[11px] tracking-[0.1em] text-paper uppercase transition-colors hover:bg-olive"
+              className="cursor-pointer rounded-sm bg-earth px-3.5 py-2 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive"
             >
               {justAdded ? dict.shop.added : dict.shop.addToCart}
             </button>

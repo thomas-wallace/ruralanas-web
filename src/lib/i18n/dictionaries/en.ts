@@ -73,6 +73,9 @@ export const en: Dictionary = {
     cta: 'Visit us digitally',
     videoPending: 'Video tour of the store',
     photoAlt: 'Front of the Ruralanas store in Punta del Este, among pine trees',
+    stockists: {
+      title: 'Stockists',
+    },
   },
 
   gallery: {
@@ -83,7 +86,7 @@ export const en: Dictionary = {
         cta: 'Discover our materials',
         section: 'materiales',
         shot: 'Photo of hands with raw wool',
-        photoAlt: 'Hands holding a raw merino wool fleece',
+        photoAlt: 'Hands opening a raw merino wool fleece',
       },
       {
         title: 'Rooted in sustainability',
@@ -97,7 +100,7 @@ export const en: Dictionary = {
         cta: 'Discover our supply chain',
         section: 'procesos',
         shot: 'Photo of the garment tag',
-        photoAlt: 'Ruralanas tag on a knitted garment',
+        photoAlt: 'Woven Ruralanas label: handmade with natural fibres, made in Uruguay',
       },
       {
         title: 'The people behind our knitwear',
@@ -128,6 +131,7 @@ export const en: Dictionary = {
   },
 
   footer: {
+    currency: 'Currency',
     contactTitle: 'Write to us',
     contactLead: 'Questions, wholesale or press? Leave us a message and we will reply.',
     name: 'Name',
@@ -161,7 +165,8 @@ export const en: Dictionary = {
     pieces: 'pieces',
     piece: 'piece',
     shipping: 'Worldwide shipping',
-    currency: 'Prices in USD',
+    // Seguido de la moneda de la vidriera: USD, EUR o GBP.
+    currency: 'Prices in',
     categories: 'Categories',
     all: 'All',
     technique: 'Technique',
@@ -252,6 +257,7 @@ export const en: Dictionary = {
     free: 'Free',
     tax: 'Taxes',
     taxIncluded: 'VAT included ({amount})',
+    chargedIn: 'Charged in US dollars: {amount}. The price in your currency is approximate.',
     discount: 'Discount',
     total: 'Total',
     checkout: 'Checkout',

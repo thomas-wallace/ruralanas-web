@@ -1,3 +1,4 @@
+import { Stockists } from '@/components/home/stockists'
 import { StoreVisitButton } from '@/components/home/store-visit-button'
 import { PhotoFader } from '@/components/ui/photo-fader'
 import { Reveal } from '@/components/ui/reveal'
@@ -17,25 +18,30 @@ export function StoreVisit({ dict }: { dict: Dictionary }) {
           />
         </Reveal>
 
-        <Reveal className="max-w-[420px]">
-          <div className="text-[12px] tracking-[0.06em] text-slate uppercase">{store.eyebrow}</div>
-          <h2 className="mb-5 mt-4 font-sans text-[clamp(20px,2vw,24px)] font-medium tracking-[0.02em] uppercase">
-            {store.title}
-          </h2>
-          <p className="m-0 text-[15px] leading-relaxed text-slate">{store.text}</p>
-          <address className="mt-5 text-[15px] not-italic leading-relaxed text-slate">
-            {dict.footer.address}
-            <br />
-            {dict.footer.city}
-          </address>
-          <div className="mt-8">
-            <StoreVisitButton
-              label={store.cta}
-              closeLabel={dict.nav.close}
-              videoSrc={homeContent.store.video}
-              pendingLabel={store.videoPending}
-            />
+        {/* `min-w-0`: sin él, el carril de tiendas estira la columna de la grilla. */}
+        <Reveal className="min-w-0">
+          <div className="max-w-[420px]">
+            <div className="text-[12px] tracking-[0.06em] text-slate uppercase">{store.eyebrow}</div>
+            <h2 className="mb-5 mt-4 font-sans text-[clamp(20px,2vw,24px)] font-medium tracking-[0.02em] uppercase">
+              {store.title}
+            </h2>
+            <p className="m-0 text-[15px] leading-relaxed text-slate">{store.text}</p>
+            <address className="mt-5 text-[15px] not-italic leading-relaxed text-slate">
+              {dict.footer.address}
+              <br />
+              {dict.footer.city}
+            </address>
+            <div className="mt-8">
+              <StoreVisitButton
+                label={store.cta}
+                closeLabel={dict.nav.close}
+                videoSrc={homeContent.store.video}
+                pendingLabel={store.videoPending}
+              />
+            </div>
           </div>
+
+          <Stockists dict={dict} />
         </Reveal>
       </div>
     </section>

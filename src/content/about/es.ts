@@ -14,7 +14,7 @@ export const es: AboutContent = {
     meta: {
       title: 'Nosotros · Ruralanas',
       description:
-        'Empresa social uruguaya desde 2003: prendas y deco en lana merino 100% artesanal, tejidas por más de 150 mujeres rurales.',
+        'Empresa social uruguaya desde 2003: prendas y home en lana merino 100% artesanal, tejidas por más de 150 mujeres rurales.',
     },
     eyebrow: 'Nosotros',
     title: 'Tejemos calidad de vida',

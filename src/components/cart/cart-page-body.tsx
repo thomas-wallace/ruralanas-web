@@ -8,6 +8,7 @@
  * sirve para seguir comprando; esta página, para decidir.
  */
 
+import { CurrentCurrency } from '@/components/currency/currency-switch'
 import Link from 'next/link'
 
 import { CartLineRow } from './cart-line-row'
@@ -91,7 +92,7 @@ export function CartPageBody({ locale, dict }: { locale: Locale; dict: Dictionar
             {dict.cart.checkout}
           </Link>
           <p className="mt-4 mb-0 text-center text-[12px] leading-relaxed text-slate">
-            {dict.shop.shipping} · {dict.shop.currency}
+            {dict.shop.shipping} · {dict.shop.currency} <CurrentCurrency />
           </p>
         </aside>
       )}

@@ -29,13 +29,9 @@ export function Hero({ dict }: { dict: Dictionary }) {
       id="top"
       className="relative flex min-h-screen items-end overflow-hidden px-[var(--spacing-gutter)] pb-[clamp(120px,16vh,170px)]"
     >
-      {/* Textura de fondo: se ve mientras carga el video, o si no carga. */}
-      <div
-        className="absolute inset-0"
-        style={{
-          background: 'repeating-linear-gradient(115deg,#14110e 0 34px,#191510 34px 68px)',
-        }}
-      />
+      {/* Fondo liso y oscuro: es lo que se ve mientras carga el video, o si no
+          carga. Sin textura: un rayado ahí se lee como sitio en construcción. */}
+      <div className="absolute inset-0 bg-[#14110e]" />
 
       {/* Video del campo: decorativo, sin sonido y sin interacción. El contenedor usa
           unidades de contenedor para cubrir el header entero sin deformar el 16:9. */}

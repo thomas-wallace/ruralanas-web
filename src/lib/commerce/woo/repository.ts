@@ -226,7 +226,7 @@ function toCart(cart: WooCart): Cart {
 // ── Repositorio ──────────────────────────────────────────────────────────────
 
 function credentialsFrom(context: CommerceContext): WooCredentials {
-  return { cartToken: context.token, nonce: null, cookie: context.cookie }
+  return { cartToken: context.token, nonce: null, cookie: context.cookie, locale: context.locale }
 }
 
 function wrap<T>(data: T, credentials: WooCredentials): CommerceResult<T> {

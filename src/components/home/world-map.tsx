@@ -51,9 +51,12 @@ export function WorldMap({
   const nameOf = countryNamer(locale)
   const byCode = new Map(reach.countries.map((país) => [país.code, país]))
 
-  /** Nodos: locales propios y países que a esta resolución no tienen silueta. */
+  /**
+   * Nodos: países que a esta resolución no tienen silueta. El local propio no
+   * lleva marca: lo dice el tono más oscuro del país.
+   */
   const nodes = reach.countries.flatMap((país) => {
-    if (!país.node) return []
+    if (!país.node || país.status === 'store') return []
     const { x, y } = projectPoint(país.node.lon, país.node.lat)
     return [{ ...país, x, y, name: país.node.label ?? nameOf(país.code) }]
   })
@@ -84,12 +87,10 @@ export function WorldMap({
 
         {nodes.map((node) => (
           <g key={`node-${node.code}`} data-node={node.status}>
-            {/* El halo separa el nodo del relleno del país, que es del mismo rojo. */}
-            {node.status === 'store' && <circle cx={node.x} cy={node.y} r={9} className="halo" />}
             <circle
               cx={node.x}
               cy={node.y}
-              r={node.status === 'store' ? 4.2 : 3}
+              r={3}
               data-country={node.code}
               data-label={node.name}
               data-status={node.status}

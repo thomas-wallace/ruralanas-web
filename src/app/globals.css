@@ -42,7 +42,7 @@
   --spacing-section: clamp(80px, 11vh, 140px);
   --spacing-gutter: clamp(18px, 5vw, 80px);
   /* Alto del header fijo: lo usan las barras que se pegan debajo de él. */
-  --spacing-header: 64px;
+  --spacing-header: 80px;
 }
 
 @layer base {
@@ -221,6 +221,42 @@
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
+   Textura de papel.
+   Un color plano se lee como pantalla; la marca es lana hilada y tejida a
+   mano. Esto le da al fondo el grano de un papel prensado sin cambiarle el
+   color: lo que hay debajo sigue siendo `--color-shell`.
+
+   El grano es procedural —un `feTurbulence` iluminado en rasante, embebido en
+   el propio CSS—, así que no hay archivo de textura que pedir, ni imagen que
+   cargar, ni JavaScript. El navegador lo rasteriza una vez y lo repite.
+
+   Tres detalles que no son adorno; cambiarlos obliga a medir de nuevo:
+
+    - `color-interpolation-filters: sRGB`. Por omisión los filtros trabajan en
+      linearRGB y el relieve sale lavado: la media del ruido pasa de 0,83 a
+      0,92 y `soft-light` lo aplasta hasta volverlo invisible.
+    - La matriz resta esa media para centrar el gris en 0,5 exacto, que es el
+      valor que `soft-light` deja pasar sin tocar. De ahí que el color se
+      conserve: medido sobre `shell`, 228,0 → 227,3 sobre 255.
+    - `stitchTiles='stitch'` es lo único que evita la costura del mosaico.
+
+   La intensidad —el 0,95 de la diagonal— está igualada al papel de referencia
+   de la marca: desvío estándar de 3 sobre 255.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.paper-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g' filterUnits='userSpaceOnUse' x='0' y='0' width='300' height='300' color-interpolation-filters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch' seed='7'/%3E%3CfeDiffuseLighting lighting-color='white' surfaceScale='1.5'%3E%3CfeDistantLight azimuth='125' elevation='58'/%3E%3C/feDiffuseLighting%3E%3CfeColorMatrix values='0.95 0 0 0 -0.2875 0 0.95 0 0 -0.2875 0 0 0.95 0 -0.2875 0 0 0 0 1'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 300px 300px;
+  background-blend-mode: soft-light;
+}
+
+/* Quien pide más contraste no quiere ruido de fondo, por tenue que sea. */
+@media (prefers-contrast: more) {
+  .paper-grain {
+    background-image: none;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
    Mapa de alcance de la home.
    El SVG lo arma el servidor (`components/home/world-map.tsx`) y pinta cada
    país según su `data-status`. El color vive acá y no en el componente porque
@@ -259,20 +295,11 @@
   }
 }
 
-/* El disco claro despega el nodo del relleno del país, que es del mismo rojo. */
-.world-map [data-node='store'] .halo {
-  fill: var(--color-shell);
-  stroke: color-mix(in srgb, var(--color-earth) 45%, transparent);
-  stroke-width: 1.2;
-}
-.world-map [data-node] circle:not(.halo) {
+.world-map [data-node] circle {
   stroke: var(--color-shell);
   stroke-width: 1.2;
 }
-.world-map [data-node='store'] circle:not(.halo) {
-  fill: var(--color-olive);
-}
-.world-map [data-node='shipped'] circle:not(.halo) {
+.world-map [data-node='shipped'] circle {
   fill: var(--color-earth);
 }
 
@@ -290,11 +317,5 @@
   background: var(--color-caramel);
 }
 .world-legend-swatch[data-status='store'] {
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-  background: var(--color-olive);
-  box-shadow:
-    0 0 0 2.5px var(--color-shell),
-    0 0 0 4px color-mix(in srgb, var(--color-earth) 45%, transparent);
+  background: var(--color-earth);
 }

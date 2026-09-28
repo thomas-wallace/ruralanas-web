@@ -11,7 +11,7 @@
 import Link from 'next/link'
 
 import { useCart } from './cart-provider'
-import { formatPrice } from '@/lib/format'
+import { useFormatPrice } from '@/components/currency/currency-provider'
 import type { CartLine } from '@/lib/commerce/types'
 import type { Dictionary } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n/config'
@@ -27,6 +27,7 @@ export function CartLineRow({
   dict: Dictionary
   compact?: boolean
 }) {
+  const formatPrice = useFormatPrice(locale)
   const { setQuantity, remove, busy } = useCart()
   const unique = line.maxUnits <= 1
 
@@ -100,7 +101,7 @@ export function CartLineRow({
       </div>
 
       <p className="m-0 shrink-0 font-mono text-[13px] text-earth">
-        {formatPrice(line.lineTotal, locale)}
+        {formatPrice(line.lineTotal)}
       </p>
     </li>
   )

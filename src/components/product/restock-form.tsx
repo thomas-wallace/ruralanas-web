@@ -15,7 +15,7 @@ function Submit({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="cursor-pointer bg-earth px-5 py-3 font-mono text-[11px] tracking-[0.1em] text-paper uppercase transition-colors hover:bg-olive disabled:opacity-60"
+      className="cursor-pointer bg-earth px-5 py-3 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive disabled:opacity-60"
     >
       {pending ? '…' : label}
     </button>

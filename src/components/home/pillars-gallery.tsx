@@ -28,11 +28,12 @@ export function PillarsGallery({ dict, locale }: { dict: Dictionary; locale: Loc
             >
               {photo ? (
                 <Image
-                  src={photo}
+                  src={photo.src}
                   alt={item.photoAlt}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                   className="object-cover"
+                  style={{ objectPosition: photo.position ?? 'center' }}
                 />
               ) : (
                 <PendingShot
@@ -44,10 +45,12 @@ export function PillarsGallery({ dict, locale }: { dict: Dictionary; locale: Loc
                 />
               )}
 
-              {/* Degradado para que el texto blanco se lea sobre cualquier foto. */}
+              {/* Degradado para que el texto blanco se lea sobre cualquier foto.
+                  Negro neutro, igual que en las tarjetas de Home y Cuero: el
+                  marrón teñía las fotos. */}
               <span
                 aria-hidden="true"
-                className="absolute inset-0 bg-linear-to-t from-earth/70 via-earth/15 to-transparent"
+                className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent"
               />
 
               <div className="absolute inset-x-0 bottom-0 flex flex-col items-center px-6 pb-[clamp(28px,4vw,44px)] text-center">
@@ -56,7 +59,7 @@ export function PillarsGallery({ dict, locale }: { dict: Dictionary; locale: Loc
                 </h3>
                 <Link
                   href={routes.about(locale, item.section)}
-                  className="mt-5 border border-paper/85 px-5 py-2.5 text-[11px] tracking-[0.06em] text-paper uppercase transition-colors hover:bg-paper hover:text-earth"
+                  className="mt-5 border border-paper/85 px-5 py-2.5 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-paper hover:text-earth"
                 >
                   {item.cta}
                 </Link>

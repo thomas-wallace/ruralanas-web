@@ -24,13 +24,13 @@ export default function NotFound() {
       <div className="mt-2 flex flex-wrap justify-center gap-3">
         <Link
           href={routes.home(locale)}
-          className="border border-earth px-6 py-3 text-[13px] tracking-[0.06em] uppercase transition-colors hover:bg-earth hover:text-paper"
+          className="border border-earth px-6 py-3 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors hover:bg-earth hover:text-paper"
         >
           {dict.notFound.home}
         </Link>
         <Link
           href={routes.shop(locale)}
-          className="bg-earth px-6 py-3 text-[13px] tracking-[0.06em] text-paper uppercase transition-colors hover:bg-earth"
+          className="bg-earth px-6 py-3 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-earth"
         >
           {dict.notFound.shop}
         </Link>

@@ -265,6 +265,40 @@ caracteres) y las claves `WOO_API_KEY` / `WOO_API_SECRET`, que se generan en Woo
 Ajustes → Avanzado → API REST con permiso de lectura/escritura. Para **leerlas** no hace
 falta ninguna clave.
 
+**Dolibarr, sólo lectura** — `src/lib/dolibarr/`
+
+Lectura directa del ERP por su API REST, con un usuario que sólo tiene lectura sobre
+Productos, Stock y Categorías. El cliente sólo sabe hacer GET, y el token
+(`DOLIBARR_API_KEY`) viaja en la cabecera `DOLAPIKEY` desde el servidor: nunca en una URL ni
+en el bundle del navegador.
+
+| Ruta | Qué devuelve | Caché |
+|---|---|---|
+| `GET /api/productos` | `{ total, productos }`: todo lo que está a la venta | 5 min |
+| `GET /api/productos/:ref` | Un producto por referencia, con el stock al día. 404 si no existe **o no está a la venta** | 1 min |
+| `GET /api/categorias` | `{ total, categorias }` | 1 h |
+| `GET /api/imagenes/productos/:ref/:archivo` | La foto, desde disco. Nunca llama al ERP | 1 año, inmutable |
+
+Cada producto sale con `id, sku, nombre, descripcion, precio, precio_sin_iva, iva, stock,
+disponible, imagenes, actualizado` y nada más: `transform.ts` arma el objeto de cero, así que
+`cost_price`, `pmp` y cualquier campo interno no pueden salir por descuido.
+
+Las fotos se bajan de Dolibarr **una vez** y se guardan en `DOLIBARR_MEDIA_DIR` (por defecto
+`.data/dolibarr-media`, fuera de Git). Cada hora se vuelve a listar y sólo se descarga lo
+nuevo; el nombre guardado lleva un hash, así que una foto reemplazada en el ERP cambia de
+URL. `POST /api/revalidate { "tags": ["catalog"] }` vacía la caché de productos y de fotos.
+
+Los errores salen como `{ error: { code, message } }`: `unauthorized` (token inválido o API
+apagada) y `forbidden` (falta un permiso) como 502, porque son configuración nuestra y no del
+visitante; `not_found` como 404. El detalle se registra en el servidor, sin el token.
+
+`npm run verificar:dolibarr -- --base http://localhost:3000 --ref <REF>` compara contra el
+ERP real: total de productos, stock de una pieza y ausencia del token en respuestas y bundle.
+
+Estas rutas todavía **no alimentan las páginas**: la tienda sigue leyendo de Woo
+(`CATALOG_SOURCE=woo`). Conectarlas es un paso aparte, ver
+[pendientes](../../../00-estrategia/pendientes.md).
+
 **Leads** — `src/lib/leads/`
 
 Contacto, newsletter y aviso de reposición entran por acciones de servidor, se validan y

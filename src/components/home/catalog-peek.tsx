@@ -11,7 +11,7 @@ import { routes } from '@/lib/routes'
 
 type LineImage = { src: string; alt: string } | null
 
-/** Entrada grande a una línea de producto (Deco, Cuero). */
+/** Entrada grande a una línea de producto (Home, Cuero). */
 export interface PeekLine {
   key: string
   title: string
@@ -54,7 +54,9 @@ export function CatalogPeek({
             {products.map((product) => (
               <li
                 key={product.id}
-                className="w-[72%] shrink-0 snap-start sm:w-[calc((100%-2*clamp(14px,2vw,24px))/3)] lg:w-[calc((100%-3*clamp(14px,2vw,24px))/4)]"
+                // Anchos que no dividen justo: la última tarjeta visible queda
+                // cortada en el borde y eso invita a deslizar.
+                className="w-[72%] shrink-0 snap-start sm:w-[40%] lg:w-[27%]"
               >
                 <ProductCard product={product} locale={locale} dict={dict} />
               </li>
@@ -65,13 +67,13 @@ export function CatalogPeek({
         <Reveal className="mt-12 flex justify-center">
           <Link
             href={shop}
-            className="inline-block w-full max-w-[440px] bg-earth px-8 py-3.5 text-center text-[13px] font-semibold tracking-[0.08em] text-paper uppercase transition-colors hover:bg-earth"
+            className="inline-block w-full max-w-[440px] bg-earth px-8 py-3.5 text-center font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-earth"
           >
             {dict.peek.cta}
           </Link>
         </Reveal>
 
-        <ul className="mt-[clamp(48px,8vh,88px)] grid list-none gap-[clamp(14px,2vw,24px)] p-0 sm:grid-cols-2">
+        <ul className="mt-[clamp(48px,8vh,88px)] grid list-none gap-[clamp(24px,5vw,72px)] p-0 sm:grid-cols-2">
           {lines.map((line) => (
             <Reveal as="li" key={line.key}>
               <Link
@@ -84,12 +86,13 @@ export function CatalogPeek({
                       src={line.image.src}
                       alt={line.image.alt}
                       fill
-                      sizes="(max-width: 640px) 100vw, 620px"
+                      sizes="(max-width: 640px) 100vw, 590px"
                       className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
                     />
+                    {/* Negro neutro y no `earth`: el marrón teñía la foto. */}
                     <span
                       aria-hidden="true"
-                      className="absolute inset-0 bg-linear-to-t from-earth/65 via-earth/10 to-transparent"
+                      className="absolute inset-0 bg-linear-to-t from-black/60 via-black/10 to-transparent"
                     />
                   </>
                 ) : (

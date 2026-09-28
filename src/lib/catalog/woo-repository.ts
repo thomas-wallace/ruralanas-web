@@ -24,6 +24,7 @@ import 'server-only'
 
 import type { CatalogRepository } from './repository'
 import { decodeEntities, humanizeName, stripTags } from './woo-text'
+import { translateAttributeName, translateTermName } from './woo-translations'
 import type {
   Artisan,
   CategoryFacet,
@@ -35,7 +36,8 @@ import type {
   ProductSummary,
   ProductVariant,
 } from './types'
-import type { Locale } from '@/lib/i18n/config'
+import { defaultLocale, type Locale } from '@/lib/i18n/config'
+import { localizeWpApiUrl } from '@/lib/i18n/translatepress'
 
 export const WOO_CATALOG_TAG = 'catalog'
 
@@ -128,9 +130,11 @@ function splitDescription(shortDescription: string): {
   let measurements: string | undefined
 
   for (const line of lines) {
-    if (!measurements && /^medidas?\s*:/i.test(line)) {
-      measurements = line.replace(/^medidas?\s*:\s*/i, '')
-    } else if (!composition && /^\s*\d+\s*%|lana merino/i.test(line) && line.length < 80) {
+    // La descripción llega traducida por TranslatePress: se reconocen las
+    // etiquetas en los dos idiomas.
+    if (!measurements && /^(medidas?|measurements?)\s*:/i.test(line)) {
+      measurements = line.replace(/^(medidas?|measurements?)\s*:\s*/i, '')
+    } else if (!composition && /^\s*\d+\s*%|lana merino|merino wool/i.test(line) && line.length < 80) {
       composition = line
     } else {
       rest.push(line)
@@ -146,8 +150,14 @@ function splitDescription(shortDescription: string): {
  *  transversal: casi todo está ahí y no dice nada del producto. */
 const CATEGORY_PRIORITY = ['pashminas-ruanas', 'deco', 'accesorios', 'lana', 'regalos']
 
+/** Nombres que el sitio muestra distinto de como están cargados en Woo. El
+ *  slug no cambia: es el que usan las URLs y el filtro. Cuando la categoría se
+ *  renombre en producción, esta tabla sobra. */
+const CATEGORY_NAME_OVERRIDES: Record<string, string> = { deco: 'Home' }
+
 function toCategoryRef(category: WooCategory): CategoryRef {
-  return { id: String(category.id), slug: category.slug, name: decodeEntities(category.name) }
+  const name = CATEGORY_NAME_OVERRIDES[category.slug] ?? decodeEntities(category.name)
+  return { id: String(category.id), slug: category.slug, name }
 }
 
 function primaryCategory(categories: WooCategory[]): CategoryRef {
@@ -189,7 +199,7 @@ function toAvailability(product: WooProduct): ProductSummary['availability'] {
 function colorOf(product: WooProduct): { name: string; terms: WooTerm[]; attribute: string } {
   const attribute =
     product.attributes.find((item) => item.taxonomy === 'pa_color') ??
-    product.attributes.find((item) => /color/i.test(item.name))
+    product.attributes.find((item) => /colou?r/i.test(item.name))
 
   return {
     name: attribute?.terms?.[0] ? decodeEntities(attribute.terms[0].name) : '',
@@ -305,8 +315,8 @@ function baseUrl(): string {
   return url.replace(/\/$/, '')
 }
 
-async function request<T>(path: string): Promise<T> {
-  const response = await fetch(`${baseUrl()}${path}`, {
+async function request<T>(path: string, locale: Locale): Promise<T> {
+  const response = await fetch(`${localizeWpApiUrl(baseUrl(), locale)}${path}`, {
     headers: { accept: 'application/json' },
     // El stock cambia cuando cambia en el ERP. Cinco minutos es el compromiso
     // entre no vender lo que no hay y no pegarle a WordPress en cada visita;
@@ -326,8 +336,39 @@ async function request<T>(path: string): Promise<T> {
  * memoria es más simple y más rápido que traducir cada filtro a la Store API,
  * y da resultados idénticos al mock. Revisar si el catálogo pasa de ~200.
  */
-function allProducts(): Promise<WooProduct[]> {
-  return request<WooProduct[]>('/products?per_page=100&catalog_visibility=catalog')
+async function allProducts(locale: Locale): Promise<WooProduct[]> {
+  const products = request<WooProduct[]>('/products?per_page=100&catalog_visibility=catalog', locale)
+  if (locale === defaultLocale) return products
+
+  const [list, categories] = await Promise.all([
+    products,
+    request<WooCategory[]>('/products/categories?per_page=100', locale),
+  ])
+  return list.map((product) => localizeProduct(product, categories, locale))
+}
+
+/**
+ * Completa lo que TranslatePress deja en español dentro de cada producto. Sólo
+ * toca textos que se muestran: el `name` y el `value` de las variaciones son
+ * los que Woo espera de vuelta al agregar al carrito, y no se traducen.
+ */
+function localizeProduct(product: WooProduct, categories: WooCategory[], locale: Locale): WooProduct {
+  const names = new Map(categories.map((category) => [category.slug, category.name]))
+  return {
+    ...product,
+    categories: product.categories.map((category) => ({
+      ...category,
+      name: names.get(category.slug) ?? category.name,
+    })),
+    attributes: product.attributes.map((attribute) => ({
+      ...attribute,
+      name: translateAttributeName(attribute.name, locale),
+      terms: attribute.terms.map((term) => ({
+        ...term,
+        name: translateTermName(decodeEntities(term.name), locale),
+      })),
+    })),
+  }
 }
 
 function matches(product: WooProduct, query: ProductQuery): boolean {
@@ -350,7 +391,9 @@ function matches(product: WooProduct, query: ProductQuery): boolean {
 
 export const wooCatalogRepository: CatalogRepository = {
   async listProducts(query: ProductQuery): Promise<ProductSummary[]> {
-    const products = (await allProducts()).filter((product) => matches(product, query))
+    const products = (await allProducts(query.locale)).filter((product) =>
+      matches(product, query),
+    )
     const summaries = products.map(toSummary)
 
     switch (query.sort) {
@@ -373,17 +416,18 @@ export const wooCatalogRepository: CatalogRepository = {
   },
 
   async getProduct(slug: string, locale: Locale): Promise<Product | null> {
-    const products = await allProducts()
+    const products = await allProducts(locale)
     const found = products.find((product) => product.slug === slug)
     return found ? toProduct(found, locale, products) : null
   },
 
   async listProductSlugs(): Promise<string[]> {
-    return (await allProducts()).map((product) => product.slug)
+    // Los slugs son los mismos en todos los idiomas.
+    return (await allProducts(defaultLocale)).map((product) => product.slug)
   },
 
-  async listCategories(): Promise<CategoryFacet[]> {
-    const products = await allProducts()
+  async listCategories(locale: Locale): Promise<CategoryFacet[]> {
+    const products = await allProducts(locale)
     const counts = new Map<string, CategoryFacet>()
 
     for (const product of products) {

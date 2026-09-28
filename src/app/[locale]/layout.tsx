@@ -5,6 +5,8 @@ import { notFound } from 'next/navigation'
 import '../globals.css'
 import { CartDrawer } from '@/components/cart/cart-drawer'
 import { CartProvider } from '@/components/cart/cart-provider'
+import { CurrencyProvider } from '@/components/currency/currency-provider'
+import { getRates } from '@/lib/currency/rate'
 import { commerce } from '@/lib/commerce'
 import { SiteFooter } from '@/components/layout/site-footer'
 import { SiteHeader } from '@/components/layout/site-header'
@@ -84,6 +86,7 @@ export default async function LocaleLayout({
   if (!isLocale(raw)) notFound()
   const locale = raw as Locale
   const dict = getDictionary(locale)
+  const rates = await getRates()
   const aboutLinks = (await about.listSections(locale)).map((section) => ({
     href: routes.about(locale, section.slug),
     label: section.eyebrow,
@@ -107,12 +110,14 @@ export default async function LocaleLayout({
           {dict.nav.skipToContent}
         </a>
 
-        <CartProvider locale={locale} mode={commerce.kind}>
-          <SiteHeader locale={locale} dict={dict} />
-          <main id="contenido">{children}</main>
-          <SiteFooter locale={locale} dict={dict} aboutLinks={aboutLinks} />
-          <CartDrawer locale={locale} dict={dict} />
-        </CartProvider>
+        <CurrencyProvider rates={rates}>
+          <CartProvider locale={locale} mode={commerce.kind}>
+            <SiteHeader locale={locale} dict={dict} />
+            <main id="contenido">{children}</main>
+            <SiteFooter locale={locale} dict={dict} aboutLinks={aboutLinks} />
+            <CartDrawer locale={locale} dict={dict} />
+          </CartProvider>
+        </CurrencyProvider>
       </body>
     </html>
   )

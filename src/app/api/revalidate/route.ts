@@ -1,5 +1,6 @@
 import { revalidateTag } from 'next/cache'
 import { NextResponse } from 'next/server'
+import { invalidateDolibarrCache } from '@/lib/dolibarr'
 
 /**
  * Invalidación de caché para el servicio de integración.
@@ -35,6 +36,12 @@ export async function POST(request: Request) {
   }
 
   for (const tag of tags as string[]) revalidateTag(tag)
+  // La caché en memoria de Dolibarr no conoce etiquetas: `catalog` vacía la de
+  // productos y la de fotos, que así se vuelven a revisar contra el disco.
+  if ((tags as string[]).includes('catalog')) {
+    invalidateDolibarrCache('producto')
+    invalidateDolibarrCache('images:')
+  }
 
   return NextResponse.json({ revalidated: tags, at: Date.now() })
 }

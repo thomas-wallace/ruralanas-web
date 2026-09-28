@@ -6,6 +6,11 @@ import { useCallback, useEffect, useRef, useState, type ReactNode } from 'react'
  * Carril horizontal con scroll nativo (táctil, trackpad, rueda con shift) y
  * flechas para quien usa mouse. Cada hijo encaja con scroll-snap; las flechas
  * se deshabilitan en los extremos.
+ *
+ * Que se puede deslizar lo dicen dos cosas, sin sombras sobre las fotos: la
+ * última tarjeta queda cortada en el borde (el ancho lo decide quien usa el
+ * carril) y debajo corre una línea fina que muestra cuánto del catálogo se ve
+ * y dónde se está parado.
  */
 export function ScrollRail({
   children,
@@ -20,6 +25,8 @@ export function ScrollRail({
 }) {
   const trackRef = useRef<HTMLUListElement>(null)
   const [edges, setEdges] = useState({ start: true, end: false })
+  /** Porción visible y posición, en fracciones del carril entero. */
+  const [progress, setProgress] = useState({ size: 1, offset: 0 })
 
   const measure = useCallback(() => {
     const track = trackRef.current
@@ -28,6 +35,10 @@ export function ScrollRail({
     setEdges({
       start: track.scrollLeft <= 2,
       end: track.scrollLeft + track.clientWidth >= track.scrollWidth - 2,
+    })
+    setProgress({
+      size: track.clientWidth / track.scrollWidth,
+      offset: track.scrollLeft / track.scrollWidth,
     })
   }, [])
 
@@ -80,6 +91,16 @@ export function ScrollRail({
       >
         <span aria-hidden="true">→</span>
       </button>
+
+      {/* Sólo se muestra si hay algo que deslizar. */}
+      {progress.size < 0.99 && (
+        <div aria-hidden="true" className="relative mx-auto mt-8 h-px w-full max-w-[320px] bg-earth/15">
+          <span
+            className="absolute inset-y-0 bg-earth transition-[left] duration-300 ease-out"
+            style={{ left: `${progress.offset * 100}%`, width: `${progress.size * 100}%` }}
+          />
+        </div>
+      )}
     </div>
   )
 }

@@ -19,7 +19,7 @@ export async function WorldReach({ dict, locale }: { dict: Dictionary; locale: L
   const reach = await getWorldReach()
 
   return (
-    <section className="bg-shell px-[var(--spacing-gutter)] py-[var(--spacing-section)] text-earth">
+    <section className="paper-grain bg-shell px-[var(--spacing-gutter)] py-[var(--spacing-section)] text-earth">
       <Reveal className="mx-auto max-w-[760px] text-center">
         <h2 className="m-0 font-display text-[clamp(32px,5vw,64px)] font-medium leading-[1.02]">
           {dict.world.titleTop}

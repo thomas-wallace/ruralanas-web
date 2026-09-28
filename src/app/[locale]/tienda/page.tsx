@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 
+import { CurrentCurrency } from '@/components/currency/currency-switch'
 import { FiltersDrawer } from '@/components/shop/filters-drawer'
 import { ProductCard } from '@/components/shop/product-card'
 import { ProductRow } from '@/components/shop/product-row'
 import { ShopFilters } from '@/components/shop/shop-filters'
 import { SortSelect } from '@/components/shop/sort-select'
+import { Watermark } from '@/components/ui/watermark'
 import { catalog } from '@/lib/catalog'
 import { getDictionary, resolveLocale } from '@/lib/i18n'
 import { locales } from '@/lib/i18n/config'
@@ -93,7 +95,9 @@ export default async function ShopPage({
   return (
     <div className="bg-paper text-earth">
       {/* Encabezado oscuro: separa la tienda del relato y deja respirar la grilla. */}
-      <div className="bg-shell px-[var(--spacing-gutter)] pb-10 pt-[104px] text-earth">
+      <div className="relative isolate overflow-hidden bg-shell px-[var(--spacing-gutter)] pb-10 pt-[120px] text-earth">
+        {/* El huso de la marca, hacia el centro: a la derecha del texto, sin irse al borde. */}
+        <Watermark className="left-[62%] top-1/2 hidden h-[clamp(300px,34vw,420px)] -translate-x-1/2 -translate-y-[42%] opacity-[0.09] sm:block" />
         <div className="mx-auto max-w-[1240px]">
           <h1 className="m-0 font-display text-[clamp(38px,6vw,68px)] font-medium leading-none">
             {dict.shop.title}
@@ -102,7 +106,7 @@ export default async function ShopPage({
             {dict.shop.lead}
           </p>
           <div className="mt-6 font-mono text-[11px] tracking-[0.18em] text-olive uppercase">
-            {allProducts.length} {dict.shop.pieces} · {dict.shop.shipping} · {dict.shop.currency}
+            {allProducts.length} {dict.shop.pieces} · {dict.shop.shipping} · {dict.shop.currency} <CurrentCurrency />
           </div>
         </div>
       </div>

@@ -20,7 +20,7 @@ export default async function ThanksPage({ params }: { params: Promise<{ locale:
   const dict = getDictionary(locale)
 
   return (
-    <div className="min-h-screen bg-paper px-[var(--spacing-gutter)] pt-[104px] text-earth">
+    <div className="min-h-screen bg-paper px-[var(--spacing-gutter)] pt-[120px] text-earth">
       <div className="mx-auto max-w-[1240px]">
         <Suspense
           fallback={

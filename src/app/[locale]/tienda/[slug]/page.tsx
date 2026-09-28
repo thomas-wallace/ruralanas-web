@@ -9,7 +9,8 @@ import { AvailabilityBadge } from '@/components/shop/availability-badge'
 import { ProductCard } from '@/components/shop/product-card'
 import { Reveal } from '@/components/ui/reveal'
 import { catalog } from '@/lib/catalog'
-import { formatPrice, interpolate } from '@/lib/format'
+import { Price } from '@/components/currency/currency-provider'
+import { interpolate } from '@/lib/format'
 import { getDictionary, resolveLocale } from '@/lib/i18n'
 import { locales } from '@/lib/i18n/config'
 
@@ -114,7 +115,7 @@ export default async function ProductPage({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="mx-auto max-w-[1240px] px-[var(--spacing-gutter)] pb-16 pt-[104px] lg:px-8">
+      <div className="mx-auto max-w-[1240px] px-[var(--spacing-gutter)] pb-16 pt-[120px] lg:px-8">
         <nav aria-label="breadcrumb" className="mb-8 font-mono text-[11px] tracking-[0.14em] uppercase">
           <Link href={`/${locale}/tienda`} className="text-slate hover:text-olive">
             ← {dict.product.backToShop}
@@ -136,7 +137,7 @@ export default async function ProductPage({
 
             <div className="mt-4 flex flex-wrap items-center gap-3">
               <span className="font-mono text-2xl text-olive">
-                {formatPrice(product.price, locale)}
+                <Price money={product.price} locale={locale} />
               </span>
               <AvailabilityBadge availability={product.availability} dict={dict} />
             </div>

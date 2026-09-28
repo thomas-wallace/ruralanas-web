@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
 
+import { CurrencySwitch } from '@/components/currency/currency-switch'
 import { sendContact, subscribeNewsletter, type FormState } from '@/lib/leads/actions'
 import type { Dictionary } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n/config'
@@ -119,7 +120,7 @@ export function SiteFooter({
             <SubmitButton
               label={dict.footer.send}
               pendingLabel={dict.footer.sending}
-              className="cursor-pointer bg-earth py-3 font-mono text-xs tracking-[0.1em] text-paper transition-colors hover:bg-olive disabled:opacity-60"
+              className="cursor-pointer bg-earth py-3 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive disabled:opacity-60"
             />
             <FormMessage state={contactState} />
           </form>
@@ -219,7 +220,10 @@ export function SiteFooter({
         <div className="font-mono text-[11px] text-slate">
           {dict.footer.tagline.toUpperCase()} · © {new Date().getFullYear()}
         </div>
-        <div className="font-mono text-[11px] text-slate">ES · EN · FR · DE</div>
+        <div className="flex items-center gap-5 font-mono text-[11px] text-slate">
+          <CurrencySwitch label={dict.footer.currency} className="flex gap-1.5" />
+          <span>ES · EN · FR · DE</span>
+        </div>
       </div>
     </footer>
   )

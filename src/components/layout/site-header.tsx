@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 import { useCart } from '@/components/cart/cart-provider'
+import { CurrencySwitch } from '@/components/currency/currency-switch'
 import type { Dictionary } from '@/lib/i18n'
 import { locales, plannedLocales, type Locale } from '@/lib/i18n/config'
 import { routes } from '@/lib/routes'
@@ -90,13 +91,13 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
             /*
               El huso es más alto que las letras: la palabra ocupa sólo el 41%
               del alto del archivo. Por eso 36px acá equivalen a los 22px de
-              tipografía que había antes, y no 28.
+              tipografía que había antes, y no 28. Después se agrandó dos veces un 20%.
             */
-            className="h-7 w-auto sm:h-9"
+            className="h-[40px] w-auto sm:h-[52px]"
           />
         </Link>
 
-        <div className="hidden items-center gap-8 text-sm tracking-[0.02em] md:flex">
+        <div className="hidden items-center gap-12 text-sm lg:gap-20 tracking-[0.02em] md:flex">
           {links.map((link) => (
             <Link
               key={link.label}
@@ -139,6 +140,11 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
               )
             })}
           </div>
+
+          <CurrencySwitch
+            label={dict.footer.currency}
+            className="hidden gap-1.5 rounded-full border border-slate/35 px-2.5 py-1 font-mono text-xs md:flex"
+          />
 
           <button
             type="button"
@@ -233,6 +239,10 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
               )
             })}
           </div>
+          <CurrencySwitch
+            label={dict.footer.currency}
+            className="flex gap-1.5 px-[var(--spacing-gutter)] pb-2.5 pt-2 font-mono text-[13px]"
+          />
         </div>
       )}
     </nav>

@@ -7,17 +7,28 @@ const LOCALE_TAGS: Record<Locale, string> = {
 }
 
 /**
- * Precio con moneda explícita, siempre. La moneda base del negocio es USD y
- * el cliente tiene que verla sin ambigüedad: "249" no dice nada en un sitio
- * que vende a cuatro mercados.
+ * Símbolo de cada moneda, igual en todos los idiomas. No se deja a `Intl`: en
+ * español de Uruguay el dólar sale "US$ 249" y en inglés "$249", y el mismo
+ * precio no puede verse distinto según el idioma. "US$" y no "$", porque para
+ * el público uruguayo "$" son pesos.
+ */
+const SYMBOLS: Partial<Record<Money['currency'], string>> = {
+  USD: 'US$',
+  EUR: '€',
+  GBP: '£',
+}
+
+/**
+ * Precio con moneda explícita, siempre: "249" no dice nada en un sitio que
+ * vende a varios mercados. El número sí sigue al idioma (separador de miles y
+ * de decimales).
  */
 export function formatPrice(money: Money, locale: Locale): string {
-  return new Intl.NumberFormat(LOCALE_TAGS[locale], {
-    style: 'currency',
-    currency: money.currency,
+  const number = new Intl.NumberFormat(LOCALE_TAGS[locale], {
     minimumFractionDigits: 0,
     maximumFractionDigits: money.amount % 1 === 0 ? 0 : 2,
   }).format(money.amount)
+  return `${SYMBOLS[money.currency] ?? money.currency} ${number}`
 }
 
 /** Reemplaza `{n}` y demás marcadores en las cadenas del diccionario. */

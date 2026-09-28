@@ -19,6 +19,8 @@ import 'server-only'
  */
 
 import { CommerceError } from '../errors'
+import type { Locale } from '@/lib/i18n/config'
+import { localizeWpApiUrl } from '@/lib/i18n/translatepress'
 
 const NONCE_ERRORS = new Set([
   'woocommerce_rest_missing_nonce',
@@ -37,6 +39,12 @@ export interface WooCredentials {
    */
   cookie?: string
   setCookie?: string[]
+  /**
+   * Idioma de la página. Con él, TranslatePress devuelve los nombres de las
+   * piezas y los mensajes de error traducidos. El carrito es el mismo en los
+   * dos idiomas: sólo cambia el texto.
+   */
+  locale?: Locale
 }
 
 export interface WooResponse<T> {
@@ -77,6 +85,7 @@ function readCredentials(response: Response, previous: WooCredentials): WooCrede
     nonce: response.headers.get('nonce') ?? previous.nonce,
     cookie: previous.cookie,
     setCookie: fresh.length > 0 ? [...(previous.setCookie ?? []), ...fresh] : previous.setCookie,
+    locale: previous.locale,
   }
 }
 
@@ -130,7 +139,8 @@ export async function wooRequest<T>({
 
   let response: Response
   try {
-    response = await fetch(`${storeApiBase()}${path}`, {
+    const base = credentials.locale ? localizeWpApiUrl(storeApiBase(), credentials.locale) : storeApiBase()
+    response = await fetch(`${base}${path}`, {
       method,
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),

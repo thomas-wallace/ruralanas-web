@@ -34,8 +34,12 @@ export function stripTags(html: string): string {
   return decodeEntities(html.replace(/<[^>]*>/g, '\n')).replace(/\n{2,}/g, '\n').trim()
 }
 
-/** Palabras que no se capitalizan dentro del título. */
-const MINOR_WORDS = new Set(['y', 'de', 'del', 'con', 'la', 'el', 'los', 'las', 'en', 'a', 'para'])
+/** Palabras que no se capitalizan dentro del título, en los dos idiomas: los
+ *  nombres en inglés llegan de TranslatePress igual de EN MAYÚSCULAS. */
+const MINOR_WORDS = new Set([
+  'y', 'de', 'del', 'con', 'la', 'el', 'los', 'las', 'en', 'a', 'para',
+  'and', 'of', 'with', 'the', 'for', 'in', 'on', 'an', 'or', 'to',
+])
 
 /**
  * Los nombres están cargados EN MAYÚSCULAS en WooCommerce. Con la tipografía

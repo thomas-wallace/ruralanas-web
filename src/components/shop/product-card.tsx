@@ -6,7 +6,7 @@ import { useState } from 'react'
 
 import { useCart } from '@/components/cart/cart-provider'
 import { AvailabilityBadge } from '@/components/shop/availability-badge'
-import { formatPrice } from '@/lib/format'
+import { useFormatPrice } from '@/components/currency/currency-provider'
 import type { ProductSummary } from '@/lib/catalog/types'
 import type { Dictionary } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n/config'
@@ -53,6 +53,7 @@ export function ProductCard({
   priority?: boolean
 }) {
   const style = TONE[tone]
+  const formatPrice = useFormatPrice(locale)
   const { add, toggleWish, isWished, ready, openDrawer } = useCart()
   const [justAdded, setJustAdded] = useState(false)
 
@@ -138,7 +139,7 @@ export function ProductCard({
             que le haya tocado. El nombre entero está en `title` y en la ficha.
           */}
           <h3
-            className={`line-clamp-2 min-h-[2.5em] font-display text-lg font-medium leading-tight ${style.title}`}
+            className={`line-clamp-2 min-h-[2.6em] font-sans text-[17px] font-normal leading-[1.3] ${style.title}`}
           >
             <Link
               href={href}
@@ -149,14 +150,14 @@ export function ProductCard({
             </Link>
           </h3>
           <span className={`shrink-0 font-mono text-sm ${style.price}`}>
-            {formatPrice(product.price, locale)}
+            {formatPrice(product.price)}
           </span>
         </div>
 
         {soldOut || needsChoice ? (
           <Link
             href={href}
-            className={`mt-auto py-2.5 text-center font-mono text-[11px] tracking-[0.1em] uppercase transition-colors ${style.button}`}
+            className={`mt-auto py-2.5 text-center font-mono text-[11px] tracking-[0.12em] uppercase transition-colors ${style.button}`}
           >
             {soldOut ? dict.shop.notifyMe : dict.product.chooseOnProduct}
           </Link>
@@ -164,7 +165,7 @@ export function ProductCard({
           <button
             type="button"
             onClick={handleAdd}
-            className={`mt-auto cursor-pointer py-2.5 font-mono text-[11px] tracking-[0.1em] uppercase transition-colors ${style.button}`}
+            className={`mt-auto cursor-pointer py-2.5 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors ${style.button}`}
           >
             {justAdded ? dict.shop.added : dict.shop.addToCart}
           </button>

@@ -20,7 +20,7 @@ export default async function ReviewsAdminPage({
 
   return (
     <div className="min-h-screen bg-paper text-earth">
-      <div className="bg-shell px-[var(--spacing-gutter)] pb-8 pt-[104px] text-earth">
+      <div className="bg-shell px-[var(--spacing-gutter)] pb-8 pt-[120px] text-earth">
         <div className="mx-auto max-w-[1240px]">
           <div className="font-mono text-[11px] tracking-[0.2em] text-olive uppercase">Admin</div>
           <h1 className="mt-3 mb-0 font-display text-[clamp(30px,4vw,48px)] font-medium leading-none">

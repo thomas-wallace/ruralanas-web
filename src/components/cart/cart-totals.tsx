@@ -8,6 +8,7 @@
  * checkout. Si todavía no se calculó, se dice cuándo se va a calcular.
  */
 
+import { useCurrency, useFormatPrice } from '@/components/currency/currency-provider'
 import { formatPrice, interpolate } from '@/lib/format'
 import type { CartTotals } from '@/lib/commerce/types'
 import type { Dictionary } from '@/lib/i18n'
@@ -24,7 +25,15 @@ export function CartTotalsPanel({
   dict: Dictionary
   shippingKnown: boolean
 }) {
-  const money = (amount: number) => formatPrice({ amount, currency: totals.currency }, locale)
+  const display = useFormatPrice(locale)
+  const { currency } = useCurrency()
+  const money = (amount: number) => display({ amount, currency: totals.currency })
+  // Woo cobra en dólares. Si la vidriera muestra otra moneda, el total real
+  // se dice acá, antes del checkout, y no como sorpresa al pagar.
+  const chargedIn =
+    currency !== totals.currency
+      ? formatPrice({ amount: totals.total, currency: totals.currency }, locale)
+      : null
 
   const row = (label: string, value: string, strong = false) => (
     <div
@@ -59,6 +68,12 @@ export function CartTotalsPanel({
       {totals.tax > 0 && totals.taxIncluded && (
         <p className="mt-1.5 mb-0 text-right text-[12px] text-slate">
           {interpolate(dict.cart.taxIncluded, { amount: money(totals.tax) })}
+        </p>
+      )}
+
+      {chargedIn && (
+        <p className="mt-1.5 mb-0 text-right text-[12px] text-slate">
+          {interpolate(dict.cart.chargedIn, { amount: chargedIn })}
         </p>
       )}
     </div>

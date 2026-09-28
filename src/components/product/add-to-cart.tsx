@@ -79,7 +79,7 @@ export function AddToCart({ product, dict }: { product: Product; dict: Dictionar
             onClick={() => void handleAdd()}
             disabled={busy}
             aria-describedby={error ? 'add-to-cart-error' : undefined}
-            className={`flex-1 cursor-pointer py-4 font-mono text-xs tracking-[0.12em] uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+            className={`flex-1 cursor-pointer py-4 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
               blocked
                 ? 'border border-earth/25 bg-transparent text-earth hover:border-olive'
                 : 'bg-earth text-paper hover:bg-olive'

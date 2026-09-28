@@ -5,10 +5,11 @@ import Image from 'next/image'
  *
  * Tres reglas que conviene no romper al agregar un uso nuevo:
  *
- *  1. **Poca cantidad.** Va en tres lugares de Nosotros y en ninguno más. Una
- *     marca de agua que aparece en cada bloque deja de ser un gesto y pasa a
- *     ser papel tapiz. La tentación es el bloque `cta`, que se repite en
- *     cuatro secciones: ahí justamente no va.
+ *  1. **Poca cantidad.** Una vez en el cuerpo de cada página de Nosotros
+ *     (ver `accentIndex` en `content-blocks.tsx`), en la portada de cada
+ *     sección y en el encabezado de la tienda. Una marca de agua que aparece
+ *     en cada bloque deja de ser un gesto y pasa a ser papel tapiz. El bloque
+ *     `cta`, que se repite en todas las secciones, no la lleva.
  *  2. **Grande o nada.** El huso es casi todo trazo fino; por debajo de unos
  *     250px de alto se deshace y se lee como suciedad en el fondo.
  *  3. **Nunca sobre una foto.** Compite y ensucia. Sólo sobre fondo liso.

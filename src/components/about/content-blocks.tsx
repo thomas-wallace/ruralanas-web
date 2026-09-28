@@ -93,11 +93,34 @@ async function Artisans({
   )
 }
 
-function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
+/**
+ * Marca de agua de los bloques que no la traen de fábrica. Sólo aparece en el
+ * bloque que `ContentBlocks` elige como acento de la página.
+ */
+function AccentWatermark({ side }: { side: 'left' | 'right' }) {
+  return (
+    <Watermark
+      className={`${side === 'left' ? 'left-[22%]' : 'left-[80%]'} top-1/2 hidden h-[clamp(300px,42vh,440px)] -translate-x-1/2 -translate-y-1/2 opacity-[0.16] md:block`}
+    />
+  )
+}
+
+function Block({
+  block,
+  locale,
+  accent = false,
+}: {
+  block: ContentBlock
+  locale: Locale
+  accent?: boolean
+}) {
+  const accentWrap = accent ? 'relative isolate overflow-hidden' : ''
   switch (block.type) {
     case 'text':
       return (
-        <section className={WRAP}>
+        <section className={`${WRAP} ${accentWrap}`}>
+          {/* Del lado del título, que es corto y deja aire debajo. */}
+          {accent && <AccentWatermark side="left" />}
           <Reveal className={`${INNER} grid gap-8 md:grid-cols-[1fr_1.3fr] md:gap-16`}>
             <Heading eyebrow={block.eyebrow} title={block.title} />
             <Paragraphs items={block.paragraphs} />
@@ -155,7 +178,8 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
 
     case 'steps':
       return (
-        <section className={WRAP}>
+        <section className={`${WRAP} ${accentWrap}`}>
+          {accent && <AccentWatermark side="right" />}
           <div className={INNER}>
             <Heading eyebrow={block.eyebrow} title={block.title} lead={block.lead} />
             <ol className="mt-12 grid list-none gap-x-10 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -175,7 +199,8 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
 
     case 'features':
       return (
-        <section className={`${WRAP} bg-paper`}>
+        <section className={`${WRAP} bg-paper ${accentWrap}`}>
+          {accent && <AccentWatermark side="right" />}
           <div className={INNER}>
             <Heading eyebrow={block.eyebrow} title={block.title} lead={block.lead} />
             <ul className="mt-12 grid list-none gap-x-10 gap-y-10 p-0 sm:grid-cols-2 lg:grid-cols-3">
@@ -196,8 +221,9 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
       return (
         <section className={`${WRAP} relative isolate overflow-hidden`}>
           {/* El recorrido es una lista vertical larga y el huso también es
-              vertical: acompaña por el margen derecho, que queda vacío. */}
-          <Watermark className="-right-12 top-[22%] hidden h-[clamp(300px,50vh,520px)] lg:block" />
+              vertical: acompaña por la franja derecha, que queda vacía, más
+              hacia adentro que pegado al borde. */}
+          <Watermark className="right-[18%] top-[22%] translate-x-1/2 hidden h-[clamp(300px,50vh,520px)] opacity-[0.16] lg:block" />
 
           <div className={INNER}>
             <Heading eyebrow={block.eyebrow} title={block.title} />
@@ -222,8 +248,14 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
 
     case 'quote':
       return (
-        <section className={`${WRAP} relative isolate overflow-hidden bg-ash`}>
+        <section className={`${WRAP} relative isolate overflow-hidden bg-paper`}>
+          <span aria-hidden="true" className="absolute inset-0 -z-20 bg-ash/55" />
           {/*
+            Gris, pero más claro que `ash` puro: ese dejaba la cita apagada. No
+            es un color nuevo, es `ash` mezclado con el papel (mismo criterio
+            que `text-slate/70`). Sigue siendo gris y no beige, para no
+            confundirse con la sección siguiente, que es `shell`.
+
             El único lugar donde la marca de agua dice algo además de decorar:
             el símbolo del oficio detrás de la voz de quien teje.
 
@@ -232,7 +264,7 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
             como textura. Con el huso entero, las puntas asomaban por encima y
             por debajo de la cita y parecían un rasguño sobre el texto.
           */}
-          <Watermark className="left-1/2 top-1/2 h-[780px] -translate-x-1/2 -translate-y-1/2 opacity-[0.08]" />
+          <Watermark className="left-1/2 top-1/2 h-[780px] -translate-x-1/2 -translate-y-1/2 opacity-[0.13]" />
 
           <Reveal as="figure" className="mx-auto m-0 max-w-[860px] text-center">
             <blockquote className="m-0 font-display text-[clamp(24px,3.2vw,38px)] font-normal leading-[1.3] text-earth">
@@ -291,7 +323,7 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
             </div>
             <Link
               href={resolveTarget(block.to, locale)}
-              className="shrink-0 border border-earth/40 px-7 py-3.5 text-[13px] tracking-[0.08em] uppercase transition-colors hover:bg-earth hover:text-paper"
+              className="shrink-0 border border-earth/40 px-7 py-3.5 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors hover:bg-earth hover:text-paper"
             >
               {block.label}
             </Link>
@@ -301,11 +333,36 @@ function Block({ block, locale }: { block: ContentBlock; locale: Locale }) {
   }
 }
 
+/** Bloques que ya traen el huso de fondo. */
+const WITH_WATERMARK = new Set<ContentBlock['type']>(['timeline', 'quote'])
+/** Dónde ponerlo si la página no tiene ninguno, en orden de preferencia. */
+const ACCENT_CANDIDATES: ContentBlock['type'][] = ['text', 'steps', 'features']
+
+/**
+ * Índice del bloque que lleva la marca de agua, o -1. Cada sección de
+ * Nosotros la muestra al menos una vez en el cuerpo, y no más de una: si la
+ * página ya tiene un bloque que la trae, no se agrega otra.
+ */
+function accentIndex(blocks: ContentBlock[]): number {
+  if (blocks.some((block) => WITH_WATERMARK.has(block.type))) return -1
+  for (const type of ACCENT_CANDIDATES) {
+    const index = blocks.findIndex((block) => block.type === type)
+    if (index !== -1) return index
+  }
+  return -1
+}
+
 export function ContentBlocks({ blocks, locale }: { blocks: ContentBlock[]; locale: Locale }) {
+  const accent = accentIndex(blocks)
   return (
     <>
       {blocks.map((block, index) => (
-        <Block key={`${block.type}-${index}`} block={block} locale={locale} />
+        <Block
+          key={`${block.type}-${index}`}
+          block={block}
+          locale={locale}
+          accent={index === accent}
+        />
       ))}
     </>
   )

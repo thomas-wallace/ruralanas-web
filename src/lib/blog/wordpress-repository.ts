@@ -10,15 +10,18 @@ import 'server-only'
  *
  * Verificado contra `https://ruralanas.com/wp-json/wp/v2` el 17-09-2026:
  * 5 posts, todos en la categoría "Noticias", en español y maquetados con
- * Elementor. TranslatePress traduce al renderizar la página de WordPress, no
- * en la API: por eso cada post declara `language: 'es'` y la página en inglés
- * lo avisa en vez de fingir una traducción.
+ * Elementor. TranslatePress también traduce la API cuando se la pide bajo el
+ * prefijo del idioma (`/en/wp-json/...`, verificado el 27-09-2026): título,
+ * cuerpo y categorías llegan en inglés, así que cada post declara el idioma en
+ * que se pidió.
  */
 
 import type { BlogRepository } from './repository'
 import { dropLeadingImage, sanitizePostHtml } from './sanitize'
 import type { BlogCategory, BlogImage, Post, PostPage, PostSummary } from './types'
 import { decodeEntities, stripTags } from '@/lib/catalog/woo-text'
+import { defaultLocale, type Locale } from '@/lib/i18n/config'
+import { localizeWpApiUrl } from '@/lib/i18n/translatepress'
 
 export const BLOG_TAG = 'blog'
 
@@ -77,8 +80,8 @@ function siteOrigin(): string {
   return new URL(baseUrl()).origin
 }
 
-async function request<T>(path: string): Promise<{ data: T; headers: Headers }> {
-  const response = await fetch(`${baseUrl()}${path}`, {
+async function request<T>(path: string, locale: Locale): Promise<{ data: T; headers: Headers }> {
+  const response = await fetch(`${localizeWpApiUrl(baseUrl(), locale)}${path}`, {
     headers: { accept: 'application/json' },
     // Una noticia no es stock: una hora de caché alcanza, y publicar puede
     // invalidar antes con POST /api/revalidate { "tags": ["blog"] }.
@@ -145,14 +148,23 @@ function toImage(post: WpPost, title: string): BlogImage | null {
   }
 }
 
-function toCategories(post: WpPost, visible: Set<string>): BlogCategory[] {
+/**
+ * Categorías del post. El nombre sale de la lista de categorías y no del
+ * término embebido: TranslatePress traduce la lista pero deja el embebido en
+ * español.
+ */
+function toCategories(post: WpPost, visible: Map<string, string>): BlogCategory[] {
   const terms = post._embedded?.['wp:term']?.flat() ?? []
   return terms
     .filter((term) => term.taxonomy === 'category' && visible.has(term.slug))
-    .map((term) => ({ slug: term.slug, name: sentenceCase(term.name), count: 0 }))
+    .map((term) => ({
+      slug: term.slug,
+      name: sentenceCase(visible.get(term.slug) ?? term.name),
+      count: 0,
+    }))
 }
 
-function toSummary(post: WpPost, visible: Set<string>): PostSummary {
+function toSummary(post: WpPost, visible: Map<string, string>, locale: Locale): PostSummary {
   const context = plainText(post.content.rendered)
   const title = sentenceCase(post.title.rendered, context)
   return {
@@ -163,15 +175,15 @@ function toSummary(post: WpPost, visible: Set<string>): PostSummary {
     updatedAt: `${post.modified_gmt}Z`,
     image: toImage(post, title),
     categories: toCategories(post, visible),
-    language: 'es',
+    language: locale,
     readingMinutes: readingMinutes(post.content.rendered),
   }
 }
 
 // ── Categorías ───────────────────────────────────────────────────────────────
 
-async function allCategories(): Promise<WpCategory[]> {
-  const { data } = await request<WpCategory[]>('/categories?per_page=100&hide_empty=true')
+async function allCategories(locale: Locale): Promise<WpCategory[]> {
+  const { data } = await request<WpCategory[]>('/categories?per_page=100&hide_empty=true', locale)
   return data
 }
 
@@ -180,10 +192,10 @@ async function allCategories(): Promise<WpCategory[]> {
  * y las que contienen todas las notas ("Noticias"): filtrar por ellas no
  * cambia nada.
  */
-async function filterableCategories(): Promise<WpCategory[]> {
+async function filterableCategories(locale: Locale): Promise<WpCategory[]> {
   const [categories, { headers }] = await Promise.all([
-    allCategories(),
-    request<WpPost[]>('/posts?per_page=1&_fields=slug'),
+    allCategories(locale),
+    request<WpPost[]>('/posts?per_page=1&_fields=slug', locale),
   ])
   const total = Number(headers.get('x-wp-total') ?? 0)
   return categories.filter(
@@ -194,9 +206,9 @@ async function filterableCategories(): Promise<WpCategory[]> {
 // ── Repositorio ──────────────────────────────────────────────────────────────
 
 export const wordpressBlogRepository: BlogRepository = {
-  async listPosts({ page = 1, perPage = 9, category }): Promise<PostPage> {
-    const categories = await filterableCategories()
-    const visible = new Set(categories.map((item) => item.slug))
+  async listPosts({ locale, page = 1, perPage = 9, category }): Promise<PostPage> {
+    const categories = await filterableCategories(locale)
+    const visible = new Map(categories.map((item) => [item.slug, item.name]))
 
     const search = new URLSearchParams({
       per_page: String(perPage),
@@ -204,35 +216,42 @@ export const wordpressBlogRepository: BlogRepository = {
       _embed: 'wp:featuredmedia,wp:term',
     })
     if (category) {
-      const match = (await allCategories()).find((item) => item.slug === category)
+      const match = (await allCategories(locale)).find((item) => item.slug === category)
       if (!match) return { posts: [], total: 0, totalPages: 0, page }
       search.set('categories', String(match.id))
     }
 
-    const { data, headers } = await request<WpPost[]>(`/posts?${search}`)
+    const { data, headers } = await request<WpPost[]>(`/posts?${search}`, locale)
     return {
-      posts: data.map((post) => toSummary(post, visible)),
+      posts: data.map((post) => toSummary(post, visible, locale)),
       total: Number(headers.get('x-wp-total') ?? data.length),
       totalPages: Number(headers.get('x-wp-totalpages') ?? 1),
       page,
     }
   },
 
-  async getPost(slug) {
+  async getPost(slug, locale) {
     const [categories, { data }] = await Promise.all([
-      filterableCategories(),
-      request<WpPost[]>(`/posts?slug=${encodeURIComponent(slug)}&_embed=wp:featuredmedia,wp:term`),
+      filterableCategories(locale),
+      request<WpPost[]>(
+        `/posts?slug=${encodeURIComponent(slug)}&_embed=wp:featuredmedia,wp:term`,
+        locale,
+      ),
     ])
     const post = data[0]
     if (!post) return null
 
-    const summary = toSummary(post, new Set(categories.map((item) => item.slug)))
+    const summary = toSummary(
+      post,
+      new Map(categories.map((item) => [item.slug, item.name])),
+      locale,
+    )
     const html = dropLeadingImage(sanitizePostHtml(post.content.rendered, siteOrigin()), summary.image?.src)
     return { ...summary, html } satisfies Post
   },
 
-  async listCategories() {
-    return (await filterableCategories()).map((category) => ({
+  async listCategories(locale) {
+    return (await filterableCategories(locale)).map((category) => ({
       slug: category.slug,
       name: sentenceCase(category.name),
       count: category.count,
@@ -240,7 +259,8 @@ export const wordpressBlogRepository: BlogRepository = {
   },
 
   async listSlugs() {
-    const { data } = await request<{ slug: string }[]>('/posts?per_page=100&_fields=slug')
+    // Los slugs son los mismos en todos los idiomas.
+    const { data } = await request<{ slug: string }[]>('/posts?per_page=100&_fields=slug', defaultLocale)
     return data.map((post) => post.slug)
   },
 }

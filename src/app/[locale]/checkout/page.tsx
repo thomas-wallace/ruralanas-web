@@ -42,7 +42,7 @@ export default async function CheckoutPage({ params }: { params: Promise<{ local
 
   return (
     <div className="min-h-screen bg-paper text-earth">
-      <div className="bg-shell px-[var(--spacing-gutter)] pb-10 pt-[104px] text-earth">
+      <div className="bg-shell px-[var(--spacing-gutter)] pb-10 pt-[120px] text-earth">
         <div className="mx-auto max-w-[1240px]">
           <h1 className="m-0 font-display text-[clamp(32px,5vw,56px)] font-medium leading-none">
             {dict.checkout.title}

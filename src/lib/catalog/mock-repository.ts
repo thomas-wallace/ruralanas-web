@@ -105,7 +105,7 @@ interface MockCategory {
 const CATEGORIES: MockCategory[] = [
   { id: 'c-01', slug: 'ruanas', name: loc('Pashminas & Ruanas', 'Shawls & Ruanas') },
   { id: 'c-02', slug: 'accesorios', name: loc('Accesorios', 'Accessories') },
-  { id: 'c-03', slug: 'deco', name: loc('Deco', 'Home') },
+  { id: 'c-03', slug: 'deco', name: loc('Home', 'Home') },
   { id: 'c-04', slug: 'lana', name: loc('Lana', 'Yarn') },
 ]
 

@@ -13,7 +13,7 @@
 
 import type { Locale } from '@/lib/i18n/config'
 
-export type CurrencyCode = 'USD' | 'UYU' | 'ARS' | 'EUR'
+export type CurrencyCode = 'USD' | 'UYU' | 'ARS' | 'EUR' | 'GBP'
 
 export interface Money {
   amount: number

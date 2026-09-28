@@ -7,7 +7,7 @@ export const es = {
   meta: {
     title: 'Ruralanas · Tejemos calidad de vida',
     description:
-      'Prendas y deco en lana merino 100% uruguaya, tejidas a mano por más de 150 mujeres rurales. Desde 2003.',
+      'Prendas y home en lana merino 100% uruguaya, tejidas a mano por más de 150 mujeres rurales. Desde 2003.',
   },
 
   nav: {
@@ -60,7 +60,7 @@ export const es = {
     next: 'Más productos',
     cta: 'Ver todos los productos',
     lines: {
-      deco: { title: 'Deco', shot: 'Foto textura manta' },
+      deco: { title: 'Home', shot: 'Foto textura manta' },
       leather: {
         title: 'Cuero',
         shot: 'Foto zoom logo cartera',
@@ -76,6 +76,9 @@ export const es = {
     cta: 'Visitanos digitalmente',
     videoPending: 'Recorrido en video por el local',
     photoAlt: 'Fachada del local de Ruralanas en Punta del Este, entre pinos',
+    stockists: {
+      title: 'Tiendas adheridas',
+    },
   },
 
   gallery: {
@@ -86,7 +89,7 @@ export const es = {
         cta: 'Descubrí nuestros materiales',
         section: 'materiales',
         shot: 'Foto manos con lana cruda',
-        photoAlt: 'Manos sosteniendo un vellón de lana merino cruda',
+        photoAlt: 'Manos abriendo un vellón de lana merino cruda',
       },
       {
         title: 'Con raíz en la sustentabilidad',
@@ -100,7 +103,7 @@ export const es = {
         cta: 'Conocé nuestra cadena',
         section: 'procesos',
         shot: 'Foto etiqueta de la prenda',
-        photoAlt: 'Etiqueta de Ruralanas sobre una prenda tejida',
+        photoAlt: 'Etiqueta tejida de Ruralanas: hecho a mano con fibras naturales, made in Uruguay',
       },
       {
         title: 'Las personas detrás de cada tejido',
@@ -131,6 +134,7 @@ export const es = {
   },
 
   footer: {
+    currency: 'Moneda',
     contactTitle: 'Escribinos',
     contactLead: '¿Consultas, mayoristas o prensa? Dejanos tu mensaje y te respondemos.',
     name: 'Nombre',
@@ -164,7 +168,8 @@ export const es = {
     pieces: 'piezas',
     piece: 'pieza',
     shipping: 'Envíos internacionales',
-    currency: 'Precios en USD',
+    // Seguido de la moneda de la vidriera: USD, EUR o GBP.
+    currency: 'Precios en',
     categories: 'Categorías',
     all: 'Todos',
     technique: 'Técnica',
@@ -256,6 +261,7 @@ export const es = {
     free: 'Sin cargo',
     tax: 'Impuestos',
     taxIncluded: 'IVA incluido ({amount})',
+    chargedIn: 'Se cobra en dólares: {amount}. El precio en tu moneda es aproximado.',
     discount: 'Descuento',
     total: 'Total',
     checkout: 'Finalizar compra',
