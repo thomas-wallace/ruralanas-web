@@ -13,6 +13,7 @@ import { Price } from '@/components/currency/currency-provider'
 import { interpolate } from '@/lib/format'
 import { getDictionary, resolveLocale } from '@/lib/i18n'
 import { locales } from '@/lib/i18n/config'
+import { routes } from '@/lib/routes'
 
 export async function generateStaticParams() {
   const slugs = await catalog.listProductSlugs()
@@ -69,6 +70,7 @@ export default async function ProductPage({
   ).filter((item) => item !== null)
 
   const soldOut = product.availability.state === 'sold_out'
+  const hasStory = Boolean(product.story.trim()) && product.story.trim() !== product.summary.trim()
 
   const note =
     product.availability.state === 'last_one'
@@ -88,7 +90,7 @@ export default async function ProductPage({
     description: product.summary,
     sku: product.sku,
     image: [product.image.src],
-    material: product.composition,
+    material: product.composition || undefined,
     brand: { '@type': 'Brand', name: 'Ruralanas' },
     offers: {
       '@type': 'Offer',
@@ -99,14 +101,14 @@ export default async function ProductPage({
     },
   }
 
-  const specRow = (label: string, value: string) => (
-    <div className="flex justify-between gap-6 border-b border-earth/10 py-3">
-      <dt className="font-mono text-[11px] tracking-[0.14em] text-slate uppercase">{label}</dt>
-      <dd className="m-0 text-right text-sm text-earth">{value}</dd>
-    </div>
-  )
-
-  const artisan = product.artisan
+  // Un dato que falta no se rellena: la fila no se dibuja.
+  const specRow = (label: string, value: string) =>
+    value.trim() ? (
+      <div className="flex justify-between gap-6 border-b border-earth/10 py-3">
+        <dt className="font-mono text-[11px] tracking-[0.14em] text-slate uppercase">{label}</dt>
+        <dd className="m-0 text-right text-sm text-earth">{value}</dd>
+      </div>
+    ) : null
 
   return (
     <div className="bg-paper text-earth">
@@ -160,7 +162,7 @@ export default async function ProductPage({
 
             {/* Envío y plazo acá, no recién en el checkout. */}
             <dl className="mt-8">
-              {specRow(dict.product.size, product.measurements)}
+              {specRow(dict.product.measurements, product.measurements)}
               {specRow(dict.product.composition, product.composition)}
               {specRow(dict.product.shipping, product.shipping.estimate)}
               {specRow(dict.product.shippingFrom, product.shipping.from)}
@@ -170,62 +172,52 @@ export default async function ProductPage({
         </div>
       </div>
 
-      {/* ── Trazabilidad: lo único que nadie puede copiar ───────────────── */}
-      {/* Sin datos de artesana el bloque no se dibuja. No se inventa un nombre:
-          la trazabilidad es un argumento de venta sólo si es cierta. */}
-      {artisan && (
-        <section className="bg-shell px-[var(--spacing-gutter)] py-[clamp(60px,8vh,110px)] text-earth">
-          <Reveal className="mx-auto max-w-[900px]">
-            <div className="mb-4 font-mono text-[11px] tracking-[0.2em] text-olive uppercase">
-              {dict.product.artisanTitle}
+      {/* ── Proceso: las horas de trabajo que hay detrás de la pieza ────── */}
+      {/* Las horas vienen del ERP. Sin ese dato el bloque no se dibuja: una
+          cifra estimada sería un argumento de venta falso. */}
+      {product.handworkHours ? (
+        <section className="bg-shell px-[var(--spacing-gutter)] py-[clamp(48px,7vh,88px)] text-earth">
+          <Reveal className="mx-auto flex max-w-[900px] flex-wrap items-end justify-between gap-x-12 gap-y-6">
+            <div>
+              <div className="mb-3 font-mono text-[11px] tracking-[0.2em] text-olive uppercase">
+                {dict.product.processEyebrow}
+              </div>
+              <h2 className="m-0 flex flex-wrap items-baseline gap-x-4 font-display font-medium leading-none">
+                <span className="text-[clamp(64px,10vw,120px)] text-olive">{product.handworkHours}</span>
+                <span className="text-[clamp(22px,2.8vw,34px)]">{dict.product.hours}</span>
+              </h2>
             </div>
 
-            <h2 className="m-0 font-display text-[clamp(28px,4vw,52px)] font-medium leading-tight">
-              {dict.product.madeBy} {artisan.name}
-              <span className="text-slate">
-                {' '}
-                {dict.product.inRegion} {artisan.region}
-              </span>
-            </h2>
-
-            {artisan.bio && (
-              <p className="mt-5 max-w-[620px] text-[15px] leading-relaxed text-slate">
-                {artisan.bio}
-              </p>
-            )}
-
-            <div className="mt-8 flex flex-wrap gap-x-10 gap-y-4 border-t border-slate/20 pt-6 font-mono text-[11px] tracking-[0.14em] text-slate uppercase">
-              {artisan.hoursForPiece ? (
-                <span>
-                  <span className="text-olive">{artisan.hoursForPiece}</span>{' '}
-                  {dict.product.hours}
-                </span>
-              ) : null}
+            <div className="flex flex-col gap-3 pb-2 font-mono text-[11px] tracking-[0.14em] text-slate uppercase">
               {product.technique && (
                 <span>
                   {dict.product.technique}:{' '}
                   <span className="text-olive">{dict.techniques[product.technique]}</span>
                 </span>
               )}
-              <span>
-                {dict.product.composition}: <span className="text-olive">{product.composition}</span>
-              </span>
+              <Link
+                href={routes.about(locale, 'procesos')}
+                className="text-olive underline underline-offset-4 transition-colors hover:text-earth"
+              >
+                {dict.product.processLink} →
+              </Link>
             </div>
-
-            <p className="mt-6 max-w-[560px] text-xs leading-relaxed text-slate">
-              {dict.product.artisanNote}
-            </p>
           </Reveal>
         </section>
-      )}
+      ) : null}
 
       {/* ── Relato y cuidados ──────────────────────────────────────────── */}
       <section className="px-[var(--spacing-gutter)] py-[clamp(60px,8vh,110px)] lg:px-8">
         <div className="mx-auto grid max-w-[1000px] gap-12 md:grid-cols-2">
-          <Reveal>
-            <h2 className="m-0 font-display text-3xl font-medium">{dict.product.processTitle}</h2>
-            <p className="mt-4 text-[15px] leading-relaxed text-slate">{product.story}</p>
-          </Reveal>
+          {/* Sólo si agrega algo: repetir el resumen de arriba se lee como relleno. */}
+          {hasStory && (
+            <Reveal>
+              <h2 className="m-0 font-display text-3xl font-medium">{dict.product.storyTitle}</h2>
+              <p className="mt-4 whitespace-pre-line text-[15px] leading-relaxed text-slate">
+                {product.story}
+              </p>
+            </Reveal>
+          )}
 
           <Reveal>
             <h2 className="m-0 font-display text-3xl font-medium">{dict.product.care}</h2>

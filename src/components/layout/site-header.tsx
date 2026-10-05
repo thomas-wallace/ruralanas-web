@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 
 import { useCart } from '@/components/cart/cart-provider'
 import { CurrencySwitch } from '@/components/currency/currency-switch'
+import { BagIcon } from '@/components/ui/bag-icon'
 import type { Dictionary } from '@/lib/i18n'
 import { locales, plannedLocales, type Locale } from '@/lib/i18n/config'
 import { routes } from '@/lib/routes'
@@ -24,23 +25,6 @@ function HeartIcon({ filled = false }: { filled?: boolean }) {
       aria-hidden="true"
     >
       <path d="M12 20s-7-4.6-9.2-8.4C1.3 8.9 2.6 5.5 5.7 5.1 8 4.8 9.4 6.3 12 8.7c2.6-2.4 4-3.9 6.3-3.6 3.1.4 4.4 3.8 2.9 6.5C19 15.4 12 20 12 20z" />
-    </svg>
-  )
-}
-
-function BagIcon() {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.6"
-      aria-hidden="true"
-    >
-      <path d="M6 8h12l-1 12H7L6 8z" />
-      <path d="M9 8V6.5a3 3 0 0 1 6 0V8" />
     </svg>
   )
 }

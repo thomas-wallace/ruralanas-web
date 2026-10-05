@@ -23,6 +23,8 @@ import 'server-only'
  */
 
 import type { CatalogRepository } from './repository'
+import { matchesSearch } from './search'
+import { PRODUCT_COPY } from '@/content/product-copy'
 import { decodeEntities, humanizeName, stripTags } from './woo-text'
 import { translateAttributeName, translateTermName } from './woo-translations'
 import type {
@@ -134,7 +136,7 @@ function splitDescription(shortDescription: string): {
     // etiquetas en los dos idiomas.
     if (!measurements && /^(medidas?|measurements?)\s*:/i.test(line)) {
       measurements = line.replace(/^(medidas?|measurements?)\s*:\s*/i, '')
-    } else if (!composition && /^\s*\d+\s*%|lana merino|merino wool/i.test(line) && line.length < 80) {
+    } else if (!composition && /\d+\s*%/.test(line) && line.length < 80) {
       composition = line
     } else {
       rest.push(line)
@@ -277,6 +279,8 @@ function toProduct(product: WooProduct, locale: Locale, all: WooProduct[]): Prod
   const name = summary.name
   const parts = splitDescription(product.short_description)
   const long = stripTags(product.description)
+  // Textos corregidos a mano mientras no se arreglen en Woo. Ver el archivo.
+  const copy = PRODUCT_COPY[product.slug]?.[locale]
 
   const related = all
     .filter(
@@ -292,10 +296,12 @@ function toProduct(product: WooProduct, locale: Locale, all: WooProduct[]): Prod
   return {
     ...summary,
     images: toImages(product, name),
-    summary: parts.summary || name,
-    story: long || parts.summary || '',
-    composition: parts.composition ?? (locale === 'es' ? '100% lana merino' : '100% merino wool'),
-    measurements: parts.measurements ?? (locale === 'es' ? 'Consultar' : 'On request'),
+    summary: copy?.summary ?? (parts.summary || name),
+    story: copy ? (copy.story ?? '') : long,
+    // Vacío antes que un valor por defecto: "100% lana merino" asumido era
+    // falso en la ovejita (80% merino, 20% algodón). La ficha esconde la fila.
+    composition: copy?.composition ?? parts.composition ?? '',
+    measurements: copy ? (copy.measurements ?? '') : (parts.measurements ?? ''),
     care: [...CARE[locale]],
     // Sin artesana: la ficha esconde el bloque. Ver el comentario del tipo.
     artisan: undefined,
@@ -380,10 +386,19 @@ function matches(product: WooProduct, query: ProductQuery): boolean {
   if (query.techniques?.length) return false
   if (query.onlyAvailable && !product.is_in_stock) return false
 
-  if (query.search) {
-    const needle = query.search.toLocaleLowerCase('es')
-    const haystack = `${product.name} ${product.sku} ${stripTags(product.short_description)}`
-    if (!haystack.toLocaleLowerCase('es').includes(needle)) return false
+  // Nombre, categorías y colores es lo que la gente escribe; el SKU, lo que
+  // escribe el mayorista que ya tiene la lista de precios.
+  if (
+    query.search &&
+    !matchesSearch(query.search, [
+      decodeEntities(product.name),
+      product.sku,
+      stripTags(product.short_description),
+      ...product.categories.map((category) => decodeEntities(category.name)),
+      ...product.attributes.flatMap((attribute) => attribute.terms.map((term) => term.name)),
+    ])
+  ) {
+    return false
   }
 
   return true

@@ -14,6 +14,8 @@ export type ShopView = 'grid' | 'list'
 
 export interface ShopParams {
   category?: string
+  /** Texto buscado. Se busca dentro de la categoría y filtros activos. */
+  q?: string
   techniques: Technique[]
   onlyAvailable: boolean
   sort: SortOrder
@@ -34,6 +36,8 @@ export function parseShopParams(raw: RawParams): ShopParams {
   const techniqueValue = first(raw.tecnica)
   const sort = first(raw.orden)
   const view = first(raw.vista)
+  // Recortado: una URL no es lugar para pegar un párrafo.
+  const q = first(raw.q)?.trim().slice(0, 80)
 
   const techniques = (techniqueValue?.split(',') ?? []).filter((item): item is Technique =>
     TECHNIQUES.includes(item as Technique),
@@ -41,6 +45,7 @@ export function parseShopParams(raw: RawParams): ShopParams {
 
   return {
     category: category && category !== 'todos' ? category : undefined,
+    q: q || undefined,
     techniques,
     onlyAvailable: first(raw.disponibles) === '1',
     sort: SORTS.includes(sort as SortOrder) ? (sort as SortOrder) : 'featured',
@@ -57,6 +62,7 @@ export function shopHref(
   const next = { ...current, ...changes }
   const search = new URLSearchParams()
 
+  if (next.q) search.set('q', next.q)
   if (next.category) search.set('categoria', next.category)
   if (next.techniques.length) search.set('tecnica', next.techniques.join(','))
   if (next.onlyAvailable) search.set('disponibles', '1')
@@ -75,5 +81,10 @@ export function toggleTechnique(current: Technique[], technique: Technique): Tec
 }
 
 export function hasActiveFilters(params: ShopParams): boolean {
-  return Boolean(params.category) || params.techniques.length > 0 || params.onlyAvailable
+  return (
+    Boolean(params.q) ||
+    Boolean(params.category) ||
+    params.techniques.length > 0 ||
+    params.onlyAvailable
+  )
 }

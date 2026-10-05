@@ -2,10 +2,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
-
-import { useCart } from '@/components/cart/cart-provider'
 import { AvailabilityBadge } from '@/components/shop/availability-badge'
+import { QuickAdd } from '@/components/shop/quick-add'
 import { useFormatPrice } from '@/components/currency/currency-provider'
 import type { ProductSummary } from '@/lib/catalog/types'
 import type { Dictionary } from '@/lib/i18n'
@@ -24,24 +22,10 @@ export function ProductRow({
   locale: Locale
   dict: Dictionary
 }) {
-  const { add, openDrawer } = useCart()
   const formatPrice = useFormatPrice(locale)
-  const [justAdded, setJustAdded] = useState(false)
   const href = `/${locale}/tienda/${product.slug}`
   const soldOut = product.availability.state === 'sold_out'
   const needsChoice = Boolean(product.hasVariants)
-
-  const handleAdd = async () => {
-    const outcome = await add({
-      sku: product.sku,
-      slug: product.slug,
-      commerceId: product.commerceId,
-    })
-    if (!outcome.ok) return
-    setJustAdded(true)
-    openDrawer()
-    setTimeout(() => setJustAdded(false), 1600)
-  }
 
   return (
     <div className="grid grid-cols-[64px_1fr_auto] items-center gap-4 border-b border-earth/12 px-2 py-3.5 transition-colors hover:bg-paper sm:grid-cols-[86px_1.6fr_1fr_110px_130px] sm:gap-5">
@@ -89,13 +73,7 @@ export function ProductRow({
             {product.availability.state !== 'in_stock' && (
               <AvailabilityBadge availability={product.availability} dict={dict} />
             )}
-            <button
-              type="button"
-              onClick={handleAdd}
-              className="cursor-pointer rounded-sm bg-earth px-3.5 py-2 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive"
-            >
-              {justAdded ? dict.shop.added : dict.shop.addToCart}
-            </button>
+            <QuickAdd product={product} dict={dict} />
           </div>
         )}
       </div>

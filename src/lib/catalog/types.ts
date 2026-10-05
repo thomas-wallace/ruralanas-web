@@ -133,6 +133,14 @@ export interface Product extends ProductSummary {
    * uso del nombre. La ficha esconde el bloque en vez de inventar una artesana.
    */
   artisan?: Artisan
+  /**
+   * Horas de trabajo a mano que lleva la pieza. Es el dato que el bloque
+   * "Proceso" de la ficha pone en primer plano. Va aparte de la artesana porque
+   * no depende del consentimiento de uso del nombre. Origen: los costos de
+   * producción de Dolibarr; mientras el catálogo venga de Woo, no llega y la
+   * ficha muestra el proceso sin cifra antes que inventar una.
+   */
+  handworkHours?: number
   /** Vacío en productos simples. */
   variants?: ProductVariant[]
   /** Estimación de envío que se muestra en la ficha, no en el checkout. */

@@ -2,11 +2,10 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { useState } from 'react'
 
 import { useCart } from '@/components/cart/cart-provider'
 import { AvailabilityBadge } from '@/components/shop/availability-badge'
-import { useFormatPrice } from '@/components/currency/currency-provider'
+import { PurchaseRow } from '@/components/shop/quick-add'
 import type { ProductSummary } from '@/lib/catalog/types'
 import type { Dictionary } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n/config'
@@ -24,18 +23,13 @@ const TONE = {
     surface: 'bg-transparent',
     title: 'text-paper',
     meta: 'text-slate',
-    price: 'text-caramel',
     frame: 'bg-earth/40',
-    button:
-      'border border-slate/50 text-paper hover:bg-paper hover:text-earth hover:border-paper',
   },
   light: {
     surface: 'bg-transparent',
     title: 'text-earth',
     meta: 'text-slate',
-    price: 'text-olive',
     frame: 'bg-paper',
-    button: 'border border-olive text-olive hover:bg-earth hover:text-paper',
   },
 } as const
 
@@ -53,28 +47,10 @@ export function ProductCard({
   priority?: boolean
 }) {
   const style = TONE[tone]
-  const formatPrice = useFormatPrice(locale)
-  const { add, toggleWish, isWished, ready, openDrawer } = useCart()
-  const [justAdded, setJustAdded] = useState(false)
+  const { toggleWish, isWished, ready } = useCart()
 
-  const soldOut = product.availability.state === 'sold_out'
-  // Con colores no se puede añadir desde la grilla: hay que elegir cuál. Un
-  // botón que falla al pulsarlo es peor que un botón que dice a dónde lleva.
-  const needsChoice = Boolean(product.hasVariants)
   const href = `/${locale}/tienda/${product.slug}`
   const wished = ready && isWished(product.slug)
-
-  const handleAdd = async () => {
-    const outcome = await add({
-      sku: product.sku,
-      slug: product.slug,
-      commerceId: product.commerceId,
-    })
-    if (!outcome.ok) return
-    setJustAdded(true)
-    openDrawer()
-    setTimeout(() => setJustAdded(false), 1600)
-  }
 
   return (
     <article className={`group flex flex-col ${style.surface}`}>
@@ -88,7 +64,7 @@ export function ProductCard({
             alt={product.image.alt}
             fill
             priority={priority}
-            sizes="(max-width: 1280px) 50vw, 260px"
+            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 300px"
             className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
           />
         </Link>
@@ -127,49 +103,25 @@ export function ProductCard({
         </div>
 
         {/*
-          `mb-3.5` es la separación mínima con el botón; el espacio que sobra lo
-          absorbe el `mt-auto` de abajo. Así, en una fila con nombres de uno,
-          dos y tres renglones, los tres botones quedan a la misma altura.
+          Dos renglones siempre: recortados si el nombre es largo, reservados
+          si es corto. Es lo que hace que todas las fichas de la grilla midan
+          igual, en vez de que cada fila se estire según el nombre más largo
+          que le haya tocado. El nombre entero está en `title` y en la ficha.
+          Usa todo el ancho: el precio vive en la fila de compra.
         */}
-        <div className="mb-3.5 flex items-baseline justify-between gap-2.5">
-          {/*
-            Dos renglones siempre: recortados si el nombre es largo, reservados
-            si es corto. Es lo que hace que todas las fichas de la grilla midan
-            igual, en vez de que cada fila se estire según el nombre más largo
-            que le haya tocado. El nombre entero está en `title` y en la ficha.
-          */}
-          <h3
-            className={`line-clamp-2 min-h-[2.6em] font-sans text-[17px] font-normal leading-[1.3] ${style.title}`}
-          >
-            <Link
-              href={href}
-              title={product.name}
-              className="hover:underline hover:underline-offset-4"
-            >
-              {product.name}
-            </Link>
-          </h3>
-          <span className={`shrink-0 font-mono text-sm ${style.price}`}>
-            {formatPrice(product.price)}
-          </span>
-        </div>
-
-        {soldOut || needsChoice ? (
+        <h3
+          className={`mb-3 line-clamp-2 min-h-[2.6em] font-sans text-[17px] font-normal leading-[1.3] ${style.title}`}
+        >
           <Link
             href={href}
-            className={`mt-auto py-2.5 text-center font-mono text-[11px] tracking-[0.12em] uppercase transition-colors ${style.button}`}
+            title={product.name}
+            className="hover:underline hover:underline-offset-4"
           >
-            {soldOut ? dict.shop.notifyMe : dict.product.chooseOnProduct}
+            {product.name}
           </Link>
-        ) : (
-          <button
-            type="button"
-            onClick={handleAdd}
-            className={`mt-auto cursor-pointer py-2.5 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors ${style.button}`}
-          >
-            {justAdded ? dict.shop.added : dict.shop.addToCart}
-          </button>
-        )}
+        </h3>
+
+        <PurchaseRow product={product} locale={locale} dict={dict} tone={tone} />
       </div>
     </article>
   )

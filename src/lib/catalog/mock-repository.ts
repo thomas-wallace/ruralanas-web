@@ -16,6 +16,7 @@
 
 import type { Locale } from '@/lib/i18n/config'
 import type { CatalogRepository } from './repository'
+import { matchesSearch } from './search'
 import type {
   Artisan,
   Availability,
@@ -585,6 +586,7 @@ function toProduct(product: MockProduct, locale: Locale): Product {
     measurements: product.measurements[locale],
     care: CARE[locale],
     artisan: artisanOf(product, locale),
+    handworkHours: product.hoursForPiece || undefined,
     shipping: SHIPPING[locale],
     relatedSlugs: sameCategory.map((p) => p.slug),
   }
@@ -618,12 +620,9 @@ export const mockCatalogRepository: CatalogRepository = {
     }
 
     if (query.search) {
-      const needle = query.search.trim().toLowerCase()
-      items = items.filter(
-        (item) =>
-          item.name.toLowerCase().includes(needle) ||
-          item.category.name.toLowerCase().includes(needle) ||
-          item.colorName.toLowerCase().includes(needle),
+      const search = query.search
+      items = items.filter((item) =>
+        matchesSearch(search, [item.name, item.category.name, item.colorName]),
       )
     }
 
