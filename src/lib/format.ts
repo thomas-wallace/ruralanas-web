@@ -4,6 +4,7 @@ import type { Money } from '@/lib/catalog/types'
 const LOCALE_TAGS: Record<Locale, string> = {
   es: 'es-UY',
   en: 'en-US',
+  pt: 'pt-BR',
 }
 
 /**

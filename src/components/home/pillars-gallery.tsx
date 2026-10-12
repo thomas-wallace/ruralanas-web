@@ -59,7 +59,7 @@ export function PillarsGallery({ dict, locale }: { dict: Dictionary; locale: Loc
                 </h3>
                 <Link
                   href={routes.about(locale, item.section)}
-                  className="mt-5 border border-paper/85 px-5 py-2.5 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-paper hover:text-earth"
+                  className="mt-5 border border-paper/85 px-5 py-2.5 font-sans text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-paper hover:text-earth"
                 >
                   {item.cta}
                 </Link>

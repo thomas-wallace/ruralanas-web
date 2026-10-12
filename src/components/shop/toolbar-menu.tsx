@@ -95,7 +95,7 @@ export function ToolbarMenu({
     >
       <summary
         onClick={onSummaryClick}
-        className={`flex cursor-pointer list-none items-center gap-2 rounded-sm border px-3 py-2 font-mono text-[11px] tracking-[0.06em] uppercase transition-colors select-none [&::-webkit-details-marker]:hidden ${
+        className={`flex cursor-pointer list-none items-center gap-2 rounded-sm border px-3 py-2 font-sans text-[11px] tracking-[0.06em] uppercase transition-colors select-none [&::-webkit-details-marker]:hidden ${
           active
             ? 'border-earth bg-earth text-paper'
             : 'border-earth/30 text-earth hover:border-earth group-open:border-earth'

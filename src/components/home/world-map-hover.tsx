@@ -67,7 +67,7 @@ export function MapHover({
           <span className="block font-sans text-[13px] leading-tight text-earth">
             {etiqueta.name}
           </span>
-          <span className="mt-0.5 block font-mono text-[10px] tracking-[0.1em] uppercase text-slate">
+          <span className="mt-0.5 block font-sans text-[10px] tracking-[0.1em] uppercase text-slate">
             {statusLabels[etiqueta.status] ?? statusLabels.none}
           </span>
         </div>

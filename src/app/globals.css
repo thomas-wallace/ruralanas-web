@@ -36,7 +36,6 @@
 
   --font-display: var(--font-cormorant), 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-sans: var(--font-instrument), 'Instrument Sans', system-ui, -apple-system, sans-serif;
-  --font-mono: var(--font-space-mono), 'Space Mono', ui-monospace, monospace;
 
   /* Ritmo vertical compartido por todas las secciones */
   --spacing-section: clamp(80px, 11vh, 140px);
@@ -89,9 +88,11 @@
 }
 
 @layer components {
-  /* Etiqueta monoespaciada: el recurso que ordena toda la jerarquía del diseño. */
+  /* Etiqueta en mayúsculas espaciadas: el recurso que ordena la jerarquía del
+     diseño. El sitio usa dos familias: `--font-display` para títulos y
+     `--font-sans` para todo lo demás. */
   .eyebrow {
-    font-family: var(--font-mono);
+    font-family: var(--font-sans);
     font-size: 12px;
     letter-spacing: 0.2em;
     text-transform: uppercase;

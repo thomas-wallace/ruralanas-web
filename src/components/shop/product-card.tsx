@@ -97,7 +97,7 @@ export function ProductCard({
       </div>
 
       <div className="flex flex-1 flex-col px-0.5 pt-3.5">
-        <div className={`mb-1.5 font-mono text-[10px] tracking-[0.2em] uppercase ${style.meta}`}>
+        <div className={`mb-1.5 font-sans text-[10px] tracking-[0.2em] uppercase ${style.meta}`}>
           {product.category.name}
           {product.technique ? ` · ${dict.techniques[product.technique]}` : ''}
         </div>

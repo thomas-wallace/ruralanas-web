@@ -1,8 +1,9 @@
 import { en } from './dictionaries/en'
 import { es, type Dictionary } from './dictionaries/es'
+import { pt } from './dictionaries/pt'
 import { defaultLocale, isLocale, type Locale } from './config'
 
-const dictionaries: Record<Locale, Dictionary> = { es, en }
+const dictionaries: Record<Locale, Dictionary> = { es, en, pt }
 
 export function getDictionary(locale: Locale): Dictionary {
   return dictionaries[locale]

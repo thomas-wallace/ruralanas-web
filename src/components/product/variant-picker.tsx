@@ -30,7 +30,7 @@ export function VariantPicker({
 }) {
   return (
     <fieldset className="m-0 border-0 p-0">
-      <legend className="mb-2.5 p-0 font-mono text-[11px] tracking-[0.14em] text-slate uppercase">
+      <legend className="mb-2.5 p-0 font-sans text-[11px] tracking-[0.14em] text-slate uppercase">
         {label}
         {selected && <span className="ml-2 normal-case tracking-normal text-earth">{selected.colorName}</span>}
       </legend>

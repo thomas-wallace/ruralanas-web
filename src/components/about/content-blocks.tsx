@@ -81,7 +81,7 @@ async function Artisans({
                 )}
               </div>
               <h3 className="mb-1 mt-4 font-display text-xl font-medium text-earth">{artisan.name}</h3>
-              <div className="font-mono text-[11px] tracking-[0.12em] text-slate uppercase">
+              <div className="font-sans text-[11px] tracking-[0.12em] text-slate uppercase">
                 {artisan.region}
               </div>
               {artisan.bio && <p className="mb-0 mt-3 text-sm leading-relaxed text-slate">{artisan.bio}</p>}
@@ -185,7 +185,7 @@ function Block({
             <ol className="mt-12 grid list-none gap-x-10 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-3">
               {block.items.map((item, index) => (
                 <Reveal as="li" key={item.title} delayMs={index * 60} className="border-t border-earth/15 pt-6">
-                  <div className="font-mono text-xs tracking-[0.12em] text-olive">
+                  <div className="font-sans text-xs tracking-[0.12em] text-olive">
                     {String(index + 1).padStart(2, '0')}
                   </div>
                   <h3 className="mb-3 mt-3 font-display text-2xl font-medium text-earth">{item.title}</h3>
@@ -234,7 +234,7 @@ function Block({
                   key={`${item.date}-${item.title}`}
                   className="grid gap-2 border-t border-earth/15 py-7 md:grid-cols-[200px_1fr] md:gap-10"
                 >
-                  <div className="font-mono text-[13px] tracking-[0.08em] text-olive uppercase">{item.date}</div>
+                  <div className="font-sans text-[13px] tracking-[0.08em] text-olive uppercase">{item.date}</div>
                   <div>
                     <h3 className="m-0 font-display text-2xl font-medium text-earth">{item.title}</h3>
                     <p className="mb-0 mt-2 max-w-[620px] text-[15px] leading-relaxed text-slate">{item.text}</p>
@@ -291,7 +291,7 @@ function Block({
                     </div>
                   )}
                   <h3 className="m-0 font-display text-xl font-medium text-earth">{item.name}</h3>
-                  <div className="mt-1 font-mono text-[11px] tracking-[0.1em] text-slate uppercase">{item.issuer}</div>
+                  <div className="mt-1 font-sans text-[11px] tracking-[0.1em] text-slate uppercase">{item.issuer}</div>
                   <p className="mb-0 mt-4 text-[15px] leading-relaxed text-slate">{item.text}</p>
                   {item.url && (
                     <a
@@ -323,7 +323,7 @@ function Block({
             </div>
             <Link
               href={resolveTarget(block.to, locale)}
-              className="shrink-0 border border-earth/40 px-7 py-3.5 font-mono text-[11px] tracking-[0.12em] uppercase transition-colors hover:bg-earth hover:text-paper"
+              className="shrink-0 border border-earth/40 px-7 py-3.5 font-sans text-[11px] tracking-[0.12em] uppercase transition-colors hover:bg-earth hover:text-paper"
             >
               {block.label}
             </Link>

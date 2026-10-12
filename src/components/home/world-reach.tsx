@@ -7,6 +7,9 @@ import { WorldMap } from './world-map'
 /**
  * "Nuestras prendas abrazan al mundo": el mapa de países alcanzados.
  *
+ * Va después del local y las tiendas, como cierre de "dónde estamos". Se lee
+ * de arriba abajo y centrado: título, mapa y la leyenda de los tres colores.
+ *
  * El dato de qué país está alcanzado sale de `getWorldReach()`, no de este
  * componente. Hoy lo declara `src/content/world-reach.ts` a mano; el día que lo
  * calculen los pedidos de Dolibarr, acá no se toca nada.
@@ -31,7 +34,8 @@ export async function WorldReach({ dict, locale }: { dict: Dictionary; locale: L
         </p>
       </Reveal>
 
-      <Reveal className="mx-auto mt-10 max-w-[1100px]">
+      {/* Más angosto que el ancho de página: el mapa acompaña, no domina la sección. */}
+      <Reveal className="mx-auto mt-10 max-w-[860px]">
         <WorldMap reach={reach} dict={dict} locale={locale} />
       </Reveal>
 
@@ -39,25 +43,10 @@ export async function WorldReach({ dict, locale }: { dict: Dictionary; locale: L
         {LEYENDA.map((estado) => (
           <span
             key={estado}
-            className="flex items-center gap-2 font-mono text-[11px] tracking-[0.1em] text-slate uppercase"
+            className="flex items-center gap-2 font-sans text-[11px] tracking-[0.1em] text-slate uppercase"
           >
             <span className="world-legend-swatch" data-status={estado} aria-hidden />
             {dict.world.legend[estado]}
-          </span>
-        ))}
-      </Reveal>
-
-      {/*
-        Las réplicas del modelo no son ventas: son países donde se copió la
-        forma de trabajo. Por eso van aparte y no pintadas en el mapa.
-      */}
-      <Reveal className="mx-auto mt-6.5 flex max-w-[900px] flex-wrap justify-center gap-2.5">
-        {dict.world.replicas.map((replica) => (
-          <span
-            key={replica}
-            className="rounded-full border border-slate/50 px-3.5 py-1.5 font-mono text-xs text-slate"
-          >
-            {replica}
           </span>
         ))}
       </Reveal>

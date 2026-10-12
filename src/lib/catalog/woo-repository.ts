@@ -26,7 +26,7 @@ import type { CatalogRepository } from './repository'
 import { matchesSearch } from './search'
 import { PRODUCT_COPY } from '@/content/product-copy'
 import { decodeEntities, humanizeName, stripTags } from './woo-text'
-import { translateAttributeName, translateTermName } from './woo-translations'
+import { translateAttributeName, translateCategoryName, translateTermName } from './woo-translations'
 import type {
   Artisan,
   CategoryFacet,
@@ -190,10 +190,10 @@ function toAvailability(product: WooProduct): ProductSummary['availability'] {
     return { state: 'sold_out', units: 0 }
   }
   // `low_stock_remaining` sólo viene cuando el stock bajó del umbral de Woo.
-  // Es la única vía por la que la Store API deja ver unidades exactas, y es
-  // justo la que necesitamos para poder decir "queda 1".
+  // Es la única vía por la que la Store API deja ver unidades exactas. Stock 1
+  // se informa como disponible común: la tienda no muestra "pieza única" con
+  // el catálogo de Woo.
   const left = product.low_stock_remaining
-  if (left === 1) return { state: 'last_one', units: 1 }
   if (typeof left === 'number' && left > 0) return { state: 'in_stock', units: left }
   return { state: 'in_stock', units: 99 }
 }
@@ -257,6 +257,7 @@ function toSummary(product: WooProduct): ProductSummary {
 const SHIPPING = {
   es: { from: 'Uruguay', estimate: 'Envío internacional, 7 a 14 días hábiles' },
   en: { from: 'Uruguay', estimate: 'International shipping, 7 to 14 business days' },
+  pt: { from: 'Uruguai', estimate: 'Envio internacional, de 7 a 14 dias úteis' },
 } as const
 
 const CARE = {
@@ -271,6 +272,12 @@ const CARE = {
     'Do not wring: press to remove water.',
     'Dry flat, away from direct sun.',
     'Store folded, never hanging.',
+  ],
+  pt: [
+    'Lavar à mão em água fria com sabão neutro.',
+    'Não torcer: pressionar para tirar a água.',
+    'Secar na horizontal, à sombra.',
+    'Guardar dobrada, nunca pendurada.',
   ],
 } as const
 
@@ -364,7 +371,7 @@ function localizeProduct(product: WooProduct, categories: WooCategory[], locale:
     ...product,
     categories: product.categories.map((category) => ({
       ...category,
-      name: names.get(category.slug) ?? category.name,
+      name: translateCategoryName(category.slug, locale) ?? names.get(category.slug) ?? category.name,
     })),
     attributes: product.attributes.map((attribute) => ({
       ...attribute,

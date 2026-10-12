@@ -125,7 +125,6 @@ export const es = {
       shipped: 'Ya enviamos',
       store: 'Tienda física',
     },
-    replicas: ['Ecuador · réplica del modelo', 'Colombia · réplica del modelo'],
   },
 
   news: {
@@ -174,7 +173,6 @@ export const es = {
     all: 'Todos',
     technique: 'Técnica',
     availability: 'Disponibilidad',
-    onlyAvailable: 'Solo disponibles',
     sort: 'Ordenar',
     sortFeatured: 'Destacados',
     sortPriceAsc: 'Precio ↑',

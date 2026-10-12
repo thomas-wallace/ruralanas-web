@@ -98,7 +98,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
 
         <div className="flex shrink-0 items-center gap-3">
           <div
-            className="hidden items-center gap-1.5 rounded-full border border-slate/35 px-2.5 py-1 font-mono text-xs text-slate md:flex"
+            className="hidden items-center gap-1.5 rounded-full border border-slate/35 px-2.5 py-1 font-sans text-xs text-slate md:flex"
             aria-label={dict.common.language}
           >
             {plannedLocales.map((item, index) => {
@@ -127,7 +127,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
 
           <CurrencySwitch
             label={dict.footer.currency}
-            className="hidden gap-1.5 rounded-full border border-slate/35 px-2.5 py-1 font-mono text-xs md:flex"
+            className="hidden gap-1.5 rounded-full border border-slate/35 px-2.5 py-1 font-sans text-xs md:flex"
           />
 
           <button
@@ -137,7 +137,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
           >
             <HeartIcon filled={ready && wishlist.length > 0} />
             {ready && wishlist.length > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-earth px-1 font-mono text-[10px] text-paper">
+              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-earth px-1 font-sans text-[10px] text-paper">
                 {wishlist.length}
               </span>
             )}
@@ -152,7 +152,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
           >
             <BagIcon />
             {ready && count > 0 && (
-              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-caramel px-1 font-mono text-[10px] font-bold text-earth">
+              <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-caramel px-1 font-sans text-[10px] font-bold text-earth">
                 {count}
               </span>
             )}
@@ -204,7 +204,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
               {link.label}
             </Link>
           ))}
-          <div className="mt-1.5 flex gap-4 border-t border-slate/20 px-[var(--spacing-gutter)] pb-2.5 pt-4 font-mono text-[13px] text-slate">
+          <div className="mt-1.5 flex gap-4 border-t border-slate/20 px-[var(--spacing-gutter)] pb-2.5 pt-4 font-sans text-[13px] text-slate">
             {plannedLocales.map((item) => {
               const available = (locales as readonly string[]).includes(item)
               return available ? (
@@ -225,7 +225,7 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
           </div>
           <CurrencySwitch
             label={dict.footer.currency}
-            className="flex gap-1.5 px-[var(--spacing-gutter)] pb-2.5 pt-2 font-mono text-[13px]"
+            className="flex gap-1.5 px-[var(--spacing-gutter)] pb-2.5 pt-2 font-sans text-[13px]"
           />
         </div>
       )}

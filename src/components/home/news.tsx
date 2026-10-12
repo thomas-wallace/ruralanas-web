@@ -21,7 +21,7 @@ export function News({ posts, locale, dict }: { posts: PostSummary[]; locale: Lo
         </h2>
         <Link
           href={routes.blog(locale)}
-          className="border-b border-caramel pb-1 font-mono text-[13px] text-earth uppercase transition-colors hover:text-olive"
+          className="border-b border-caramel pb-1 font-sans text-[13px] text-earth uppercase transition-colors hover:text-olive"
         >
           {dict.news.cta} →
         </Link>

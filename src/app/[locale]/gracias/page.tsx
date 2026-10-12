@@ -24,7 +24,7 @@ export default async function ThanksPage({ params }: { params: Promise<{ locale:
       <div className="mx-auto max-w-[1240px]">
         <Suspense
           fallback={
-            <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-slate uppercase">
+            <p className="py-20 text-center font-sans text-[12px] tracking-[0.12em] text-slate uppercase">
               {dict.cart.updating}
             </p>
           }

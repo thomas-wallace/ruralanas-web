@@ -30,7 +30,12 @@ import type {
 
 type Localized<T> = Record<Locale, T>
 
-const loc = <T,>(es: T, en: T): Localized<T> => ({ es, en })
+/**
+ * El catálogo mock es de desarrollo y sólo está redactado en español e inglés.
+ * Portugués muestra el español, que un lector de Brasil entiende mejor que el
+ * inglés; los textos de interfaz sí están traducidos.
+ */
+const loc = <T,>(es: T, en: T): Localized<T> => ({ es, en, pt: es })
 
 // ── Artesanas ────────────────────────────────────────────────────────────────
 

@@ -98,7 +98,7 @@ export default async function PostPage({
               />
             </div>
 
-            <div className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[11px] tracking-[0.1em] uppercase">
+            <div className="mt-10 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-[11px] tracking-[0.1em] uppercase">
               {post.categories.map((category) => (
                 <Link
                   key={category.slug}

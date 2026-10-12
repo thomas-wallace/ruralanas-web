@@ -36,7 +36,7 @@ export function PostCard({
             />
           )}
         </div>
-        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] tracking-[0.1em] uppercase">
+        <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 font-sans text-[11px] tracking-[0.1em] uppercase">
           {topic && <span className="text-olive">{topic}</span>}
           <time dateTime={post.publishedAt} className="text-slate">
             {formatDate(post.publishedAt, locale)}

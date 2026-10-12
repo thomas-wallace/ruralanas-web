@@ -42,7 +42,7 @@ export function CartTotalsPanel({
       }`}
     >
       <span className={strong ? 'font-display text-earth' : 'text-slate'}>{label}</span>
-      <span className={`font-mono ${strong ? 'text-earth' : 'text-earth/80'}`}>{value}</span>
+      <span className={`font-sans ${strong ? 'text-earth' : 'text-earth/80'}`}>{value}</span>
     </div>
   )
 

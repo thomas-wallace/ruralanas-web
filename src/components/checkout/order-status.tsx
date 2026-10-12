@@ -58,7 +58,7 @@ export function OrderStatus({ locale, dict }: { locale: Locale; dict: Dictionary
 
   if (state === 'loading') {
     return (
-      <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-slate uppercase">
+      <p className="py-20 text-center font-sans text-[12px] tracking-[0.12em] text-slate uppercase">
         {dict.cart.updating}
       </p>
     )
@@ -70,7 +70,7 @@ export function OrderStatus({ locale, dict }: { locale: Locale; dict: Dictionary
         <p className="m-0 font-display text-[24px] text-earth">{dict.thanks.missing}</p>
         <Link
           href={`/${locale}/tienda`}
-          className="mt-8 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
+          className="mt-8 inline-block bg-earth px-8 py-4 font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
         >
           {dict.thanks.backToShop}
         </Link>
@@ -98,14 +98,14 @@ export function OrderStatus({ locale, dict }: { locale: Locale; dict: Dictionary
       <p className="mt-3 mb-0 text-[16px] leading-relaxed text-slate">{dict.thanks.subtitle}</p>
 
       <dl className="mt-10 grid grid-cols-2 gap-y-3 border-y border-earth/15 py-5 text-[15px]">
-        <dt className="m-0 font-mono text-[11px] tracking-[0.1em] text-slate uppercase">
+        <dt className="m-0 font-sans text-[11px] tracking-[0.1em] text-slate uppercase">
           {dict.thanks.orderNumber}
         </dt>
-        <dd className="m-0 text-right font-mono text-earth">{order.orderId}</dd>
-        <dt className="m-0 font-mono text-[11px] tracking-[0.1em] text-slate uppercase">
+        <dd className="m-0 text-right font-sans text-earth">{order.orderId}</dd>
+        <dt className="m-0 font-sans text-[11px] tracking-[0.1em] text-slate uppercase">
           {dict.thanks.total}
         </dt>
-        <dd className="m-0 text-right font-mono text-earth">{formatPrice(order.total, locale)}</dd>
+        <dd className="m-0 text-right font-sans text-earth">{formatPrice(order.total, locale)}</dd>
       </dl>
 
       <div
@@ -123,7 +123,7 @@ export function OrderStatus({ locale, dict }: { locale: Locale; dict: Dictionary
 
       <Link
         href={`/${locale}/tienda`}
-        className="mt-10 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
+        className="mt-10 inline-block bg-earth px-8 py-4 font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
       >
         {dict.thanks.backToShop}
       </Link>

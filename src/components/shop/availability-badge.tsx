@@ -36,7 +36,7 @@ export function AvailabilityBadge({
 }) {
   return (
     <span
-      className={`inline-flex items-center border px-2.5 py-1 font-mono text-[10px] tracking-[0.16em] uppercase ${TONE[availability.state]} ${className}`}
+      className={`inline-flex items-center border px-2.5 py-1 font-sans text-[10px] tracking-[0.16em] uppercase ${TONE[availability.state]} ${className}`}
     >
       {availabilityLabel(availability, dict)}
     </span>

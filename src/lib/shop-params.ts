@@ -17,7 +17,6 @@ export interface ShopParams {
   /** Texto buscado. Se busca dentro de la categoría y filtros activos. */
   q?: string
   techniques: Technique[]
-  onlyAvailable: boolean
   sort: SortOrder
   view: ShopView
 }
@@ -47,7 +46,6 @@ export function parseShopParams(raw: RawParams): ShopParams {
     category: category && category !== 'todos' ? category : undefined,
     q: q || undefined,
     techniques,
-    onlyAvailable: first(raw.disponibles) === '1',
     sort: SORTS.includes(sort as SortOrder) ? (sort as SortOrder) : 'featured',
     view: view === 'list' ? 'list' : 'grid',
   }
@@ -65,7 +63,6 @@ export function shopHref(
   if (next.q) search.set('q', next.q)
   if (next.category) search.set('categoria', next.category)
   if (next.techniques.length) search.set('tecnica', next.techniques.join(','))
-  if (next.onlyAvailable) search.set('disponibles', '1')
   if (next.sort !== 'featured') search.set('orden', next.sort)
   if (next.view !== 'grid') search.set('vista', next.view)
 
@@ -81,10 +78,5 @@ export function toggleTechnique(current: Technique[], technique: Technique): Tec
 }
 
 export function hasActiveFilters(params: ShopParams): boolean {
-  return (
-    Boolean(params.q) ||
-    Boolean(params.category) ||
-    params.techniques.length > 0 ||
-    params.onlyAvailable
-  )
+  return Boolean(params.q) || Boolean(params.category) || params.techniques.length > 0
 }

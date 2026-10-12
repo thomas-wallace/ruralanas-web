@@ -192,6 +192,75 @@ export const en: AboutContent = {
     },
 
     {
+      slug: 'artesanas',
+      meta: {
+        title: 'The artisans · Ruralanas',
+        description:
+          'More than 150 rural women in Uruguay knit every Ruralanas piece from their homes.',
+      },
+      eyebrow: 'The artisans',
+      title: 'The hands behind every knit',
+      lead: 'More than 150 women from rural Uruguay knit on looms, with two needles and crochet from their homes, without leaving where they live.',
+      summary: 'The network of rural women who knit every piece, and how we work with them.',
+      image: {
+        src: '/media/nosotros/telar-en-casa.jpg',
+        alt: 'A small child next to a loom in a rural home',
+        position: 'center 40%',
+      },
+      blocks: [
+        {
+          type: 'split',
+          eyebrow: 'A growing network',
+          title: 'Work that values knowledge and time',
+          paragraphs: [
+            'We have built a network that motivates more than 150 women in rural areas and improves their quality of life.',
+            'They work independently or in groups. We design to make the most of their skills, valuing their knowledge and their time, which means more production and more income for each of them.',
+          ],
+          image: {
+            src: '/media/nosotros/artesanas.jpg',
+            alt: 'Ruralanas artisans laughing next to a loom',
+          },
+          imageSide: 'right',
+        },
+        {
+          type: 'features',
+          eyebrow: 'What matters to us',
+          title: 'How we work with them',
+          items: [
+            {
+              title: 'No uprooting',
+              text: 'Each artisan knits from home, close to her family and within her community.',
+            },
+            {
+              title: 'Design that fits them',
+              text: 'Pieces are planned around the talent of the person knitting them.',
+            },
+            {
+              title: 'New generations',
+              text: 'We bring in young artisans so the tradition stays alive.',
+            },
+          ],
+        },
+        {
+          type: 'artisans',
+          eyebrow: 'Who knits',
+          title: 'Some of our artisans',
+        },
+        {
+          type: 'quote',
+          text: 'Everyone should feel comfortable and as happy as possible at work, because it shows in the final product. We weave quality of life, for the person who buys and for the person who knits.',
+          source: 'Ruralanas, in El País newspaper',
+        },
+        {
+          type: 'cta',
+          title: 'Take home a piece knitted by them',
+          label: 'Visit the shop',
+          to: { kind: 'shop' },
+        },
+      ],
+    },
+
+    {
       slug: 'procesos',
       meta: {
         title: 'Process and production · Ruralanas',
@@ -341,75 +410,6 @@ export const en: AboutContent = {
           title: 'Follow our news',
           label: 'Go to news',
           to: { kind: 'blog' },
-        },
-      ],
-    },
-
-    {
-      slug: 'artesanas',
-      meta: {
-        title: 'The artisans · Ruralanas',
-        description:
-          'More than 150 rural women in Uruguay knit every Ruralanas piece from their homes.',
-      },
-      eyebrow: 'The artisans',
-      title: 'The hands behind every knit',
-      lead: 'More than 150 women from rural Uruguay knit on looms, with two needles and crochet from their homes, without leaving where they live.',
-      summary: 'The network of rural women who knit every piece, and how we work with them.',
-      image: {
-        src: '/media/nosotros/telar-en-casa.jpg',
-        alt: 'A small child next to a loom in a rural home',
-        position: 'center 40%',
-      },
-      blocks: [
-        {
-          type: 'split',
-          eyebrow: 'A growing network',
-          title: 'Work that values knowledge and time',
-          paragraphs: [
-            'We have built a network that motivates more than 150 women in rural areas and improves their quality of life.',
-            'They work independently or in groups. We design to make the most of their skills, valuing their knowledge and their time, which means more production and more income for each of them.',
-          ],
-          image: {
-            src: '/media/nosotros/artesanas.jpg',
-            alt: 'Ruralanas artisans laughing next to a loom',
-          },
-          imageSide: 'right',
-        },
-        {
-          type: 'features',
-          eyebrow: 'What matters to us',
-          title: 'How we work with them',
-          items: [
-            {
-              title: 'No uprooting',
-              text: 'Each artisan knits from home, close to her family and within her community.',
-            },
-            {
-              title: 'Design that fits them',
-              text: 'Pieces are planned around the talent of the person knitting them.',
-            },
-            {
-              title: 'New generations',
-              text: 'We bring in young artisans so the tradition stays alive.',
-            },
-          ],
-        },
-        {
-          type: 'artisans',
-          eyebrow: 'Who knits',
-          title: 'Some of our artisans',
-        },
-        {
-          type: 'quote',
-          text: 'Everyone should feel comfortable and as happy as possible at work, because it shows in the final product. We weave quality of life, for the person who buys and for the person who knits.',
-          source: 'Ruralanas, in El País newspaper',
-        },
-        {
-          type: 'cta',
-          title: 'Take home a piece knitted by them',
-          label: 'Visit the shop',
-          to: { kind: 'shop' },
         },
       ],
     },

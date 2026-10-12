@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, Instrument_Sans, Space_Mono } from 'next/font/google'
+import { Cormorant_Garamond, Instrument_Sans } from 'next/font/google'
 import { notFound } from 'next/navigation'
 
 import '../globals.css'
@@ -32,13 +32,6 @@ const cormorant = Cormorant_Garamond({
 const instrument = Instrument_Sans({
   subsets: ['latin'],
   variable: '--font-instrument',
-  display: 'swap',
-})
-
-const spaceMono = Space_Mono({
-  subsets: ['latin'],
-  weight: ['400', '700'],
-  variable: '--font-space-mono',
   display: 'swap',
 })
 
@@ -95,7 +88,7 @@ export default async function LocaleLayout({
   return (
     <html
       lang={localeHtmlLang[locale]}
-      className={`${cormorant.variable} ${instrument.variable} ${spaceMono.variable}`}
+      className={`${cormorant.variable} ${instrument.variable}`}
     >
       <body>
         {/* Sin JavaScript los bloques con reveal deben verse igual. */}
@@ -105,7 +98,7 @@ export default async function LocaleLayout({
 
         <a
           href="#contenido"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-paper focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:text-earth"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:bg-paper focus:px-4 focus:py-2 focus:font-sans focus:text-xs focus:text-earth"
         >
           {dict.nav.skipToContent}
         </a>

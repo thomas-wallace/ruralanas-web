@@ -4,11 +4,7 @@ import Link from 'next/link'
 import { CurrentCurrency } from '@/components/currency/currency-switch'
 import { ProductCard } from '@/components/shop/product-card'
 import { ProductRow } from '@/components/shop/product-row'
-import {
-  CategoryOptions,
-  FilterOptions,
-  OnlyAvailableToggle,
-} from '@/components/shop/shop-filters'
+import { CategoryOptions, FilterOptions } from '@/components/shop/shop-filters'
 import { ShopSearch } from '@/components/shop/shop-search'
 import { SortSelect } from '@/components/shop/sort-select'
 import { ToolbarMenu } from '@/components/shop/toolbar-menu'
@@ -57,7 +53,6 @@ export default async function ShopPage({
       category: shopParams.category,
       search: shopParams.q,
       techniques: shopParams.techniques,
-      onlyAvailable: shopParams.onlyAvailable,
       sort: shopParams.sort,
     }),
     catalog.listCategories(locale),
@@ -65,7 +60,7 @@ export default async function ShopPage({
   ])
 
   const showTechniques = allProducts.some((product) => product.technique)
-  const activeFilters = shopParams.techniques.length + (shopParams.onlyAvailable ? 1 : 0)
+  const activeFilters = shopParams.techniques.length
   const onlySearch = Boolean(shopParams.q) && !shopParams.category && activeFilters === 0
   const activeCategory = categories.find((category) => category.slug === shopParams.category)
 
@@ -100,7 +95,7 @@ export default async function ShopPage({
           <p className="mt-4 max-w-[560px] text-[15px] leading-relaxed text-slate">
             {dict.shop.lead}
           </p>
-          <div className="mt-6 font-mono text-[11px] tracking-[0.18em] text-olive uppercase">
+          <div className="mt-6 font-sans text-[11px] tracking-[0.18em] text-olive uppercase">
             {allProducts.length} {dict.shop.pieces} · {dict.shop.shipping} · {dict.shop.currency} <CurrentCurrency />
           </div>
         </div>
@@ -130,15 +125,13 @@ export default async function ShopPage({
               />
             </ToolbarMenu>
 
-            {showTechniques ? (
+            {showTechniques && (
               <ToolbarMenu
                 label={activeFilters > 0 ? `${dict.shop.filters} (${activeFilters})` : dict.shop.filters}
                 active={activeFilters > 0}
               >
                 <FilterOptions locale={locale} dict={dict} params={shopParams} />
               </ToolbarMenu>
-            ) : (
-              <OnlyAvailableToggle locale={locale} dict={dict} params={shopParams} />
             )}
           </div>
 
@@ -152,7 +145,7 @@ export default async function ShopPage({
           />
 
           <div className="flex items-center gap-2.5">
-            <div className="hidden font-mono text-[11px] tracking-[0.18em] text-slate uppercase md:block">
+            <div className="hidden font-sans text-[11px] tracking-[0.18em] text-slate uppercase md:block">
               {products.length} {products.length === 1 ? dict.shop.piece : dict.shop.pieces}
             </div>
 
@@ -180,9 +173,8 @@ export default async function ShopPage({
                 q: undefined,
                 category: undefined,
                 techniques: [],
-                onlyAvailable: false,
               })}
-              className="mt-6 inline-block border-b border-olive pb-1 font-mono text-[11px] tracking-[0.1em] text-olive uppercase"
+              className="mt-6 inline-block border-b border-olive pb-1 font-sans text-[11px] tracking-[0.1em] text-olive uppercase"
             >
               {onlySearch ? dict.shop.clearSearch : dict.shop.clearFilters}
             </Link>

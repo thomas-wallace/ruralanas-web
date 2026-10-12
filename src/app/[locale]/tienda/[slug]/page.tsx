@@ -105,7 +105,7 @@ export default async function ProductPage({
   const specRow = (label: string, value: string) =>
     value.trim() ? (
       <div className="flex justify-between gap-6 border-b border-earth/10 py-3">
-        <dt className="font-mono text-[11px] tracking-[0.14em] text-slate uppercase">{label}</dt>
+        <dt className="font-sans text-[11px] tracking-[0.14em] text-slate uppercase">{label}</dt>
         <dd className="m-0 text-right text-sm text-earth">{value}</dd>
       </div>
     ) : null
@@ -118,7 +118,7 @@ export default async function ProductPage({
       />
 
       <div className="mx-auto max-w-[1240px] px-[var(--spacing-gutter)] pb-16 pt-[120px] lg:px-8">
-        <nav aria-label="breadcrumb" className="mb-8 font-mono text-[11px] tracking-[0.14em] uppercase">
+        <nav aria-label="breadcrumb" className="mb-8 font-sans text-[11px] tracking-[0.14em] uppercase">
           <Link href={`/${locale}/tienda`} className="text-slate hover:text-olive">
             ← {dict.product.backToShop}
           </Link>
@@ -128,7 +128,7 @@ export default async function ProductPage({
           <ProductGallery product={product} dict={dict} />
 
           <div className="lg:sticky lg:top-24 lg:self-start">
-            <div className="font-mono text-[10px] tracking-[0.2em] text-slate uppercase">
+            <div className="font-sans text-[10px] tracking-[0.2em] text-slate uppercase">
               {product.category.name}
               {product.technique ? ` · ${dict.techniques[product.technique]}` : ''}
             </div>
@@ -138,7 +138,7 @@ export default async function ProductPage({
             </h1>
 
             <div className="mt-4 flex flex-wrap items-center gap-3">
-              <span className="font-mono text-2xl text-olive">
+              <span className="font-sans text-2xl text-olive">
                 <Price money={product.price} locale={locale} />
               </span>
               <AvailabilityBadge availability={product.availability} dict={dict} />
@@ -179,7 +179,7 @@ export default async function ProductPage({
         <section className="bg-shell px-[var(--spacing-gutter)] py-[clamp(48px,7vh,88px)] text-earth">
           <Reveal className="mx-auto flex max-w-[900px] flex-wrap items-end justify-between gap-x-12 gap-y-6">
             <div>
-              <div className="mb-3 font-mono text-[11px] tracking-[0.2em] text-olive uppercase">
+              <div className="mb-3 font-sans text-[11px] tracking-[0.2em] text-olive uppercase">
                 {dict.product.processEyebrow}
               </div>
               <h2 className="m-0 flex flex-wrap items-baseline gap-x-4 font-display font-medium leading-none">
@@ -188,7 +188,7 @@ export default async function ProductPage({
               </h2>
             </div>
 
-            <div className="flex flex-col gap-3 pb-2 font-mono text-[11px] tracking-[0.14em] text-slate uppercase">
+            <div className="flex flex-col gap-3 pb-2 font-sans text-[11px] tracking-[0.14em] text-slate uppercase">
               {product.technique && (
                 <span>
                   {dict.product.technique}:{' '}

@@ -60,7 +60,7 @@ export function Hero({ dict }: { dict: Dictionary }) {
       />
 
       <div className="relative z-3 max-w-[1000px]">
-        <div className="mb-6 font-mono text-[13px] tracking-[0.22em] text-caramel uppercase">
+        <div className="mb-6 font-sans text-[13px] tracking-[0.22em] text-caramel uppercase">
           {dict.hero.eyebrow}
         </div>
         <h1 className="m-0 font-display text-[clamp(52px,9vw,140px)] font-medium leading-[0.95] tracking-[-0.02em] text-paper">

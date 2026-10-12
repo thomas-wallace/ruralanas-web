@@ -5,7 +5,7 @@
  *
  * El selector de cantidad se apaga cuando `maxUnits` es 1, que con piezas
  * únicas es el caso más frecuente: mostrar un "+" que siempre falla es
- * prometer algo que no existe. En su lugar se dice que es pieza única.
+ * prometer algo que no existe. En su lugar se muestra la cantidad fija.
  */
 
 import Link from 'next/link'
@@ -62,17 +62,17 @@ export function CartLineRow({
           {line.name}
         </Link>
 
-        <p className="m-0 font-mono text-[11px] tracking-[0.08em] text-slate uppercase">
+        <p className="m-0 font-sans text-[11px] tracking-[0.08em] text-slate uppercase">
           {line.sku}
         </p>
 
         <div className="mt-1 flex flex-wrap items-center gap-3">
           {unique ? (
-            <span className="font-mono text-[11px] tracking-[0.08em] text-olive uppercase">
-              {dict.cart.unique}
+            <span className="font-sans text-[11px] tracking-[0.08em] text-slate uppercase">
+              {dict.cart.quantity} {line.quantity}
             </span>
           ) : (
-            <label className="flex items-center gap-2 font-mono text-[11px] tracking-[0.08em] text-slate uppercase">
+            <label className="flex items-center gap-2 font-sans text-[11px] tracking-[0.08em] text-slate uppercase">
               {dict.cart.quantity}
               <select
                 value={line.quantity}
@@ -93,14 +93,14 @@ export function CartLineRow({
             type="button"
             disabled={busy}
             onClick={() => void remove(line.key)}
-            className="cursor-pointer font-mono text-[11px] tracking-[0.08em] text-slate underline underline-offset-4 uppercase hover:text-olive disabled:opacity-50"
+            className="cursor-pointer font-sans text-[11px] tracking-[0.08em] text-slate underline underline-offset-4 uppercase hover:text-olive disabled:opacity-50"
           >
             {dict.cart.remove}
           </button>
         </div>
       </div>
 
-      <p className="m-0 shrink-0 font-mono text-[13px] text-earth">
+      <p className="m-0 shrink-0 font-sans text-[13px] text-earth">
         {formatPrice(line.lineTotal)}
       </p>
     </li>

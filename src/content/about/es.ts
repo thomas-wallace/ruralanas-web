@@ -196,6 +196,75 @@ export const es: AboutContent = {
     },
 
     {
+      slug: 'artesanas',
+      meta: {
+        title: 'Las artesanas · Ruralanas',
+        description:
+          'Más de 150 mujeres rurales de Uruguay tejen cada pieza de Ruralanas desde sus casas.',
+      },
+      eyebrow: 'Las artesanas',
+      title: 'Las manos detrás de cada tejido',
+      lead: 'Más de 150 mujeres de zonas rurales de Uruguay tejen en telar, dos agujas y crochet desde sus casas, sin dejar su lugar.',
+      summary: 'La red de mujeres rurales que teje cada pieza, y cómo trabajamos con ellas.',
+      image: {
+        src: '/media/nosotros/telar-en-casa.jpg',
+        alt: 'Un niño pequeño junto a un telar en una casa rural',
+        position: 'center 40%',
+      },
+      blocks: [
+        {
+          type: 'split',
+          eyebrow: 'Una red que crece',
+          title: 'Trabajo que valora el conocimiento y el tiempo',
+          paragraphs: [
+            'Creamos una red que motiva a más de 150 mujeres de zonas rurales y mejora su calidad de vida.',
+            'Trabajan de forma independiente o en grupos. Diseñamos para aprovechar sus habilidades, valorando su conocimiento y su tiempo: eso se traduce en más producción y más ingresos para cada una.',
+          ],
+          image: {
+            src: '/media/nosotros/artesanas.jpg',
+            alt: 'Artesanas de Ruralanas riendo junto a un telar',
+          },
+          imageSide: 'right',
+        },
+        {
+          type: 'features',
+          eyebrow: 'Lo que nos importa',
+          title: 'Cómo trabajamos con ellas',
+          items: [
+            {
+              title: 'Sin desarraigo',
+              text: 'Cada artesana teje desde su casa, cerca de su familia y en su comunidad.',
+            },
+            {
+              title: 'Diseño a su medida',
+              text: 'Las piezas se piensan según el talento de quien las teje.',
+            },
+            {
+              title: 'Nuevas generaciones',
+              text: 'Sumamos a jóvenes artesanas para que la tradición siga viva.',
+            },
+          ],
+        },
+        {
+          type: 'artisans',
+          eyebrow: 'Quiénes tejen',
+          title: 'Algunas de nuestras artesanas',
+        },
+        {
+          type: 'quote',
+          text: 'Todos se tienen que sentir cómodos y lo más felices posible en su ámbito de trabajo, porque eso se refleja en el producto final. Tejemos calidad de vida, para quien lo compra y para quien lo teje.',
+          source: 'Ruralanas, en diario El País',
+        },
+        {
+          type: 'cta',
+          title: 'Llevá una pieza tejida por ellas',
+          label: 'Ver la tienda',
+          to: { kind: 'shop' },
+        },
+      ],
+    },
+
+    {
       slug: 'procesos',
       meta: {
         title: 'Procesos y producción · Ruralanas',
@@ -345,75 +414,6 @@ export const es: AboutContent = {
           title: 'Seguí nuestras novedades',
           label: 'Ir a noticias',
           to: { kind: 'blog' },
-        },
-      ],
-    },
-
-    {
-      slug: 'artesanas',
-      meta: {
-        title: 'Las artesanas · Ruralanas',
-        description:
-          'Más de 150 mujeres rurales de Uruguay tejen cada pieza de Ruralanas desde sus casas.',
-      },
-      eyebrow: 'Las artesanas',
-      title: 'Las manos detrás de cada tejido',
-      lead: 'Más de 150 mujeres de zonas rurales de Uruguay tejen en telar, dos agujas y crochet desde sus casas, sin dejar su lugar.',
-      summary: 'La red de mujeres rurales que teje cada pieza, y cómo trabajamos con ellas.',
-      image: {
-        src: '/media/nosotros/telar-en-casa.jpg',
-        alt: 'Un niño pequeño junto a un telar en una casa rural',
-        position: 'center 40%',
-      },
-      blocks: [
-        {
-          type: 'split',
-          eyebrow: 'Una red que crece',
-          title: 'Trabajo que valora el conocimiento y el tiempo',
-          paragraphs: [
-            'Creamos una red que motiva a más de 150 mujeres de zonas rurales y mejora su calidad de vida.',
-            'Trabajan de forma independiente o en grupos. Diseñamos para aprovechar sus habilidades, valorando su conocimiento y su tiempo: eso se traduce en más producción y más ingresos para cada una.',
-          ],
-          image: {
-            src: '/media/nosotros/artesanas.jpg',
-            alt: 'Artesanas de Ruralanas riendo junto a un telar',
-          },
-          imageSide: 'right',
-        },
-        {
-          type: 'features',
-          eyebrow: 'Lo que nos importa',
-          title: 'Cómo trabajamos con ellas',
-          items: [
-            {
-              title: 'Sin desarraigo',
-              text: 'Cada artesana teje desde su casa, cerca de su familia y en su comunidad.',
-            },
-            {
-              title: 'Diseño a su medida',
-              text: 'Las piezas se piensan según el talento de quien las teje.',
-            },
-            {
-              title: 'Nuevas generaciones',
-              text: 'Sumamos a jóvenes artesanas para que la tradición siga viva.',
-            },
-          ],
-        },
-        {
-          type: 'artisans',
-          eyebrow: 'Quiénes tejen',
-          title: 'Algunas de nuestras artesanas',
-        },
-        {
-          type: 'quote',
-          text: 'Todos se tienen que sentir cómodos y lo más felices posible en su ámbito de trabajo, porque eso se refleja en el producto final. Tejemos calidad de vida, para quien lo compra y para quien lo teje.',
-          source: 'Ruralanas, en diario El País',
-        },
-        {
-          type: 'cta',
-          title: 'Llevá una pieza tejida por ellas',
-          label: 'Ver la tienda',
-          to: { kind: 'shop' },
         },
       ],
     },

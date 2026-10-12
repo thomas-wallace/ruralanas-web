@@ -207,7 +207,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
         <p className="m-0 font-display text-[24px] text-earth">{dict.cart.empty}</p>
         <Link
           href={`/${locale}/tienda`}
-          className="mt-8 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
+          className="mt-8 inline-block bg-earth px-8 py-4 font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
         >
           {dict.cart.continueShopping}
         </Link>
@@ -223,7 +223,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
     options: { type?: string; required?: boolean; onBlur?: () => void; className?: string } = {},
   ) => (
     <label className={`flex flex-col gap-1.5 ${options.className ?? ''}`}>
-      <span className="font-mono text-[11px] tracking-[0.1em] text-slate uppercase">{label}</span>
+      <span className="font-sans text-[11px] tracking-[0.1em] text-slate uppercase">{label}</span>
       <input
         type={options.type ?? 'text'}
         name={name}
@@ -256,7 +256,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
           </div>
 
           <label className="flex flex-col gap-1.5">
-            <span className="font-mono text-[11px] tracking-[0.1em] text-slate uppercase">
+            <span className="font-sans text-[11px] tracking-[0.1em] text-slate uppercase">
               {dict.checkout.country}
             </span>
             <select
@@ -324,7 +324,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
                         )}
                       </span>
                     </span>
-                    <span className="font-mono text-[13px] text-earth">
+                    <span className="font-sans text-[13px] text-earth">
                       {rate.price > 0
                         ? formatPrice({ amount: rate.price, currency: rate.currency }, locale)
                         : dict.cart.free}
@@ -373,7 +373,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
           )}
 
           <label className="flex flex-col gap-1.5">
-            <span className="font-mono text-[11px] tracking-[0.1em] text-slate uppercase">
+            <span className="font-sans text-[11px] tracking-[0.1em] text-slate uppercase">
               {dict.checkout.note}
             </span>
             <textarea
@@ -398,7 +398,7 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
                 {line.name}
                 {line.quantity > 1 && <span className="text-slate"> × {line.quantity}</span>}
               </span>
-              <span className="shrink-0 font-mono text-[13px] text-earth">
+              <span className="shrink-0 font-sans text-[13px] text-earth">
                 {formatPrice(line.lineTotal, locale)}
               </span>
             </li>
@@ -423,14 +423,14 @@ export function CheckoutForm({ locale, dict }: { locale: Locale; dict: Dictionar
         <button
           type="submit"
           disabled={!canSubmit}
-          className="mt-5 w-full cursor-pointer bg-earth py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive disabled:cursor-not-allowed disabled:opacity-45"
+          className="mt-5 w-full cursor-pointer bg-earth py-4 font-sans text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive disabled:cursor-not-allowed disabled:opacity-45"
         >
           {placing ? dict.checkout.placing : dict.checkout.placeOrder}
         </button>
 
         <Link
           href={`/${locale}/carrito`}
-          className="mt-3 block text-center font-mono text-[11px] tracking-[0.12em] text-slate uppercase underline underline-offset-4 hover:text-earth"
+          className="mt-3 block text-center font-sans text-[11px] tracking-[0.12em] text-slate uppercase underline underline-offset-4 hover:text-earth"
         >
           {dict.checkout.backToCart}
         </Link>

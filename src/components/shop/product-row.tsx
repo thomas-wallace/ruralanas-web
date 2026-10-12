@@ -47,16 +47,16 @@ export function ProductRow({
           {product.colorName}
           {product.technique ? ` · ${dict.techniques[product.technique]}` : ''}
         </div>
-        <div className="mt-1.5 font-mono text-[13px] text-olive sm:hidden">
+        <div className="mt-1.5 font-sans text-[13px] text-olive sm:hidden">
           {formatPrice(product.price)}
         </div>
       </div>
 
-      <div className="hidden font-mono text-[10px] tracking-[0.2em] text-slate uppercase sm:block">
+      <div className="hidden font-sans text-[10px] tracking-[0.2em] text-slate uppercase sm:block">
         {product.category.name}
       </div>
 
-      <div className="hidden font-mono text-[13px] text-olive sm:block">
+      <div className="hidden font-sans text-[13px] text-olive sm:block">
         {formatPrice(product.price)}
       </div>
 
@@ -64,7 +64,7 @@ export function ProductRow({
         {soldOut || needsChoice ? (
           <Link
             href={href}
-            className="font-mono text-[10px] tracking-[0.18em] text-slate uppercase underline underline-offset-4"
+            className="font-sans text-[10px] tracking-[0.18em] text-slate uppercase underline underline-offset-4"
           >
             {soldOut ? dict.shop.notifyMe : dict.product.chooseOnProduct}
           </Link>

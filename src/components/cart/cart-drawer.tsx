@@ -100,7 +100,7 @@ export function CartDrawer({ locale, dict }: { locale: Locale; dict: Dictionary 
               <Link
                 href={`/${locale}/tienda`}
                 onClick={closeDrawer}
-                className="mt-6 inline-block bg-earth px-6 py-3 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
+                className="mt-6 inline-block bg-earth px-6 py-3 font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
               >
                 {dict.cart.continueShopping}
               </Link>
@@ -126,14 +126,14 @@ export function CartDrawer({ locale, dict }: { locale: Locale; dict: Dictionary 
               href={`/${locale}/checkout`}
               onClick={closeDrawer}
               aria-disabled={busy}
-              className="mt-4 block bg-earth py-4 text-center font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive"
+              className="mt-4 block bg-earth py-4 text-center font-sans text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive"
             >
               {dict.cart.checkout}
             </Link>
             <Link
               href={`/${locale}/carrito`}
               onClick={closeDrawer}
-              className="mt-2 block py-2 text-center font-mono text-[11px] tracking-[0.12em] text-slate uppercase underline underline-offset-4 hover:text-earth"
+              className="mt-2 block py-2 text-center font-sans text-[11px] tracking-[0.12em] text-slate uppercase underline underline-offset-4 hover:text-earth"
             >
               {dict.cart.viewCart}
             </Link>

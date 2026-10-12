@@ -39,12 +39,12 @@ pisan. Parar el dev primero, o compilar desde otra copia del repo.
 
 | Ruta | Estado |
 |---|---|
-| `/[locale]` | Home (v0.2): video de fondo, tres pilares, adelanto del catálogo con líneas Deco y Cuero, mapa, local de Punta del Este, galería de cuatro paneles y últimas noticias del blog |
+| `/[locale]` | Home (v0.2): video de fondo, tres pilares, adelanto del catálogo con líneas Deco y Cuero, local de Punta del Este con tiendas asociadas, mapa de alcance, galería de cuatro paneles y últimas noticias del blog |
 | `/[locale]/nosotros` | Portada institucional: cifras, quiénes somos, historia, filosofía y equipo |
-| `/[locale]/nosotros/[slug]` | Secciones de Nosotros: `materiales`, `procesos`, `sustentabilidad`, `artesanas` |
+| `/[locale]/nosotros/[slug]` | Secciones de Nosotros: `materiales`, `artesanas`, `procesos`, `sustentabilidad` |
 | `/[locale]/noticias` | Blog: notas publicadas en WordPress, con filtro por tema y paginación |
 | `/[locale]/noticias/[slug]` | Nota completa, con el HTML de WordPress saneado y el diseño del sitio |
-| `/[locale]/tienda` | Listado con filtros por categoría y técnica, solo disponibles, orden, y dos vistas (grilla y lista) |
+| `/[locale]/tienda` | Listado con filtros por categoría y técnica, orden, y dos vistas (grilla y lista) |
 | `/[locale]/tienda/[slug]` | Ficha con galería, caja de compra, trazabilidad de la artesana, ficha técnica, cuidados y relacionados |
 | `/[locale]/carrito` | Carrito propio, con cantidades limitadas por el stock real y totales del motor |
 | `/[locale]/checkout` | Checkout híbrido: contacto, envío, tarifa elegida y resumen con total real antes de pagar |
@@ -53,10 +53,19 @@ pisan. Parar el dev primero, o compilar desde otra copia del repo.
 | `/api/cart` · `/api/checkout` · `/api/orders` | Capa BFF del motor transaccional |
 | `/api/admin/*` | Sesión del admin y alta de reseñas |
 | `/api/revalidate` | Invalida caché por etiqueta: `catalog` tras sincronizar stock, `blog` tras publicar una nota |
-| `/sitemap.xml` · `/robots.txt` | Generados: productos, Nosotros y notas en los dos idiomas |
+| `/sitemap.xml` · `/robots.txt` | Generados: productos, Nosotros y notas en los tres idiomas |
 
-Idiomas: ES y EN completos. FR y DE aparecen en el selector como planificados; agregarlos
-es escribir un diccionario más en `src/lib/i18n/dictionaries/`.
+Idiomas: ES, EN y PT (portugués de Brasil, ruta `/pt`, `lang="pt-BR"`). FR y DE aparecen
+en el selector como planificados; agregarlos es escribir un diccionario más en
+`src/lib/i18n/dictionaries/` y un `src/content/about/` más.
+
+**PT no está en TranslatePress de producción** (verificado el 10-10-2026: `/pt/wp-json/`
+da 404). Lo que es nuestro está traducido —interfaz, Nosotros, fichas de
+`product-copy.ts`, cuidados, envío, colores, talles y categorías—, pero el nombre y la
+descripción de las piezas que no están en `product-copy.ts`, y las notas del blog, salen en
+español. El día que se active portugués en TranslatePress, se suma `pt` a
+`TRANSLATED_IN_WORDPRESS` en `src/lib/i18n/translatepress.ts`. El checkout de Woo tampoco
+tiene portugués hasta entonces.
 
 ## Dónde se cambia cada cosa
 
@@ -64,10 +73,10 @@ Ningún texto, foto ni URL vive dentro de un componente. Cada cosa tiene un úni
 
 | Qué | Dónde |
 |---|---|
-| Textos de interfaz y de la home (ES/EN) | `src/lib/i18n/dictionaries/` |
+| Textos de interfaz y de la home (ES/EN/PT) | `src/lib/i18n/dictionaries/` |
 | Fotos, video, producto destacado y cantidades de la home | `src/content/home.ts` |
 | Países del mapa de alcance | `src/content/world-reach.ts` |
-| Páginas de Nosotros: secciones, bloques y fotos | `src/content/about/{es,en}.ts` |
+| Páginas de Nosotros: secciones, bloques y fotos | `src/content/about/{es,en,pt}.ts` |
 | Notas del blog | Admin de WordPress → Entradas (no se toca código) |
 | Productos, precios y stock | Dolibarr → WooCommerce (no se toca código) |
 | Colores de marca | `src/app/globals.css`, bloque `@theme` |
@@ -318,8 +327,9 @@ servicio, que los deja en HubSpot. El navegador nunca ve un token.
 - **El scrub por fotogramas del video solo corre en pantallas grandes.** Extraer cien
   frames a memoria en un móvil es caro y el seek encadenado entrecorta en Safari iOS. En
   móvil el video se reproduce en bucle y el marco sigue animándose con el scroll.
-- **`stock 1` se muestra como "Queda 1 · pieza única"**, en color de marca y no como
-  alerta. Agotado nunca es un callejón sin salida: hay plazo de producción o formulario de
+- **`stock 1` no lleva etiqueta de "pieza única"** con el catálogo de Woo: se muestra
+  como disponible común, y en el carrito la línea dice la cantidad fija. (El catálogo mock
+  conserva el estado `last_one`.) Agotado nunca es un callejón sin salida: hay plazo de producción o formulario de
   aviso.
 - **Lo que falta producir se ve.** Las fotos, ilustraciones, sellos y el mapa que todavía
   no existen se dibujan como marcos punteados, igual que en el prototipo. Es el inventario

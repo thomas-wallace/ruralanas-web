@@ -32,7 +32,7 @@ export function StoreVisitButton({
       <button
         type="button"
         onClick={() => dialogRef.current?.showModal()}
-        className="cursor-pointer border border-earth/70 px-6 py-3 font-mono text-[11px] tracking-[0.12em] text-earth uppercase transition-colors hover:bg-earth hover:text-paper"
+        className="cursor-pointer border border-earth/70 px-6 py-3 font-sans text-[11px] tracking-[0.12em] text-earth uppercase transition-colors hover:bg-earth hover:text-paper"
       >
         {label}
       </button>
@@ -49,7 +49,7 @@ export function StoreVisitButton({
           <button
             type="button"
             onClick={close}
-            className="cursor-pointer font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:text-olive"
+            className="cursor-pointer font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:text-olive"
           >
             {closeLabel} ✕
           </button>

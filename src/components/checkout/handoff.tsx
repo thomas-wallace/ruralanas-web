@@ -79,7 +79,7 @@ export function CheckoutHandoff({ locale, dict }: { locale: Locale; dict: Dictio
         <p className="m-0 font-display text-[24px] text-earth">{dict.cart.empty}</p>
         <Link
           href={`/${locale}/tienda`}
-          className="mt-8 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
+          className="mt-8 inline-block bg-earth px-8 py-4 font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
         >
           {dict.cart.continueShopping}
         </Link>
@@ -101,20 +101,20 @@ export function CheckoutHandoff({ locale, dict }: { locale: Locale; dict: Dictio
           </p>
           <Link
             href={`/${locale}/carrito`}
-            className="mt-6 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
+            className="mt-6 inline-block bg-earth px-8 py-4 font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
           >
             {dict.checkout.backToCart}
           </Link>
         </>
       ) : (
         <>
-          <p className="mt-8 mb-0 font-mono text-[12px] tracking-[0.12em] text-slate uppercase">
+          <p className="mt-8 mb-0 font-sans text-[12px] tracking-[0.12em] text-slate uppercase">
             {dict.checkout.handoffWait}
           </p>
           {target && (
             <a
               href={target}
-              className="mt-6 inline-block font-mono text-[11px] tracking-[0.12em] text-olive uppercase underline underline-offset-4"
+              className="mt-6 inline-block font-sans text-[11px] tracking-[0.12em] text-olive uppercase underline underline-offset-4"
             >
               {dict.checkout.handoffFallback}
             </a>

@@ -142,7 +142,7 @@ export default async function BlogPage({
               ) : (
                 <span />
               )}
-              <span className="font-mono text-[11px] text-slate">
+              <span className="font-sans text-[11px] text-slate">
                 {interpolate(dict.blog.pageOf, { page, total: result.totalPages })}
               </span>
               {page < result.totalPages ? (

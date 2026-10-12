@@ -100,7 +100,7 @@ export function PurchaseRow({
   const soldOut = product.availability.state === 'sold_out'
   const needsChoice = Boolean(product.hasVariants)
 
-  const label = 'font-mono text-[10px] tracking-[0.18em] uppercase'
+  const label = 'font-sans text-[10px] tracking-[0.18em] uppercase'
   // La acción ocupa todo lo que el precio deja libre: el área para pulsar es
   // la fila entera, no sólo el ícono.
   const action = `flex flex-1 items-center justify-end gap-2 self-stretch transition-colors ${style.action}`
@@ -109,7 +109,7 @@ export function PurchaseRow({
     <div
       className={`group/buy mt-auto flex items-center border-t pt-1 transition-colors duration-300 ${style.rule}`}
     >
-      <span className={`py-2 font-mono text-sm ${style.price}`}>
+      <span className={`py-2 font-sans text-sm ${style.price}`}>
         {formatPrice(product.price)}
       </span>
 

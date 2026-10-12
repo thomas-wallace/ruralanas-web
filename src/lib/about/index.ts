@@ -9,6 +9,7 @@
 
 import { en } from '@/content/about/en'
 import { es } from '@/content/about/es'
+import { pt } from '@/content/about/pt'
 import type { AboutContent, AboutHub, AboutSection } from './types'
 import type { Locale } from '@/lib/i18n/config'
 
@@ -18,7 +19,7 @@ export interface AboutRepository {
   getSection(slug: string, locale: Locale): Promise<AboutSection | null>
 }
 
-const CONTENT: Record<Locale, AboutContent> = { es, en }
+const CONTENT: Record<Locale, AboutContent> = { es, en, pt }
 
 const localAboutRepository: AboutRepository = {
   getHub: async (locale) => CONTENT[locale].hub,

@@ -51,7 +51,7 @@ export async function Stockists({ dict }: { dict: Dictionary }) {
               </div>
               <div className="pt-3 text-[13px] leading-snug text-earth">{store.name}</div>
               {place && (
-                <div className="mt-1 font-mono text-[10px] tracking-[0.16em] text-slate uppercase">
+                <div className="mt-1 font-sans text-[10px] tracking-[0.16em] text-slate uppercase">
                   {place}
                 </div>
               )}

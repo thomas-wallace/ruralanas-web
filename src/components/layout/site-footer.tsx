@@ -44,7 +44,7 @@ function FormMessage({ state }: { state: FormState }) {
     // Éxito y error comparten color: la paleta no tiene un rojo, y de los
     // acentos que quedan ninguno llega a 4,5:1 sobre este fondo. Lo que pasó lo
     // dice el mensaje, que es además lo que lee un lector de pantalla.
-    <p role="status" className="font-mono text-xs text-earth">
+    <p role="status" className="font-sans text-xs text-earth">
       {state.message}
     </p>
   )
@@ -120,7 +120,7 @@ export function SiteFooter({
             <SubmitButton
               label={dict.footer.send}
               pendingLabel={dict.footer.sending}
-              className="cursor-pointer bg-earth py-3 font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive disabled:opacity-60"
+              className="cursor-pointer bg-earth py-3 font-sans text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive disabled:opacity-60"
             />
             <FormMessage state={contactState} />
           </form>
@@ -128,7 +128,7 @@ export function SiteFooter({
 
         <div className="flex flex-col gap-8">
           <div>
-            <div className="mb-3.5 font-mono text-[11px] tracking-[0.15em] text-slate">
+            <div className="mb-3.5 font-sans text-[11px] tracking-[0.15em] text-slate">
               {dict.footer.newsletter.toUpperCase()}
             </div>
             <form action={newsletterAction} className="flex max-w-[340px] gap-2">
@@ -147,7 +147,7 @@ export function SiteFooter({
               <SubmitButton
                 label="→"
                 pendingLabel="…"
-                className="cursor-pointer bg-earth px-5 font-mono text-xs text-paper transition-colors hover:bg-olive disabled:opacity-60"
+                className="cursor-pointer bg-earth px-5 font-sans text-xs text-paper transition-colors hover:bg-olive disabled:opacity-60"
               />
             </form>
             <div className="mt-2">
@@ -156,7 +156,7 @@ export function SiteFooter({
           </div>
 
           <nav aria-label={dict.footer.explore}>
-            <div className="mb-3.5 font-mono text-[11px] tracking-[0.15em] text-earth">
+            <div className="mb-3.5 font-sans text-[11px] tracking-[0.15em] text-earth">
               {dict.footer.explore.toUpperCase()}
             </div>
             <ul className="m-0 grid list-none grid-cols-2 gap-x-6 gap-y-2 p-0 text-sm">
@@ -171,7 +171,7 @@ export function SiteFooter({
           </nav>
 
           <address className="text-sm not-italic leading-[1.9] text-slate">
-            <div className="mb-2.5 font-mono text-[11px] tracking-[0.15em] text-earth">
+            <div className="mb-2.5 font-sans text-[11px] tracking-[0.15em] text-earth">
               {dict.footer.contact.toUpperCase()}
             </div>
             {dict.footer.address}
@@ -192,14 +192,14 @@ export function SiteFooter({
           </address>
 
           <div>
-            <div className="mb-3 font-mono text-[11px] tracking-[0.15em] text-slate">
+            <div className="mb-3 font-sans text-[11px] tracking-[0.15em] text-slate">
               {dict.footer.payments.toUpperCase()}
             </div>
             <div className="flex flex-wrap gap-2">
               {PAYMENT_METHODS.map((method) => (
                 <span
                   key={method}
-                  className="rounded border border-dashed border-slate/40 px-3 py-1.5 font-mono text-[10px] text-slate"
+                  className="rounded border border-dashed border-slate/40 px-3 py-1.5 font-sans text-[10px] text-slate"
                 >
                   {method}
                 </span>
@@ -217,10 +217,10 @@ export function SiteFooter({
           height={278}
           className="h-9 w-auto"
         />
-        <div className="font-mono text-[11px] text-slate">
+        <div className="font-sans text-[11px] text-slate">
           {dict.footer.tagline.toUpperCase()} · © {new Date().getFullYear()}
         </div>
-        <div className="flex items-center gap-5 font-mono text-[11px] text-slate">
+        <div className="flex items-center gap-5 font-sans text-[11px] text-slate">
           <CurrencySwitch label={dict.footer.currency} className="flex gap-1.5" />
           <span>ES · EN · FR · DE</span>
         </div>

@@ -122,7 +122,6 @@ export const en: Dictionary = {
       shipped: 'Already shipped',
       store: 'Physical store',
     },
-    replicas: ['Ecuador · model replicated', 'Colombia · model replicated'],
   },
 
   news: {
@@ -171,7 +170,6 @@ export const en: Dictionary = {
     all: 'All',
     technique: 'Technique',
     availability: 'Availability',
-    onlyAvailable: 'Available only',
     sort: 'Sort',
     sortFeatured: 'Featured',
     sortPriceAsc: 'Price ↑',

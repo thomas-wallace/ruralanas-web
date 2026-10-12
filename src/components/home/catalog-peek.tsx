@@ -67,7 +67,7 @@ export function CatalogPeek({
         <Reveal className="mt-12 flex justify-center">
           <Link
             href={shop}
-            className="inline-block w-full max-w-[440px] bg-earth px-8 py-3.5 text-center font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-earth"
+            className="inline-block w-full max-w-[440px] bg-earth px-8 py-3.5 text-center font-sans text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-earth"
           >
             {dict.peek.cta}
           </Link>

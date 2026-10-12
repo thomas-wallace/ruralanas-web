@@ -34,10 +34,19 @@ const MESSAGES = {
     newsletterOk: 'Done. We write rarely, and only when it is worth it.',
     restockOk: 'We will let you know as soon as it is back.',
   },
+  pt: {
+    invalidEmail: 'Confira o e-mail, parece incompleto.',
+    missingName: 'Precisamos do seu nome para responder.',
+    missingMessage: 'Conte para nós do que você precisa.',
+    failed: 'Não conseguimos enviar. Tente de novo ou escreva para nós pelo WhatsApp.',
+    contactOk: 'Recebido. Respondemos nas próximas 24 horas úteis.',
+    newsletterOk: 'Pronto. Vamos escrever pouco e só quando valer a pena.',
+    restockOk: 'Avisamos assim que voltar a estar disponível.',
+  },
 } as const
 
 function dict(locale: string) {
-  return locale === 'en' ? MESSAGES.en : MESSAGES.es
+  return locale === 'en' || locale === 'pt' ? MESSAGES[locale] : MESSAGES.es
 }
 
 function readLead(formData: FormData, source: LeadSource) {

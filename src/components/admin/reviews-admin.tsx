@@ -34,7 +34,7 @@ const EMPTY_FORM = { productId: '', author: '', email: '', text: '', rating: '5'
 
 const field =
   'w-full border border-earth/25 bg-paper px-3 py-2.5 text-[15px] text-earth outline-none focus:border-olive'
-const label = 'font-mono text-[11px] tracking-[0.1em] text-slate uppercase'
+const label = 'font-sans text-[11px] tracking-[0.1em] text-slate uppercase'
 
 export function ReviewsAdmin({ locale }: { locale: Locale }) {
   const [state, setState] = useState<'checking' | 'locked' | 'open'>('checking')
@@ -132,7 +132,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
 
   if (state === 'checking') {
     return (
-      <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-slate uppercase">
+      <p className="py-20 text-center font-sans text-[12px] tracking-[0.12em] text-slate uppercase">
         Cargando…
       </p>
     )
@@ -171,7 +171,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
             <button
               type="submit"
               disabled={busy}
-              className="mt-5 w-full cursor-pointer bg-earth py-3.5 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive disabled:opacity-50"
+              className="mt-5 w-full cursor-pointer bg-earth py-3.5 font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive disabled:opacity-50"
             >
               {busy ? 'Entrando…' : 'Entrar'}
             </button>
@@ -189,7 +189,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
           <button
             type="button"
             onClick={() => void signOut()}
-            className="cursor-pointer font-mono text-[11px] tracking-[0.1em] text-slate uppercase underline underline-offset-4 hover:text-olive"
+            className="cursor-pointer font-sans text-[11px] tracking-[0.1em] text-slate uppercase underline underline-offset-4 hover:text-olive"
           >
             Salir
           </button>
@@ -261,7 +261,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
             <button
               type="submit"
               disabled={busy}
-              className="cursor-pointer bg-earth py-3.5 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive disabled:opacity-50"
+              className="cursor-pointer bg-earth py-3.5 font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive disabled:opacity-50"
             >
               {busy ? 'Cargando…' : 'Publicar reseña'}
             </button>
@@ -273,7 +273,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
         <div className="mb-6 flex items-baseline gap-4">
           <h2 className="m-0 font-display text-[24px] text-earth">Publicadas</h2>
           {data && data.summary.count > 0 && data.summary.average !== null && (
-            <span className="font-mono text-[12px] text-slate">
+            <span className="font-sans text-[12px] text-slate">
               {data.summary.average.toFixed(1)} de 5 · {data.summary.count}
             </span>
           )}
@@ -293,7 +293,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
                     <Stars rating={review.rating} />
                     <span className="text-[15px] text-earth">{review.author}</span>
                   </div>
-                  <span className="font-mono text-[11px] text-slate">
+                  <span className="font-sans text-[11px] text-slate">
                     {formatMonthYear(review.publishedAt, locale)}
                     {review.product ? ` · ${review.product.name}` : ''}
                   </span>

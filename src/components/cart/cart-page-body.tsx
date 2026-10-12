@@ -24,7 +24,7 @@ export function CartPageBody({ locale, dict }: { locale: Locale; dict: Dictionar
 
   if (!ready) {
     return (
-      <p className="py-20 text-center font-mono text-[12px] tracking-[0.12em] text-slate uppercase">
+      <p className="py-20 text-center font-sans text-[12px] tracking-[0.12em] text-slate uppercase">
         {dict.cart.updating}
       </p>
     )
@@ -39,7 +39,7 @@ export function CartPageBody({ locale, dict }: { locale: Locale; dict: Dictionar
         </p>
         <Link
           href={`/${locale}/tienda`}
-          className="mt-8 inline-block bg-earth px-8 py-4 font-mono text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
+          className="mt-8 inline-block bg-earth px-8 py-4 font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive"
         >
           {dict.cart.continueShopping}
         </Link>
@@ -70,7 +70,7 @@ export function CartPageBody({ locale, dict }: { locale: Locale; dict: Dictionar
 
         <Link
           href={`/${locale}/tienda`}
-          className="mt-8 inline-block font-mono text-[11px] tracking-[0.12em] text-slate uppercase underline underline-offset-4 hover:text-earth"
+          className="mt-8 inline-block font-sans text-[11px] tracking-[0.12em] text-slate uppercase underline underline-offset-4 hover:text-earth"
         >
           {dict.cart.continueShopping}
         </Link>
@@ -87,7 +87,7 @@ export function CartPageBody({ locale, dict }: { locale: Locale; dict: Dictionar
           <Link
             href={`/${locale}/checkout`}
             aria-disabled={busy}
-            className="mt-5 block bg-earth py-4 text-center font-mono text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive"
+            className="mt-5 block bg-earth py-4 text-center font-sans text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive"
           >
             {dict.cart.checkout}
           </Link>
