@@ -15,6 +15,11 @@ export default function NotFound() {
   const dict = getDictionary(locale)
 
   return (
+    <>
+      {/* Next descarta los metadatos de la página que llamó a notFound() y deja
+          los del layout ("Inicio - Ruralanas"). React 19 sube este <title> al
+          <head> y es el que queda en la pestaña, como en el sitio original. */}
+      <title>{`${dict.notFound.pageTitle} - Ruralanas`}</title>
     <div className="flex min-h-[80vh] flex-col items-center justify-center gap-6 bg-paper px-[var(--spacing-gutter)] pb-20 pt-32 text-center text-earth">
       <div className="eyebrow text-olive">404</div>
       <h1 className="m-0 max-w-[560px] font-display text-[clamp(34px,5vw,64px)] font-medium leading-none">
@@ -36,5 +41,6 @@ export default function NotFound() {
         </Link>
       </div>
     </div>
+    </>
   )
 }

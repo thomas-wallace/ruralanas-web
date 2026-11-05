@@ -9,8 +9,10 @@ import { CurrencyProvider } from '@/components/currency/currency-provider'
 import { getRates } from '@/lib/currency/rate'
 import { commerce } from '@/lib/commerce'
 import { SiteFooter } from '@/components/layout/site-footer'
+import { NewsletterSignup } from '@/components/layout/newsletter-signup'
 import { SiteHeader } from '@/components/layout/site-header'
 import { about } from '@/lib/about'
+import { listCampaigns } from '@/lib/campaigns'
 import { getDictionary } from '@/lib/i18n'
 import { isLocale, localeHtmlLang, locales, type Locale } from '@/lib/i18n/config'
 import { routes } from '@/lib/routes'
@@ -80,6 +82,7 @@ export default async function LocaleLayout({
   const locale = raw as Locale
   const dict = getDictionary(locale)
   const rates = await getRates()
+  const hasCampaigns = (await listCampaigns(locale)).length > 0
   const aboutLinks = (await about.listSections(locale)).map((section) => ({
     href: routes.about(locale, section.slug),
     label: section.eyebrow,
@@ -105,9 +108,10 @@ export default async function LocaleLayout({
 
         <CurrencyProvider rates={rates}>
           <CartProvider locale={locale} mode={commerce.kind}>
-            <SiteHeader locale={locale} dict={dict} />
+            <SiteHeader locale={locale} dict={dict} hasCampaigns={hasCampaigns} />
             <main id="contenido">{children}</main>
-            <SiteFooter locale={locale} dict={dict} aboutLinks={aboutLinks} />
+            <NewsletterSignup locale={locale} dict={dict} />
+            <SiteFooter locale={locale} dict={dict} aboutLinks={aboutLinks} hasCampaigns={hasCampaigns} />
             <CartDrawer locale={locale} dict={dict} />
           </CartProvider>
         </CurrencyProvider>

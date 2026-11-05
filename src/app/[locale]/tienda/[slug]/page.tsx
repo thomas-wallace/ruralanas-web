@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 import { AddToCart } from '@/components/product/add-to-cart'
+import { ProcessFacts } from '@/components/product/process-facts'
 import { ProductGallery } from '@/components/product/product-gallery'
 import { RestockForm } from '@/components/product/restock-form'
 import { AvailabilityBadge } from '@/components/shop/availability-badge'
@@ -13,7 +14,6 @@ import { Price } from '@/components/currency/currency-provider'
 import { interpolate } from '@/lib/format'
 import { getDictionary, resolveLocale } from '@/lib/i18n'
 import { locales } from '@/lib/i18n/config'
-import { routes } from '@/lib/routes'
 
 export async function generateStaticParams() {
   const slugs = await catalog.listProductSlugs()
@@ -31,7 +31,7 @@ export async function generateMetadata({
   if (!product) return {}
 
   return {
-    title: `${product.name} · Ruralanas`,
+    title: `${product.name} - Ruralanas`,
     description: product.summary,
     alternates: {
       canonical: `/${locale}/tienda/${slug}`,
@@ -65,9 +65,16 @@ export default async function ProductPage({
   const product = await catalog.getProduct(slug, locale)
   if (!product) notFound()
 
-  const related = (
-    await Promise.all(product.relatedSlugs.map((item) => catalog.getProduct(item, locale)))
-  ).filter((item) => item !== null)
+  const fetchProducts = async (slugs: string[]) =>
+    (await Promise.all(slugs.map((item) => catalog.getProduct(item, locale)))).filter(
+      (item) => item !== null,
+    )
+  // Una pieza que va en "Completá el look" no se repite en los relacionados.
+  const lookSlugs = product.lookSlugs ?? []
+  const [related, look] = await Promise.all([
+    fetchProducts(product.relatedSlugs.filter((item) => !lookSlugs.includes(item))),
+    fetchProducts(lookSlugs),
+  ])
 
   const soldOut = product.availability.state === 'sold_out'
   const hasStory = Boolean(product.story.trim()) && product.story.trim() !== product.summary.trim()
@@ -146,6 +153,8 @@ export default async function ProductPage({
 
             <p className="mt-5 text-[15px] leading-relaxed text-slate">{product.summary}</p>
 
+            <ProcessFacts product={product} locale={locale} dict={dict} />
+
             {note && (
               <p className="mt-4 border-l-2 border-olive bg-olive/5 py-3 pl-4 text-sm leading-relaxed text-earth">
                 {note}
@@ -165,46 +174,11 @@ export default async function ProductPage({
               {specRow(dict.product.measurements, product.measurements)}
               {specRow(dict.product.composition, product.composition)}
               {specRow(dict.product.shipping, product.shipping.estimate)}
-              {specRow(dict.product.shippingFrom, product.shipping.from)}
               {specRow(dict.product.sku, product.sku)}
             </dl>
           </div>
         </div>
       </div>
-
-      {/* ── Proceso: las horas de trabajo que hay detrás de la pieza ────── */}
-      {/* Las horas vienen del ERP. Sin ese dato el bloque no se dibuja: una
-          cifra estimada sería un argumento de venta falso. */}
-      {product.handworkHours ? (
-        <section className="bg-shell px-[var(--spacing-gutter)] py-[clamp(48px,7vh,88px)] text-earth">
-          <Reveal className="mx-auto flex max-w-[900px] flex-wrap items-end justify-between gap-x-12 gap-y-6">
-            <div>
-              <div className="mb-3 font-sans text-[11px] tracking-[0.2em] text-olive uppercase">
-                {dict.product.processEyebrow}
-              </div>
-              <h2 className="m-0 flex flex-wrap items-baseline gap-x-4 font-display font-medium leading-none">
-                <span className="text-[clamp(64px,10vw,120px)] text-olive">{product.handworkHours}</span>
-                <span className="text-[clamp(22px,2.8vw,34px)]">{dict.product.hours}</span>
-              </h2>
-            </div>
-
-            <div className="flex flex-col gap-3 pb-2 font-sans text-[11px] tracking-[0.14em] text-slate uppercase">
-              {product.technique && (
-                <span>
-                  {dict.product.technique}:{' '}
-                  <span className="text-olive">{dict.techniques[product.technique]}</span>
-                </span>
-              )}
-              <Link
-                href={routes.about(locale, 'procesos')}
-                className="text-olive underline underline-offset-4 transition-colors hover:text-earth"
-              >
-                {dict.product.processLink} →
-              </Link>
-            </div>
-          </Reveal>
-        </section>
-      ) : null}
 
       {/* ── Relato y cuidados ──────────────────────────────────────────── */}
       <section className="px-[var(--spacing-gutter)] py-[clamp(60px,8vh,110px)] lg:px-8">
@@ -241,6 +215,34 @@ export default async function ProductPage({
             </h2>
             <div className="grid grid-cols-2 gap-x-6 gap-y-9 lg:grid-cols-4">
               {related.map((item) => (
+                <ProductCard
+                  key={item.id}
+                  product={item}
+                  locale={locale}
+                  dict={dict}
+                  tone="light"
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ── Completá el look: el cierre de la ficha ──────────────────────
+          Prendas de otra categoría para llevar con esta (ver
+          `completeTheLook` en el repositorio). Fondo `shell` para que se lea
+          como propuesta y no como una fila más de relacionados. */}
+      {look.length > 0 && (
+        <section className="bg-shell px-[var(--spacing-gutter)] py-[clamp(60px,8vh,110px)] lg:px-8">
+          <div className="mx-auto max-w-[1240px]">
+            <div className="mb-3 font-sans text-[11px] tracking-[0.2em] text-olive uppercase">
+              {product.name}
+            </div>
+            <h2 className="m-0 mb-9 font-display text-[clamp(26px,3.5vw,40px)] font-medium">
+              {dict.product.completeLook}
+            </h2>
+            <div className="grid grid-cols-2 gap-x-6 gap-y-9 lg:grid-cols-4">
+              {look.map((item) => (
                 <ProductCard
                   key={item.id}
                   product={item}

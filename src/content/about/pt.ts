@@ -8,7 +8,7 @@ import type { AboutContent } from '@/lib/about/types'
 export const pt: AboutContent = {
   hub: {
     meta: {
-      title: 'Sobre nós · Ruralanas',
+      title: 'Sobre nós - Ruralanas',
       description:
         'Empresa social uruguaia desde 2003: roupas e peças para casa em lã merino 100% artesanal, tecidas por mais de 150 mulheres rurais.',
     },
@@ -111,7 +111,7 @@ export const pt: AboutContent = {
     {
       slug: 'materiales',
       meta: {
-        title: 'Materiais · Ruralanas',
+        title: 'Materiais - Ruralanas',
         description:
           'Lã merino uruguaia, penteada, fiada e tingida artesanalmente. Suas propriedades e como cuidar dela.',
       },
@@ -194,7 +194,7 @@ export const pt: AboutContent = {
     {
       slug: 'artesanas',
       meta: {
-        title: 'As artesãs · Ruralanas',
+        title: 'As artesãs - Ruralanas',
         description:
           'Mais de 150 mulheres rurais do Uruguai tecem cada peça da Ruralanas em suas casas.',
       },
@@ -263,7 +263,7 @@ export const pt: AboutContent = {
     {
       slug: 'procesos',
       meta: {
-        title: 'Processos e produção · Ruralanas',
+        title: 'Processos e produção - Ruralanas',
         description:
           'Da tosquia aos acabamentos: como cada peça da Ruralanas é produzida, 100% à mão.',
       },
@@ -348,7 +348,7 @@ export const pt: AboutContent = {
     {
       slug: 'sustentabilidad',
       meta: {
-        title: 'Sustentabilidade e compromisso · Ruralanas',
+        title: 'Sustentabilidade e compromisso - Ruralanas',
         description:
           'Finalidade social, fibra natural e produção responsável: o compromisso da Ruralanas com a mulher rural e com o meio ambiente.',
       },
@@ -410,6 +410,32 @@ export const pt: AboutContent = {
           title: 'Acompanhe as nossas novidades',
           label: 'Ir para as notícias',
           to: { kind: 'blog' },
+        },
+      ],
+    },
+    {
+      slug: 'en-el-mundo',
+      meta: {
+        title: 'No mundo - Ruralanas',
+        description:
+          'Tecidas no campo uruguaio, as peças da Ruralanas viajam para clientes de muitos países. O mapa de onde já chegamos.',
+      },
+      eyebrow: 'No mundo',
+      title: 'Do Uruguai para o mundo',
+      lead: 'Cada peça é tecida em uma casa do campo uruguaio e sai com a mesma etiqueta: feito à mão no Uruguai. De lá, viaja até quem a escolhe, onde quer que esteja.',
+      summary: 'Os países aonde nossas peças já chegaram.',
+      image: {
+        src: '/media/etiqueta-ruralanas-vertical.jpg',
+        alt: 'Etiqueta tecida da Ruralanas: feito à mão com fibras naturais, made in Uruguay',
+        position: 'center 35%',
+      },
+      blocks: [
+        { type: 'worldReach' },
+        {
+          type: 'cta',
+          title: 'Enviamos para o mundo todo',
+          label: 'Ver a loja',
+          to: { kind: 'shop' },
         },
       ],
     },

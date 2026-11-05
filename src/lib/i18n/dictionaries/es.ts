@@ -5,7 +5,7 @@
 
 export const es = {
   meta: {
-    title: 'Ruralanas · Tejemos calidad de vida',
+    title: 'Inicio - Ruralanas',
     description:
       'Prendas y home en lana merino 100% uruguaya, tejidas a mano por más de 150 mujeres rurales. Desde 2003.',
   },
@@ -20,6 +20,7 @@ export const es = {
     cart: 'Carrito',
     wishlist: 'Lista de deseos',
     skipToContent: 'Ir al contenido',
+    campaigns: 'Campañas',
   },
 
   hero: {
@@ -141,9 +142,6 @@ export const es = {
     message: 'Mensaje',
     send: 'Enviar mensaje',
     sending: 'Enviando…',
-    newsletter: 'Newsletter',
-    newsletterPlaceholder: 'Tu email',
-    newsletterCta: 'Suscribirme',
     contact: 'Contacto',
     address: 'Pedragosa Sierra y San Ciro – Local 01',
     city: 'Punta del Este, Uruguay',
@@ -155,6 +153,7 @@ export const es = {
   },
 
   notFound: {
+    pageTitle: 'Página no encontrada',
     title: 'Esta hebra no lleva a ningún lado',
     text: 'La página que buscás no existe o cambió de dirección.',
     home: 'Volver al inicio',
@@ -171,15 +170,15 @@ export const es = {
     currency: 'Precios en',
     categories: 'Categorías',
     all: 'Todos',
-    technique: 'Técnica',
-    availability: 'Disponibilidad',
-    sort: 'Ordenar',
-    sortFeatured: 'Destacados',
-    sortPriceAsc: 'Precio ↑',
-    sortPriceDesc: 'Precio ↓',
+    color: 'Color',
+    collections: 'Selecciones',
+    collection: {
+      'best-sellers': 'Best Sellers',
+      exclusivos: 'Exclusivos',
+      carryover: 'Carryover',
+    },
     viewGrid: 'Grilla',
     viewList: 'Lista',
-    filters: 'Filtros',
     clearFilters: 'Limpiar filtros',
     search: 'Buscar',
     searchPlaceholder: 'Buscar piezas',
@@ -236,12 +235,18 @@ export const es = {
     sku: 'Código',
     care: 'Cuidados',
     shipping: 'Envío',
-    shippingFrom: 'Sale de',
     relatedTitle: 'También tejidas a mano',
     storyTitle: 'Sobre esta pieza',
     gallerySoon: 'Foto pendiente',
     textureShot: 'Detalle de textura',
     lifestyleShot: 'Foto de uso',
+    workshop: 'taller involucrado',
+    workshops: 'talleres involucrados',
+    lifestyleTag: 'En uso',
+    textureTag: 'Textura',
+    zoomIn: 'Ampliar foto',
+    zoomOut: 'Achicar foto',
+    completeLook: 'Completá el look',
   },
 
   cart: {
@@ -354,6 +359,25 @@ export const es = {
     back: 'Volver a noticias',
     more: 'Más noticias',
     originalLanguage: '',
+  },
+
+  campaigns: {
+    title: 'Campañas',
+    lead: 'Nuestras colecciones en fotos y en video.',
+    empty: 'Muy pronto, la primera campaña.',
+    view: 'Ver la campaña',
+    back: 'Campañas',
+    more: 'Otras campañas',
+    shopCta: 'Ver la tienda',
+  },
+
+  newsletter: {
+    eyebrow: 'Newsletter',
+    title: 'Novedades desde el campo',
+    text: 'Colecciones nuevas, campañas y piezas recién salidas del telar. Escribimos poco.',
+    placeholder: 'Tu email',
+    cta: 'Suscribirme',
+    consent: 'Al suscribirte aceptás recibir nuestros emails. Podés darte de baja cuando quieras.',
   },
 
   common: {

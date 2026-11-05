@@ -24,12 +24,15 @@ export function ToolbarMenu({
   label,
   active = false,
   align = 'start',
+  wide = false,
   children,
 }: {
   label: ReactNode
   /** Hay algo elegido dentro: el botón se rellena para que se note sin abrirlo. */
   active?: boolean
   align?: 'start' | 'end'
+  /** Panel más ancho, para contenido en dos columnas como los colores. */
+  wide?: boolean
   children: ReactNode
 }) {
   const ref = useRef<HTMLDetailsElement>(null)
@@ -123,7 +126,7 @@ export function ToolbarMenu({
       */}
       <div
         onClick={onPanelClick}
-        className={`absolute inset-x-0 top-full z-10 px-[var(--spacing-gutter)] pt-2 sm:inset-x-auto sm:w-72 sm:px-0 ${
+        className={`absolute inset-x-0 top-full z-10 px-[var(--spacing-gutter)] pt-2 sm:inset-x-auto ${wide ? 'sm:w-96' : 'sm:w-72'} sm:px-0 ${
           align === 'end' ? 'sm:right-0' : 'sm:left-0'
         }`}
       >

@@ -27,6 +27,10 @@ export const routes = {
     return `/${locale}/noticias${query ? `?${query}` : ''}`
   },
   post: (locale: Locale, slug: string) => `/${locale}/noticias/${slug}`,
+
+  /** Sin `slug`, el listado de campañas; con `slug`, una campaña. */
+  campaigns: (locale: Locale, slug?: string) =>
+    slug ? `/${locale}/campanas/${slug}` : `/${locale}/campanas`,
 } as const
 
 /** URL de un destino declarado en el contenido. */

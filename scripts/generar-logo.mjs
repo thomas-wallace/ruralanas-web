@@ -21,7 +21,11 @@
  * Salidas:
  *   public/logo-ruralanas.png  isotipo + palabra, para el encabezado y el pie
  *   public/isotipo.png         sólo el huso, para espacios angostos
- *   src/app/icon.png           favicon; Next lo toma de esa ruta sin declararlo
+ *
+ * El favicon **no** sale de acá: desde el 05-11-2026 es el mismo del sitio
+ * original (`cropped-firma-logo-new-1.png` de la biblioteca de WordPress), el
+ * huso grande sobre fondo transparente. Está en `src/app/icon.png` (512 px) y
+ * `src/app/apple-icon.png` (180 px), y Next los toma de esas rutas.
  */
 
 import { PNG } from 'pngjs'
@@ -36,8 +40,6 @@ const RAIZ = join(dirname(fileURLToPath(import.meta.url)), '..')
  * queda así: no se tiñe con los colores de la paleta.
  */
 const TINTA = [0x37, 0x34, 0x35]
-/** El favicon conserva el fondo blanco del maestro. */
-const FONDO_ICONO = [0xff, 0xff, 0xff]
 
 /**
  * Luminancia de la tinta del maestro. El alfa se normaliza contra este valor
@@ -46,9 +48,6 @@ const FONDO_ICONO = [0xff, 0xff, 0xff]
  */
 const LUM_TINTA = 0.299 * TINTA[0] + 0.587 * TINTA[1] + 0.114 * TINTA[2]
 
-const ICONO = 512
-/** Cuánto del alto del favicon ocupa el huso. El resto es aire. */
-const ICONO_OCUPACION = 0.66
 
 // ---------------------------------------------------------------------------
 
@@ -123,71 +122,6 @@ function siluetaDe(img, caja) {
   return out
 }
 
-/**
- * Reduce promediando el área de origen de cada píxel. Para un trazo fino como
- * éste, tomar el píxel más cercano dejaría los bordes dentados.
- */
-function reducir(img, ancho, alto) {
-  const out = new PNG({ width: ancho, height: alto })
-  const escalaX = img.width / ancho
-  const escalaY = img.height / alto
-
-  for (let y = 0; y < alto; y++) {
-    for (let x = 0; x < ancho; x++) {
-      let suma = 0
-      let n = 0
-      const yi = Math.floor(y * escalaY)
-      const yf = Math.max(yi + 1, Math.floor((y + 1) * escalaY))
-      const xi = Math.floor(x * escalaX)
-      const xf = Math.max(xi + 1, Math.floor((x + 1) * escalaX))
-
-      for (let sy = yi; sy < Math.min(yf, img.height); sy++) {
-        for (let sx = xi; sx < Math.min(xf, img.width); sx++) {
-          suma += img.data[((img.width * sy + sx) << 2) + 3]
-          n++
-        }
-      }
-
-      const i = (ancho * y + x) << 2
-      out.data[i] = TINTA[0]
-      out.data[i + 1] = TINTA[1]
-      out.data[i + 2] = TINTA[2]
-      out.data[i + 3] = n ? Math.round(suma / n) : 0
-    }
-  }
-  return out
-}
-
-/** El huso centrado sobre un cuadrado blanco, como el maestro. */
-function favicon(isotipo) {
-  const alto = Math.round(ICONO * ICONO_OCUPACION)
-  const ancho = Math.round((alto * isotipo.width) / isotipo.height)
-  const marca = reducir(isotipo, ancho, alto)
-
-  const out = new PNG({ width: ICONO, height: ICONO })
-  for (let i = 0; i < out.data.length; i += 4) {
-    out.data[i] = FONDO_ICONO[0]
-    out.data[i + 1] = FONDO_ICONO[1]
-    out.data[i + 2] = FONDO_ICONO[2]
-    out.data[i + 3] = 255
-  }
-
-  const offX = Math.round((ICONO - ancho) / 2)
-  const offY = Math.round((ICONO - alto) / 2)
-  for (let y = 0; y < alto; y++) {
-    for (let x = 0; x < ancho; x++) {
-      const a = marca.data[((ancho * y + x) << 2) + 3] / 255
-      if (!a) continue
-      const i = (ICONO * (offY + y) + (offX + x)) << 2
-      // Mezcla manual: el PNG se guarda plano, sin alfa que componer después.
-      for (let c = 0; c < 3; c++) {
-        out.data[i + c] = Math.round(TINTA[c] * a + FONDO_ICONO[c] * (1 - a))
-      }
-    }
-  }
-  return out
-}
-
 const guardar = (img, ruta) => {
   writeFileSync(ruta, PNG.sync.write(img))
   const kb = (readFileSync(ruta).length / 1024).toFixed(0)
@@ -208,7 +142,6 @@ function main() {
   guardar(siluetaDe(maestro, completo), join(RAIZ, 'public', 'logo-ruralanas.png'))
   const isotipo = siluetaDe(maestro, cajaIsotipo)
   guardar(isotipo, join(RAIZ, 'public', 'isotipo.png'))
-  guardar(favicon(isotipo), join(RAIZ, 'src', 'app', 'icon.png'))
 }
 
 main()

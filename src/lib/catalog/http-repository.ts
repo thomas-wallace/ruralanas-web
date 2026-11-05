@@ -54,6 +54,8 @@ function toSearchParams(query: ProductQuery): string {
   const params = new URLSearchParams({ locale: query.locale })
   if (query.category) params.set('category', query.category)
   if (query.techniques?.length) params.set('techniques', query.techniques.join(','))
+  if (query.colors?.length) params.set('colors', query.colors.join(','))
+  if (query.collection) params.set('collection', query.collection)
   if (query.onlyAvailable) params.set('available', '1')
   if (query.sort) params.set('sort', query.sort)
   if (query.search) params.set('q', query.search)

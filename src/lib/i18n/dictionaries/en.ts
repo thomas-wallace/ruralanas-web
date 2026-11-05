@@ -2,7 +2,7 @@ import type { Dictionary } from './es'
 
 export const en: Dictionary = {
   meta: {
-    title: 'Ruralanas · We weave quality of life',
+    title: 'Home - Ruralanas',
     description:
       '100% Uruguayan merino wool garments and home pieces, hand-knitted by more than 150 rural women. Since 2003.',
   },
@@ -17,6 +17,7 @@ export const en: Dictionary = {
     cart: 'Cart',
     wishlist: 'Wishlist',
     skipToContent: 'Skip to content',
+    campaigns: 'Campaigns',
   },
 
   hero: {
@@ -138,9 +139,6 @@ export const en: Dictionary = {
     message: 'Message',
     send: 'Send message',
     sending: 'Sending…',
-    newsletter: 'Newsletter',
-    newsletterPlaceholder: 'Your email',
-    newsletterCta: 'Subscribe',
     contact: 'Contact',
     address: 'Pedragosa Sierra y San Ciro – Local 01',
     city: 'Punta del Este, Uruguay',
@@ -152,6 +150,7 @@ export const en: Dictionary = {
   },
 
   notFound: {
+    pageTitle: 'Page not found',
     title: 'This thread leads nowhere',
     text: 'The page you are looking for does not exist or has moved.',
     home: 'Back to home',
@@ -168,15 +167,15 @@ export const en: Dictionary = {
     currency: 'Prices in',
     categories: 'Categories',
     all: 'All',
-    technique: 'Technique',
-    availability: 'Availability',
-    sort: 'Sort',
-    sortFeatured: 'Featured',
-    sortPriceAsc: 'Price ↑',
-    sortPriceDesc: 'Price ↓',
+    color: 'Colour',
+    collections: 'Collections',
+    collection: {
+      'best-sellers': 'Best Sellers',
+      exclusivos: 'Exclusives',
+      carryover: 'Carryover',
+    },
     viewGrid: 'Grid',
     viewList: 'List',
-    filters: 'Filters',
     clearFilters: 'Clear filters',
     search: 'Search',
     searchPlaceholder: 'Search pieces',
@@ -232,12 +231,18 @@ export const en: Dictionary = {
     sku: 'Code',
     care: 'Care',
     shipping: 'Shipping',
-    shippingFrom: 'Ships from',
     relatedTitle: 'Also knitted by hand',
     storyTitle: 'About this piece',
     gallerySoon: 'Photo pending',
     textureShot: 'Texture close-up',
     lifestyleShot: 'In use',
+    workshop: 'workshop involved',
+    workshops: 'workshops involved',
+    lifestyleTag: 'Worn',
+    textureTag: 'Texture',
+    zoomIn: 'Zoom in',
+    zoomOut: 'Zoom out',
+    completeLook: 'Complete the look',
   },
 
   cart: {
@@ -350,6 +355,25 @@ export const en: Dictionary = {
     back: 'Back to news',
     more: 'More news',
     originalLanguage: 'This article is available in Spanish only.',
+  },
+
+  campaigns: {
+    title: 'Campaigns',
+    lead: 'Our collections in photos and film.',
+    empty: 'Our first campaign is coming soon.',
+    view: 'View the campaign',
+    back: 'Campaigns',
+    more: 'More campaigns',
+    shopCta: 'Visit the shop',
+  },
+
+  newsletter: {
+    eyebrow: 'Newsletter',
+    title: 'News from the countryside',
+    text: 'New collections, campaigns and pieces fresh off the loom. We write rarely.',
+    placeholder: 'Your email',
+    cta: 'Subscribe',
+    consent: 'By subscribing you agree to receive our emails. You can unsubscribe at any time.',
   },
 
   common: {

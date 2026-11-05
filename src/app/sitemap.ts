@@ -2,6 +2,7 @@ import type { MetadataRoute } from 'next'
 
 import { about } from '@/lib/about'
 import { blog } from '@/lib/blog'
+import { listCampaigns } from '@/lib/campaigns'
 import { catalog } from '@/lib/catalog'
 import { locales, type Locale } from '@/lib/i18n/config'
 import { routes } from '@/lib/routes'
@@ -25,10 +26,11 @@ function entries(
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [productSlugs, sections, postPage] = await Promise.all([
+  const [productSlugs, sections, postPage, campaigns] = await Promise.all([
     catalog.listProductSlugs().catch(() => []),
     about.listSections('es'),
     blog.listPosts({ locale: 'es', perPage: 100 }).catch(() => null),
+    listCampaigns('es').catch(() => []),
   ])
 
   return [
@@ -37,6 +39,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...productSlugs.flatMap((slug) => entries((locale) => routes.product(locale, slug), { priority: 0.8 })),
     ...entries((locale) => routes.about(locale), { priority: 0.7 }),
     ...sections.flatMap((section) => entries((locale) => routes.about(locale, section.slug), { priority: 0.6 })),
+    ...(campaigns.length > 0 ? entries((locale) => routes.campaigns(locale), { priority: 0.6 }) : []),
+    ...campaigns.flatMap((campaign) =>
+      entries((locale) => routes.campaigns(locale, campaign.slug), { priority: 0.5 }),
+    ),
     ...entries((locale) => routes.blog(locale), { priority: 0.6 }),
     ...(postPage?.posts ?? []).flatMap((post) =>
       entries((locale) => routes.post(locale, post.slug), { lastModified: post.updatedAt, priority: 0.5 }),

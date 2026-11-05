@@ -6,7 +6,9 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: '*',
-      allow: '/',
+      // Las fotos de campañas se sirven desde /api/medios: tienen que poder
+      // indexarse aunque el resto de /api no.
+      allow: ['/', '/api/medios/'],
       // Transaccional y privado: no aporta nada a un buscador.
       disallow: ['/api/', '/*/admin/', '/*/carrito', '/*/checkout', '/*/gracias'],
     },

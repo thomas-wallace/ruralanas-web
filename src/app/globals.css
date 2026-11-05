@@ -259,7 +259,7 @@
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Mapa de alcance de la home.
-   El SVG lo arma el servidor (`components/home/world-map.tsx`) y pinta cada
+   El SVG lo arma el servidor (`components/world/world-map.tsx`) y pinta cada
    país según su `data-status`. El color vive acá y no en el componente porque
    el realce al pasar el mouse tiene que ser CSS: así funciona sin JavaScript y
    no hay un re-render por cada país que se toca.

@@ -3,6 +3,7 @@
 import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
 
+import { buttonClass } from '@/components/ui/button'
 import { requestRestockAlert, type FormState } from '@/lib/leads/actions'
 import type { Dictionary } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n/config'
@@ -15,7 +16,7 @@ function Submit({ label }: { label: string }) {
     <button
       type="submit"
       disabled={pending}
-      className="cursor-pointer bg-earth px-5 py-3 font-sans text-[11px] tracking-[0.12em] text-paper uppercase transition-colors hover:bg-olive disabled:opacity-60"
+      className={buttonClass('primary', 'md')}
     >
       {pending ? '…' : label}
     </button>

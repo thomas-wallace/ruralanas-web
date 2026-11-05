@@ -39,19 +39,23 @@ pisan. Parar el dev primero, o compilar desde otra copia del repo.
 
 | Ruta | Estado |
 |---|---|
-| `/[locale]` | Home (v0.2): video de fondo, tres pilares, adelanto del catálogo con líneas Deco y Cuero, local de Punta del Este con tiendas asociadas, mapa de alcance, galería de cuatro paneles y últimas noticias del blog |
+| `/[locale]` | Home (v0.2): video de fondo, tres pilares, adelanto del catálogo con líneas Deco y Cuero, local de Punta del Este con tiendas asociadas, galería de cuatro paneles y últimas noticias del blog |
 | `/[locale]/nosotros` | Portada institucional: cifras, quiénes somos, historia, filosofía y equipo |
-| `/[locale]/nosotros/[slug]` | Secciones de Nosotros: `materiales`, `artesanas`, `procesos`, `sustentabilidad` |
+| `/[locale]/nosotros/[slug]` | Secciones de Nosotros: `materiales`, `artesanas`, `procesos`, `sustentabilidad` y `en-el-mundo` (el mapa de países alcanzados, que antes estaba en la home) |
 | `/[locale]/noticias` | Blog: notas publicadas en WordPress, con filtro por tema y paginación |
 | `/[locale]/noticias/[slug]` | Nota completa, con el HTML de WordPress saneado y el diseño del sitio |
-| `/[locale]/tienda` | Listado con filtros por categoría y técnica, orden, y dos vistas (grilla y lista) |
-| `/[locale]/tienda/[slug]` | Ficha con galería, caja de compra, trazabilidad de la artesana, ficha técnica, cuidados y relacionados |
+| `/[locale]/tienda` | Listado con selecciones (Best Sellers, Exclusivos, Carryover), filtros por categoría y color, y dos vistas (grilla y lista). Sin orden por precio |
+| `/[locale]/tienda/[slug]` | Ficha con galería con zoom (producto, en uso, textura), caja de compra, bloque de proceso, ficha técnica, cuidados, relacionados y "Completá el look" |
 | `/[locale]/carrito` | Carrito propio, con cantidades limitadas por el stock real y totales del motor |
 | `/[locale]/checkout` | Checkout híbrido: contacto, envío, tarifa elegida y resumen con total real antes de pagar |
 | `/[locale]/gracias` | Retorno de la pasarela; muestra el estado real del pedido, no un "gracias" optimista |
+| `/[locale]/campanas` · `/[locale]/campanas/[slug]` | Campañas: contenido editorial de moda (fotos y videos). El menú las muestra sólo si hay alguna publicada |
 | `/[locale]/admin/resenas` | Admin interno: cargar reseñas, protegido por contraseña |
+| `/[locale]/admin/nosotros` | Admin: línea de tiempo de «Nuestra historia» |
+| `/[locale]/admin/campanas` | Admin: crear, ordenar y publicar campañas; subir fotos y videos |
 | `/api/cart` · `/api/checkout` · `/api/orders` | Capa BFF del motor transaccional |
-| `/api/admin/*` | Sesión del admin y alta de reseñas |
+| `/api/admin/*` | Sesión del admin, reseñas, línea de tiempo, campañas y subida de medios |
+| `/api/medios/[archivo]` | Fotos y videos subidos desde el admin, con pedidos por rango para el video |
 | `/api/revalidate` | Invalida caché por etiqueta: `catalog` tras sincronizar stock, `blog` tras publicar una nota |
 | `/sitemap.xml` · `/robots.txt` | Generados: productos, Nosotros y notas en los tres idiomas |
 
@@ -77,6 +81,11 @@ Ningún texto, foto ni URL vive dentro de un componente. Cada cosa tiene un úni
 | Fotos, video, producto destacado y cantidades de la home | `src/content/home.ts` |
 | Países del mapa de alcance | `src/content/world-reach.ts` |
 | Páginas de Nosotros: secciones, bloques y fotos | `src/content/about/{es,en,pt}.ts` |
+| Línea de tiempo de «Nuestra historia» | Admin → Nosotros (no se toca código) |
+| Campañas, sus fotos y videos | Admin → Campañas (no se toca código) |
+| Fotos en uso y de textura de cada ficha | `src/content/product-media.ts` |
+| Técnica, horas y talleres de cada pieza | `src/content/product-process.ts` |
+| Exclusivos y Carryover | `src/content/collections.ts` |
 | Notas del blog | Admin de WordPress → Entradas (no se toca código) |
 | Productos, precios y stock | Dolibarr → WooCommerce (no se toca código) |
 | Colores de marca | `src/app/globals.css`, bloque `@theme` |
@@ -314,6 +323,27 @@ Contacto, newsletter y aviso de reposición entran por acciones de servidor, se 
 salen por `submitLead()`. Con `LEADS_SINK=log` se escriben en consola; con `http` van al
 servicio, que los deja en HubSpot. El navegador nunca ve un token.
 
+**Newsletter** — `src/lib/newsletter/`
+
+La franja de suscripción va arriba del pie en todas las páginas públicas (no en carrito,
+checkout, gracias ni admin). El alta pasa por `subscribe()`, que la entrega al proveedor de
+`NEWSLETTER_PROVIDER`. Hoy hay uno, `crm`: el mismo camino de los leads hacia HubSpot, con
+el texto de consentimiento que se mostró. **La plataforma de mailing no está decidida.**
+Sumarla es escribir su proveedor en ese archivo; el formulario no cambia. Lo recomendable es
+que el alta siga pasando por el servicio de integración y que él la reparta, para que
+HubSpot siga siendo el único maestro del contacto.
+
+**Contenido editable desde el admin** — `src/lib/content-store/`
+
+La línea de tiempo de Nosotros y las campañas se guardan como JSON en el disco del
+servidor (`CONTENT_DATA_DIR`, por defecto `.data/content`), y los archivos subidos en su
+subcarpeta `media/`. Mientras nadie guarde, la línea de tiempo sale de
+`src/content/about/` y las campañas arrancan con un borrador hecho con la sesión de fotos
+con modelos de la biblioteca de WordPress. **Requisito de despliegue:** esa carpeta tiene
+que persistir entre despliegues y entrar en el backup. En una plataforma sin disco
+persistente hay que cambiar la implementación de `content-store` por una base o un
+almacenamiento de objetos; el resto no se entera.
+
 ## Decisiones tomadas al portar
 
 - **Variante de tienda: "Mostrador"** (la 1b del prototipo), con sidebar de filtros en
@@ -322,6 +352,29 @@ servicio, que los deja en HubSpot. El navegador nunca ve un token.
   conservó como **vista de lista**, disponible con un toggle.
 - **Los filtros viven en la URL**, no en estado de React: la tienda funciona sin
   JavaScript, cada combinación es compartible y Google puede rastrear las categorías.
+- **Selecciones de la tienda** (04-11-2026). "Best Sellers" sale de Woo ordenando por
+  ventas (`orderby=popularity`); la Store API no expone las cantidades, sólo el orden.
+  "Exclusivos" y "Carryover" no existen como dato en Woo ni en Dolibarr y se eligen a mano
+  en `src/content/collections.ts`. Una selección vacía no se muestra.
+- **Filtro por color en lugar de técnica.** Los colores salen de los términos `pa_color`
+  de cada pieza, así que un color nuevo en Woo aparece solo; la muestra se pinta con
+  `lib/catalog/colors.ts`. La técnica sigue en el modelo para cuando llegue del ERP, pero
+  ya no es filtro.
+- **Segunda foto al pasar el mouse.** La tarjeta muestra la foto de la prenda en uso o,
+  si no hay, otra toma del producto; nunca la caja de regalo ni un detalle de textura.
+  Sólo en dispositivos con puntero; en el celular no cambia.
+- **Fotos de la ficha** (04-11-2026). Woo no dice qué muestra cada foto, y las de la
+  sesión con modelos están en la biblioteca de medios sin asociar a ningún producto.
+  `src/content/product-media.ts` clasifica las de Woo por nombre de archivo y suma las de
+  uso. La galería las ordena: principal, en uso, textura, resto y caja. Todas tienen zoom
+  (clic o toque, y se recorre con el puntero o arrastrando).
+- **Bloque de proceso** debajo de la descripción: horas, técnica y talleres
+  involucrados, cada uno sólo si hay dato real. La técnica sale de la descripción de cada
+  pieza en Woo; horas y talleres esperan a Ruralanas o al ERP. Todo en
+  `src/content/product-process.ts`.
+- **"Completá el look"** cierra la ficha de lo que se viste: prendas en stock de la otra
+  categoría de prendas (a una ruana, accesorios; a un accesorio, ruanas y chalecos),
+  primero las que comparten más colores. La deco y la lana no lo muestran.
 - **Fuentes autoalojadas** con `next/font` en vez de la CDN de Google: sin request
   bloqueante a un tercero y sin salto de layout.
 - **El scrub por fotogramas del video solo corre en pantallas grandes.** Extraer cien

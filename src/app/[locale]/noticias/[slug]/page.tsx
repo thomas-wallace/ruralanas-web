@@ -37,7 +37,7 @@ export async function generateMetadata({
   if (!post) return {}
 
   return {
-    title: `${post.title} · Ruralanas`,
+    title: `${post.title} - Ruralanas`,
     description: post.excerpt,
     alternates: {
       canonical: routes.post(locale, slug),

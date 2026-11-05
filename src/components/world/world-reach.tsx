@@ -7,8 +7,9 @@ import { WorldMap } from './world-map'
 /**
  * "Nuestras prendas abrazan al mundo": el mapa de países alcanzados.
  *
- * Va después del local y las tiendas, como cierre de "dónde estamos". Se lee
- * de arriba abajo y centrado: título, mapa y la leyenda de los tres colores.
+ * Vive en Nosotros, en su propia sección («En el mundo»), como bloque
+ * `worldReach` del contenido. Se lee de arriba abajo y centrado: título, mapa y
+ * la leyenda de los tres colores.
  *
  * El dato de qué país está alcanzado sale de `getWorldReach()`, no de este
  * componente. Hoy lo declara `src/content/world-reach.ts` a mano; el día que lo

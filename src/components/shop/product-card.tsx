@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { useCart } from '@/components/cart/cart-provider'
 import { AvailabilityBadge } from '@/components/shop/availability-badge'
 import { PurchaseRow } from '@/components/shop/quick-add'
+import { IsotipoIcon } from '@/components/ui/isotipo-icon'
 import type { ProductSummary } from '@/lib/catalog/types'
 import type { Dictionary } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n/config'
@@ -17,6 +18,8 @@ import type { Locale } from '@/lib/i18n/config'
  * La proporción 4/5 y el aire alrededor son deliberados: en una grilla densa
  * una ruana de 249 USD se lee como saldo.
  */
+
+const IMAGE_SIZES = '(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 300px'
 
 const TONE = {
   dark: {
@@ -64,9 +67,22 @@ export function ProductCard({
             alt={product.image.alt}
             fill
             priority={priority}
-            sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 300px"
+            sizes={IMAGE_SIZES}
             className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
           />
+          {/* La prenda en uso, encima de la de producto, al pasar el mouse.
+              `group-hover` sólo existe en dispositivos con puntero: en el
+              celular la tarjeta muestra la primera foto y nada salta al tocar.
+              Sin `alt`: es la misma pieza y el lector ya la nombró. */}
+          {product.hoverImage && (
+            <Image
+              src={product.hoverImage.src}
+              alt=""
+              fill
+              sizes={IMAGE_SIZES}
+              className="object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            />
+          )}
         </Link>
 
         <button
@@ -74,19 +90,13 @@ export function ProductCard({
           onClick={() => toggleWish(product.slug)}
           aria-label={dict.nav.wishlist}
           aria-pressed={wished}
-          className="absolute right-2.5 top-2.5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-slate/40 bg-earth/60 leading-none text-paper transition-colors hover:border-paper"
+          className={`absolute right-2.5 top-2.5 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border leading-none transition-colors ${
+            wished
+              ? 'border-paper bg-paper text-earth'
+              : 'border-slate/40 bg-earth/60 text-paper hover:border-paper'
+          }`}
         >
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill={wished ? '#B4132E' : 'none'}
-            stroke={wished ? '#B4132E' : 'currentColor'}
-            strokeWidth="1.6"
-            aria-hidden="true"
-          >
-            <path d="M12 20s-7-4.6-9.2-8.4C1.3 8.9 2.6 5.5 5.7 5.1 8 4.8 9.4 6.3 12 8.7c2.6-2.4 4-3.9 6.3-3.6 3.1.4 4.4 3.8 2.9 6.5C19 15.4 12 20 12 20z" />
-          </svg>
+          <IsotipoIcon size={20} />
         </button>
 
         {product.availability.state !== 'in_stock' && (

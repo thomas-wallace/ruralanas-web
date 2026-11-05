@@ -36,7 +36,7 @@ export async function generateMetadata({
   const { page, category } = readParams(await searchParams)
 
   return {
-    title: `${dict.blog.title} · Ruralanas`,
+    title: `${dict.blog.title} - Ruralanas`,
     description: dict.blog.lead,
     alternates: {
       canonical: routes.blog(locale, { page, category }),

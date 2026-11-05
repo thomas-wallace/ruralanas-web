@@ -8,28 +8,22 @@ import { useEffect, useState } from 'react'
 import { useCart } from '@/components/cart/cart-provider'
 import { CurrencySwitch } from '@/components/currency/currency-switch'
 import { BagIcon } from '@/components/ui/bag-icon'
+import { IsotipoIcon } from '@/components/ui/isotipo-icon'
 import type { Dictionary } from '@/lib/i18n'
 import { locales, plannedLocales, type Locale } from '@/lib/i18n/config'
 import { routes } from '@/lib/routes'
 import { site } from '@/lib/site'
 
-function HeartIcon({ filled = false }: { filled?: boolean }) {
-  return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 24 24"
-      fill={filled ? 'currentColor' : 'none'}
-      stroke="currentColor"
-      strokeWidth="1.6"
-      aria-hidden="true"
-    >
-      <path d="M12 20s-7-4.6-9.2-8.4C1.3 8.9 2.6 5.5 5.7 5.1 8 4.8 9.4 6.3 12 8.7c2.6-2.4 4-3.9 6.3-3.6 3.1.4 4.4 3.8 2.9 6.5C19 15.4 12 20 12 20z" />
-    </svg>
-  )
-}
-
-export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary }) {
+export function SiteHeader({
+  locale,
+  dict,
+  hasCampaigns,
+}: {
+  locale: Locale
+  dict: Dictionary
+  /** "Campañas" sólo entra al menú cuando hay alguna publicada. */
+  hasCampaigns: boolean
+}) {
   const pathname = usePathname()
   const { count, wishlist, ready, openDrawer } = useCart()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -46,6 +40,15 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
     { href: home, label: dict.nav.home, active: pathname === home },
     { href: routes.about(locale), label: dict.nav.about, active: isUnder(routes.about(locale)) },
     { href: routes.shop(locale), label: dict.nav.shop, active: isUnder(routes.shop(locale)) },
+    ...(hasCampaigns
+      ? [
+          {
+            href: routes.campaigns(locale),
+            label: dict.nav.campaigns,
+            active: isUnder(routes.campaigns(locale)),
+          },
+        ]
+      : []),
     { href: routes.blog(locale), label: dict.nav.news, active: isUnder(routes.blog(locale)) },
   ]
 
@@ -135,7 +138,8 @@ export function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary 
             aria-label={dict.nav.wishlist}
             className="relative cursor-pointer p-1 leading-none text-earth"
           >
-            <HeartIcon filled={ready && wishlist.length > 0} />
+            {/* Con algo guardado, el huso pasa a oliva: se nota sin contar. */}
+            <IsotipoIcon size={22} className={ready && wishlist.length > 0 ? 'text-olive' : ''} />
             {ready && wishlist.length > 0 && (
               <span className="absolute -right-1 -top-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-earth px-1 font-sans text-[10px] text-paper">
                 {wishlist.length}

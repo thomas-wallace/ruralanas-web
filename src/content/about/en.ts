@@ -8,7 +8,7 @@ import type { AboutContent } from '@/lib/about/types'
 export const en: AboutContent = {
   hub: {
     meta: {
-      title: 'About us · Ruralanas',
+      title: 'About us - Ruralanas',
       description:
         'A Uruguayan social enterprise since 2003: handmade merino wool garments and home pieces, knitted by more than 150 rural women.',
     },
@@ -111,7 +111,7 @@ export const en: AboutContent = {
     {
       slug: 'materiales',
       meta: {
-        title: 'Materials · Ruralanas',
+        title: 'Materials - Ruralanas',
         description:
           'Uruguayan merino wool, combed, spun and dyed by hand. Its properties and how to care for it.',
       },
@@ -194,7 +194,7 @@ export const en: AboutContent = {
     {
       slug: 'artesanas',
       meta: {
-        title: 'The artisans · Ruralanas',
+        title: 'The artisans - Ruralanas',
         description:
           'More than 150 rural women in Uruguay knit every Ruralanas piece from their homes.',
       },
@@ -263,7 +263,7 @@ export const en: AboutContent = {
     {
       slug: 'procesos',
       meta: {
-        title: 'Process and production · Ruralanas',
+        title: 'Process and production - Ruralanas',
         description:
           'From shearing to the final details: how every Ruralanas piece is made, 100% by hand.',
       },
@@ -348,7 +348,7 @@ export const en: AboutContent = {
     {
       slug: 'sustentabilidad',
       meta: {
-        title: 'Sustainability and commitment · Ruralanas',
+        title: 'Sustainability and commitment - Ruralanas',
         description:
           'Social purpose, natural fibre and responsible production: Ruralanas’ commitment to rural women and the environment.',
       },
@@ -410,6 +410,32 @@ export const en: AboutContent = {
           title: 'Follow our news',
           label: 'Go to news',
           to: { kind: 'blog' },
+        },
+      ],
+    },
+    {
+      slug: 'en-el-mundo',
+      meta: {
+        title: 'Around the world - Ruralanas',
+        description:
+          'Knitted in the Uruguayan countryside, Ruralanas pieces travel to customers in many countries. The map of where we have already arrived.',
+      },
+      eyebrow: 'Around the world',
+      title: 'From Uruguay to the world',
+      lead: 'Every piece is knitted in a home in the Uruguayan countryside and leaves with the same label: handmade in Uruguay. From there it travels to whoever chooses it, wherever they are.',
+      summary: 'The countries our pieces have already reached.',
+      image: {
+        src: '/media/etiqueta-ruralanas-vertical.jpg',
+        alt: 'Woven Ruralanas label: handmade with natural fibres, made in Uruguay',
+        position: 'center 35%',
+      },
+      blocks: [
+        { type: 'worldReach' },
+        {
+          type: 'cta',
+          title: 'We ship worldwide',
+          label: 'Visit the shop',
+          to: { kind: 'shop' },
         },
       ],
     },

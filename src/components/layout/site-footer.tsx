@@ -6,7 +6,7 @@ import { useActionState } from 'react'
 import { useFormStatus } from 'react-dom'
 
 import { CurrencySwitch } from '@/components/currency/currency-switch'
-import { sendContact, subscribeNewsletter, type FormState } from '@/lib/leads/actions'
+import { sendContact, type FormState } from '@/lib/leads/actions'
 import type { Dictionary } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n/config'
 import { routes } from '@/lib/routes'
@@ -54,21 +54,24 @@ export function SiteFooter({
   locale,
   dict,
   aboutLinks,
+  hasCampaigns,
 }: {
   locale: Locale
   dict: Dictionary
   /** Secciones de Nosotros: vienen del contenido, así una nueva aparece sola. */
   aboutLinks: FooterLink[]
+  /** El enlace a Campañas sólo aparece cuando hay alguna publicada. */
+  hasCampaigns: boolean
 }) {
   const explore: FooterLink[] = [
     { href: routes.shop(locale), label: dict.nav.shop },
     { href: routes.about(locale), label: dict.nav.about },
     ...aboutLinks,
+    ...(hasCampaigns ? [{ href: routes.campaigns(locale), label: dict.nav.campaigns }] : []),
     { href: routes.blog(locale), label: dict.nav.news },
   ]
 
   const [contactState, contactAction] = useActionState(sendContact, INITIAL)
-  const [newsletterState, newsletterAction] = useActionState(subscribeNewsletter, INITIAL)
 
   const field =
     'w-full border border-slate/40 bg-transparent px-4 py-3 text-sm text-earth placeholder:text-slate focus:border-earth focus:outline-none'
@@ -127,34 +130,6 @@ export function SiteFooter({
         </div>
 
         <div className="flex flex-col gap-8">
-          <div>
-            <div className="mb-3.5 font-sans text-[11px] tracking-[0.15em] text-slate">
-              {dict.footer.newsletter.toUpperCase()}
-            </div>
-            <form action={newsletterAction} className="flex max-w-[340px] gap-2">
-              <input type="hidden" name="locale" value={locale} />
-              <label className="sr-only" htmlFor="newsletter-email">
-                {dict.footer.email}
-              </label>
-              <input
-                id="newsletter-email"
-                name="email"
-                type="email"
-                placeholder={dict.footer.newsletterPlaceholder}
-                autoComplete="email"
-                className={`${field} flex-1`}
-              />
-              <SubmitButton
-                label="→"
-                pendingLabel="…"
-                className="cursor-pointer bg-earth px-5 font-sans text-xs text-paper transition-colors hover:bg-olive disabled:opacity-60"
-              />
-            </form>
-            <div className="mt-2">
-              <FormMessage state={newsletterState} />
-            </div>
-          </div>
-
           <nav aria-label={dict.footer.explore}>
             <div className="mb-3.5 font-sans text-[11px] tracking-[0.15em] text-earth">
               {dict.footer.explore.toUpperCase()}

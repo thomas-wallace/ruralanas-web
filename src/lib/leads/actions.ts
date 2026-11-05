@@ -5,6 +5,8 @@
  * URL ni el token del servicio de integración.
  */
 
+import { subscribe } from '@/lib/newsletter'
+
 import { submitLead } from './gateway'
 import type { LeadSource } from './gateway'
 
@@ -81,10 +83,19 @@ export async function subscribeNewsletter(
   const lead = readLead(formData, 'newsletter')
   const t = dict(lead.locale)
 
+  // Campo trampa: invisible para una persona, los bots lo completan. Se les
+  // responde que salió bien para que no insistan.
+  if (String(formData.get('website') ?? '')) return { status: 'ok', message: t.newsletterOk }
+
   if (!EMAIL.test(lead.email)) return { status: 'error', message: t.invalidEmail }
 
   // Alta a lista = consentimiento explícito de marketing.
-  const result = await submitLead({ ...lead, marketingConsent: true })
+  const result = await subscribe({
+    email: lead.email,
+    locale: lead.locale,
+    origin: String(formData.get('origin') ?? 'web').slice(0, 40),
+    consentText: String(formData.get('consent') ?? '').slice(0, 300),
+  })
   return result.ok
     ? { status: 'ok', message: t.newsletterOk }
     : { status: 'error', message: t.failed }

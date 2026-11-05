@@ -23,6 +23,8 @@ export interface Lead {
   productSlug?: string
   /** Consentimiento explícito para comunicaciones comerciales. */
   marketingConsent: boolean
+  /** Texto exacto que aceptó, para poder probar el consentimiento después. */
+  consentText?: string
 }
 
 export interface LeadResult {

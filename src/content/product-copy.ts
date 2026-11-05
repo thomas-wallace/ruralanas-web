@@ -33,20 +33,20 @@ export const PRODUCT_COPY: Record<string, Record<Locale, ProductCopy>> = {
         'Bufanda clásica de trama abierta con flecos, presentada en un divertido empaque ideal para regalar.',
       story: 'Tejida a mano en telar, con lana hilada y teñida artesanalmente.',
       composition: '100% lana merino',
-      measurements: '155 x 17 cm',
+      measurements: '155 x 17 cm, flecos incluidos',
     },
     en: {
       summary: 'Classic open-weave scarf with fringes, presented in fun packaging that makes it an ideal gift.',
       story: 'Handwoven on a loom, with yarn spun and dyed by hand.',
       composition: '100% merino wool',
-      measurements: '155 x 17 cm',
+      measurements: '155 x 17 cm, fringe included',
     },
     pt: {
       summary:
         'Cachecol clássico de trama aberta com franjas, apresentado em uma embalagem divertida, ideal para presentear.',
       story: 'Tecido à mão em tear, com lã fiada e tingida artesanalmente.',
       composition: '100% lã merino',
-      measurements: '155 x 17 cm',
+      measurements: '155 x 17 cm, franjas incluídas',
     },
   },
   'bufanda-flame': {
@@ -54,19 +54,19 @@ export const PRODUCT_COPY: Record<string, Record<Locale, ProductCopy>> = {
       summary: 'Bufanda flamé en color natural, súper suave, de trama abierta y con flecos.',
       story: 'Tejida a mano en telar con lana merino premium, hilada artesanalmente.',
       composition: '100% lana merino premium',
-      measurements: '145 x 20 cm',
+      measurements: '145 x 20 cm, flecos incluidos',
     },
     en: {
       summary: 'Super-soft flamé scarf in natural colour, with an open weave and fringes.',
       story: 'Handwoven on a loom with premium merino wool, spun by hand.',
       composition: '100% premium merino wool',
-      measurements: '145 x 20 cm',
+      measurements: '145 x 20 cm, fringe included',
     },
     pt: {
       summary: 'Cachecol flamê na cor natural, supermacio, de trama aberta e com franjas.',
       story: 'Tecido à mão em tear com lã merino premium, fiada artesanalmente.',
       composition: '100% lã merino premium',
-      measurements: '145 x 20 cm',
+      measurements: '145 x 20 cm, franjas incluídas',
     },
   },
   calcetines: {
@@ -242,21 +242,21 @@ export const PRODUCT_COPY: Record<string, Record<Locale, ProductCopy>> = {
         'No solo es calentita, sino también muy versátil: usala como pashmina o como bufanda grande. Su trama amplia la hace flexible y cómoda. Nuestro bufandón más popular viene en un hermoso packaging, ideal para regalar.',
       story: 'Tejida a mano en telar y teñida artesanalmente.',
       composition: '100% lana merino',
-      measurements: '180 x 50 cm + flecos',
+      measurements: '180 x 50 cm, flecos incluidos',
     },
     en: {
       summary:
         'Not only warm but also very versatile: wear it as a pashmina or as a big scarf. Its loose weave makes it flexible and comfortable. Our most popular scarf comes in beautiful packaging, ideal as a gift.',
       story: 'Handwoven on a loom and hand-dyed.',
       composition: '100% merino wool',
-      measurements: '180 x 50 cm + fringes',
+      measurements: '180 x 50 cm, fringe included',
     },
     pt: {
       summary:
         'Além de quentinha, é muito versátil: use como pashmina ou como cachecol grande. Sua trama ampla a deixa flexível e confortável. Nosso maxicachecol mais querido vem em uma linda embalagem, ideal para presentear.',
       story: 'Tecida à mão em tear e tingida artesanalmente.',
       composition: '100% lã merino',
-      measurements: '180 x 50 cm + franjas',
+      measurements: '180 x 50 cm, franjas incluídas',
     },
   },
   'pie-de-cama-con-arnes-de-cuero': {
@@ -288,14 +288,14 @@ export const PRODUCT_COPY: Record<string, Record<Locale, ProductCopy>> = {
       story:
         'Tejida en telar manual por artesanas uruguayas, con lana hilada y teñida artesanalmente. Talle único.',
       composition: '100% lana merino',
-      measurements: '150 x 90 cm + flecos',
+      measurements: '150 x 90 cm, flecos incluidos',
     },
     en: {
       summary:
         'Tradition and the best gaucho chic style in one garment. This warm, close-weave classic ruana is ideal for mild climates. Rectangular cut with a fringed finish.',
       story: 'Woven on a hand loom by Uruguayan artisans, with yarn spun and dyed by hand. One size.',
       composition: '100% merino wool',
-      measurements: '150 x 90 cm + fringes',
+      measurements: '150 x 90 cm, fringe included',
     },
     pt: {
       summary:
@@ -303,7 +303,7 @@ export const PRODUCT_COPY: Record<string, Record<Locale, ProductCopy>> = {
       story:
         'Tecida em tear manual por artesãs uruguaias, com lã fiada e tingida artesanalmente. Tamanho único.',
       composition: '100% lã merino',
-      measurements: '150 x 90 cm + franjas',
+      measurements: '150 x 90 cm, franjas incluídas',
     },
   },
   'ruana-liviana': {
@@ -311,19 +311,19 @@ export const PRODUCT_COPY: Record<string, Record<Locale, ProductCopy>> = {
       summary: 'Su trama abierta la convierte en una prenda liviana, flexible y cómoda.',
       story: 'Tejida en telar manual y teñida artesanalmente. Talle único.',
       composition: '100% lana merino',
-      measurements: '150 x 90 cm + flecos',
+      measurements: '150 x 90 cm, flecos incluidos',
     },
     en: {
       summary: 'Its open weave makes it a light, flexible and comfortable garment.',
       story: 'Woven on a hand loom and hand-dyed. One size.',
       composition: '100% merino wool',
-      measurements: '150 x 90 cm + fringes',
+      measurements: '150 x 90 cm, fringe included',
     },
     pt: {
       summary: 'Sua trama aberta faz dela uma peça leve, flexível e confortável.',
       story: 'Tecida em tear manual e tingida artesanalmente. Tamanho único.',
       composition: '100% lã merino',
-      measurements: '150 x 90 cm + franjas',
+      measurements: '150 x 90 cm, franjas incluídas',
     },
   },
   'sendero-de-mesa': {

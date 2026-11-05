@@ -4,7 +4,6 @@ import { News } from '@/components/home/news'
 import { Pillars } from '@/components/home/pillars'
 import { PillarsGallery } from '@/components/home/pillars-gallery'
 import { StoreVisit } from '@/components/home/store-visit'
-import { WorldReach } from '@/components/home/world-reach'
 import { homeContent } from '@/content/home'
 import { blog } from '@/lib/blog'
 import { catalog } from '@/lib/catalog'
@@ -72,7 +71,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         dict={dict}
       />
       <StoreVisit dict={dict} />
-      <WorldReach dict={dict} locale={locale} />
       <PillarsGallery dict={dict} locale={locale} />
       <News posts={latest?.posts ?? []} locale={locale} dict={dict} />
     </div>

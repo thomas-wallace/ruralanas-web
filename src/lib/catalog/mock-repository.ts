@@ -14,6 +14,7 @@
  * Nada de este archivo debe sobrevivir a la conexión con el ERP.
  */
 
+import { CURATED_COLLECTIONS } from '@/content/collections'
 import type { Locale } from '@/lib/i18n/config'
 import type { CatalogRepository } from './repository'
 import { matchesSearch } from './search'
@@ -117,7 +118,7 @@ const CATEGORIES: MockCategory[] = [
 
 // ── Textos compartidos ───────────────────────────────────────────────────────
 
-const MERINO = loc('100% lana merino uruguaya', '100% Uruguayan merino wool')
+const MERINO = loc('100% lana merino', '100% merino wool')
 
 const CARE = loc(
   [
@@ -629,6 +630,19 @@ export const mockCatalogRepository: CatalogRepository = {
       items = items.filter((item) =>
         matchesSearch(search, [item.name, item.category.name, item.colorName]),
       )
+    }
+
+    // El mock no tiene colores por variante ni ventas: el filtro de color no
+    // aparece, y "Best Sellers" son los destacados.
+    if (query.collection) {
+      const order: string[] =
+        query.collection === 'best-sellers'
+          ? items.filter((item) => item.featured).map((item) => item.slug)
+          : [...CURATED_COLLECTIONS[query.collection]]
+      items = items
+        .filter((item) => order.includes(item.slug))
+        .sort((a, b) => order.indexOf(a.slug) - order.indexOf(b.slug))
+      return query.limit ? items.slice(0, query.limit) : items
     }
 
     switch (query.sort) {

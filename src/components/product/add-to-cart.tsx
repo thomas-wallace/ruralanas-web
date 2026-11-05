@@ -16,6 +16,8 @@
 import { useState } from 'react'
 
 import { VariantPicker } from './variant-picker'
+import { buttonClass } from '@/components/ui/button'
+import { IsotipoIcon } from '@/components/ui/isotipo-icon'
 import { useCart } from '@/components/cart/cart-provider'
 import { cartErrorMessage } from '@/components/cart/messages'
 import type { Product, ProductVariant } from '@/lib/catalog/types'
@@ -79,11 +81,8 @@ export function AddToCart({ product, dict }: { product: Product; dict: Dictionar
             onClick={() => void handleAdd()}
             disabled={busy}
             aria-describedby={error ? 'add-to-cart-error' : undefined}
-            className={`flex-1 cursor-pointer py-4 font-sans text-[11px] tracking-[0.12em] uppercase transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
-              blocked
-                ? 'border border-earth/25 bg-transparent text-earth hover:border-olive'
-                : 'bg-earth text-paper hover:bg-olive'
-            }`}
+            // Mismo botón que el de la tarjeta del listado, en tamaño grande.
+            className={buttonClass(blocked ? 'secondary' : 'primary', 'md', 'flex-1')}
           >
             {added ? dict.shop.added : blocked ? dict.product.pickColor : dict.product.addToCart}
           </button>
@@ -93,19 +92,13 @@ export function AddToCart({ product, dict }: { product: Product; dict: Dictionar
             onClick={() => toggleWish(product.slug)}
             aria-label={dict.nav.wishlist}
             aria-pressed={wished}
-            className="flex w-14 cursor-pointer items-center justify-center border border-earth/25 text-earth transition-colors hover:border-olive"
+            className={`flex w-14 cursor-pointer items-center justify-center border transition-colors ${
+              wished
+                ? 'border-earth bg-earth text-paper'
+                : 'border-earth/25 text-earth hover:border-olive'
+            }`}
           >
-            <svg
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill={wished ? '#B4132E' : 'none'}
-              stroke={wished ? '#B4132E' : 'currentColor'}
-              strokeWidth="1.6"
-              aria-hidden="true"
-            >
-              <path d="M12 20s-7-4.6-9.2-8.4C1.3 8.9 2.6 5.5 5.7 5.1 8 4.8 9.4 6.3 12 8.7c2.6-2.4 4-3.9 6.3-3.6 3.1.4 4.4 3.8 2.9 6.5C19 15.4 12 20 12 20z" />
-            </svg>
+            <IsotipoIcon size={24} />
           </button>
         </div>
 

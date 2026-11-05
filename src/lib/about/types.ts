@@ -53,6 +53,9 @@ export type ContentBlock =
       /** Vacío = el bloque no se muestra. Nunca se inventa un sello. */
       items: { name: string; issuer: string; text: string; image?: ContentImage; url?: string }[]
     }
+  /** El mapa de países alcanzados. Sus textos y datos salen del diccionario
+   *  (`world`) y de `content/world-reach.ts`, no del bloque. */
+  | { type: 'worldReach' }
   /** Artesanas reales del catálogo. Si todavía no hay datos, no se muestra. */
   | { type: 'artisans'; eyebrow?: string; title: string; lead?: string }
   | { type: 'cta'; title: string; text?: string; label: string; to: LinkTarget }

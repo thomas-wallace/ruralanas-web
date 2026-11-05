@@ -12,7 +12,7 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>
 }): Promise<Metadata> {
   const dict = getDictionary(resolveLocale((await params).locale))
-  return { title: `${dict.thanks.title} · Ruralanas`, robots: { index: false, follow: false } }
+  return { title: `${dict.thanks.title} - Ruralanas`, robots: { index: false, follow: false } }
 }
 
 export default async function ThanksPage({ params }: { params: Promise<{ locale: string }> }) {

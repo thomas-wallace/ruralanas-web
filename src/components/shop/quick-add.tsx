@@ -6,12 +6,13 @@ import { useState } from 'react'
 import { useCart } from '@/components/cart/cart-provider'
 import { useFormatPrice } from '@/components/currency/currency-provider'
 import { BagIcon } from '@/components/ui/bag-icon'
+import { buttonClass } from '@/components/ui/button'
 import type { ProductSummary } from '@/lib/catalog/types'
 import type { Dictionary } from '@/lib/i18n'
 import type { Locale } from '@/lib/i18n/config'
 
 /**
- * Agregado rápido desde el listado, con la bolsa de compras como gesto.
+ * Agregado rápido desde el listado. El botón es el mismo de la ficha.
  *
  * Qué ofrece según el producto:
  * - Sin variantes y con stock: añade al carrito y abre el drawer.
@@ -59,27 +60,15 @@ function CheckIcon({ size }: { size: number }) {
   )
 }
 
-const ROW_TONE = {
-  light: {
-    rule: 'border-earth/15 group-hover/buy:border-earth/50',
-    price: 'text-olive',
-    action: 'text-olive group-hover/buy:text-earth',
-  },
-  dark: {
-    rule: 'border-paper/15 group-hover/buy:border-paper/50',
-    price: 'text-caramel',
-    action: 'text-caramel group-hover/buy:text-paper',
-  },
+const PRICE_TONE = {
+  light: 'text-olive',
+  dark: 'text-caramel',
 } as const
 
 /**
- * Fila de compra al pie de la tarjeta: precio a la izquierda, acción a la
- * derecha, sobre una línea fina que va de borde a borde como la foto. Así la
- * compra es parte de la estructura de la tarjeta y no un elemento suelto.
- *
- * La palabra "Añadir" aparece al pasar el mouse; en pantallas táctiles no hay
- * hover y queda sólo la bolsa, que se entiende sola. Las acciones que llevan a
- * la ficha se escriben siempre, porque un ícono de bolsa que no añade engaña.
+ * Pie de la tarjeta: el precio y debajo el botón de compra, del mismo diseño
+ * que el de la ficha (ver `ui/button`). Relleno si agrega al carrito; contorno
+ * si primero hay que elegir color o la pieza está agotada.
  */
 export function PurchaseRow({
   product,
@@ -90,9 +79,8 @@ export function PurchaseRow({
   product: ProductSummary
   locale: Locale
   dict: Dictionary
-  tone?: keyof typeof ROW_TONE
+  tone?: keyof typeof PRICE_TONE
 }) {
-  const style = ROW_TONE[tone]
   const formatPrice = useFormatPrice(locale)
   const { handleAdd, pending, justAdded } = useQuickAdd(product)
 
@@ -100,30 +88,13 @@ export function PurchaseRow({
   const soldOut = product.availability.state === 'sold_out'
   const needsChoice = Boolean(product.hasVariants)
 
-  const label = 'font-sans text-[10px] tracking-[0.18em] uppercase'
-  // La acción ocupa todo lo que el precio deja libre: el área para pulsar es
-  // la fila entera, no sólo el ícono.
-  const action = `flex flex-1 items-center justify-end gap-2 self-stretch transition-colors ${style.action}`
-
   return (
-    <div
-      className={`group/buy mt-auto flex items-center border-t pt-1 transition-colors duration-300 ${style.rule}`}
-    >
-      <span className={`py-2 font-sans text-sm ${style.price}`}>
-        {formatPrice(product.price)}
-      </span>
+    <div className="mt-auto flex flex-col gap-3">
+      <span className={`font-sans text-sm ${PRICE_TONE[tone]}`}>{formatPrice(product.price)}</span>
 
       {soldOut || needsChoice ? (
-        <Link href={href} className={action}>
-          <span className={label}>
-            {soldOut ? dict.shop.notifyMe : dict.product.chooseOnProduct}
-          </span>
-          <span
-            aria-hidden="true"
-            className="text-xs transition-transform duration-300 group-hover/buy:translate-x-0.5"
-          >
-            →
-          </span>
+        <Link href={href} className={buttonClass('secondary', 'sm', 'w-full')}>
+          {soldOut ? dict.shop.notifyMe : dict.product.chooseOnProduct}
         </Link>
       ) : (
         <button
@@ -131,18 +102,10 @@ export function PurchaseRow({
           onClick={handleAdd}
           disabled={pending}
           aria-label={justAdded ? dict.shop.added : `${dict.product.addToCart} · ${product.name}`}
-          className={`group/add ${action} cursor-pointer disabled:cursor-wait disabled:opacity-70`}
+          className={buttonClass('primary', 'sm', 'w-full disabled:cursor-wait')}
         >
-          <span
-            className={`${label} transition-all duration-300 ${
-              justAdded
-                ? 'translate-x-0 opacity-100'
-                : 'translate-x-1 opacity-0 group-hover/buy:translate-x-0 group-hover/buy:opacity-100 group-focus-visible/add:translate-x-0 group-focus-visible/add:opacity-100'
-            }`}
-          >
-            {justAdded ? dict.shop.added : dict.shop.addToCart}
-          </span>
-          {justAdded ? <CheckIcon size={18} /> : <BagIcon size={18} />}
+          {justAdded ? <CheckIcon size={15} /> : <BagIcon size={15} />}
+          {justAdded ? dict.shop.added : dict.shop.addToCart}
         </button>
       )}
     </div>
@@ -150,12 +113,27 @@ export function PurchaseRow({
 }
 
 /**
- * Variante compacta para la vista lista: un botón sólido con la bolsa. Sólo se
- * usa cuando el producto se puede añadir directo; los demás casos la lista los
- * resuelve con texto.
+ * La misma acción en la vista lista: mismo botón, sin ocupar el ancho.
  */
-export function QuickAdd({ product, dict }: { product: ProductSummary; dict: Dictionary }) {
+export function QuickAdd({
+  product,
+  locale,
+  dict,
+}: {
+  product: ProductSummary
+  locale: Locale
+  dict: Dictionary
+}) {
   const { handleAdd, pending, justAdded } = useQuickAdd(product)
+  const soldOut = product.availability.state === 'sold_out'
+
+  if (soldOut || product.hasVariants) {
+    return (
+      <Link href={`/${locale}/tienda/${product.slug}`} className={buttonClass('secondary', 'sm')}>
+        {soldOut ? dict.shop.notifyMe : dict.product.chooseOnProduct}
+      </Link>
+    )
+  }
 
   return (
     <button
@@ -163,10 +141,10 @@ export function QuickAdd({ product, dict }: { product: ProductSummary; dict: Dic
       onClick={handleAdd}
       disabled={pending}
       aria-label={justAdded ? dict.shop.added : `${dict.product.addToCart} · ${product.name}`}
-      title={justAdded ? dict.shop.added : dict.product.addToCart}
-      className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-sm bg-earth leading-none text-paper transition-colors hover:bg-olive disabled:cursor-wait disabled:opacity-70"
+      className={buttonClass('primary', 'sm', 'disabled:cursor-wait')}
     >
-      {justAdded ? <CheckIcon size={18} /> : <BagIcon size={18} />}
+      {justAdded ? <CheckIcon size={15} /> : <BagIcon size={15} />}
+      {justAdded ? dict.shop.added : dict.shop.addToCart}
     </button>
   )
 }

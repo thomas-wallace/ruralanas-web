@@ -4,12 +4,12 @@ import Link from 'next/link'
 import { CurrentCurrency } from '@/components/currency/currency-switch'
 import { ProductCard } from '@/components/shop/product-card'
 import { ProductRow } from '@/components/shop/product-row'
-import { CategoryOptions, FilterOptions } from '@/components/shop/shop-filters'
+import { CategoryOptions, ColorOptions, type ColorFacet } from '@/components/shop/shop-filters'
 import { ShopSearch } from '@/components/shop/shop-search'
-import { SortSelect } from '@/components/shop/sort-select'
 import { ToolbarMenu } from '@/components/shop/toolbar-menu'
 import { Watermark } from '@/components/ui/watermark'
 import { catalog } from '@/lib/catalog'
+import { COLLECTIONS, type ProductSummary } from '@/lib/catalog/types'
 import { getDictionary, resolveLocale } from '@/lib/i18n'
 import { locales } from '@/lib/i18n/config'
 import { parseShopParams, shopHref } from '@/lib/shop-params'
@@ -27,7 +27,7 @@ export async function generateMetadata({
   const dict = getDictionary(locale)
 
   return {
-    title: `${dict.shop.title} · Ruralanas`,
+    title: `${dict.shop.title} - Ruralanas`,
     description: dict.shop.lead,
     alternates: {
       canonical: `/${locale}/tienda`,
@@ -47,22 +47,47 @@ export default async function ShopPage({
   const dict = getDictionary(locale)
   const shopParams = parseShopParams(await searchParams)
 
-  const [products, categories, allProducts] = await Promise.all([
+  const [products, categories, allProducts, collectionSizes] = await Promise.all([
     catalog.listProducts({
       locale,
       category: shopParams.category,
+      collection: shopParams.collection,
       search: shopParams.q,
-      techniques: shopParams.techniques,
-      sort: shopParams.sort,
+      colors: shopParams.colors,
     }),
     catalog.listCategories(locale),
     catalog.listProducts({ locale }),
+    // Una selección vacía no se ofrece: llevaría a una grilla sin nada.
+    Promise.all(
+      COLLECTIONS.map(async (collection) => ({
+        collection,
+        count: (await catalog.listProducts({ locale, collection })).length,
+      })),
+    ),
   ])
 
-  const showTechniques = allProducts.some((product) => product.technique)
-  const activeFilters = shopParams.techniques.length
-  const onlySearch = Boolean(shopParams.q) && !shopParams.category && activeFilters === 0
+  const collections = collectionSizes.filter((item) => item.count > 0)
+  const colors = colorFacets(allProducts)
+  const activeFilters = shopParams.colors.length
+  const onlySearch =
+    Boolean(shopParams.q) && !shopParams.category && !shopParams.collection && activeFilters === 0
   const activeCategory = categories.find((category) => category.slug === shopParams.category)
+
+  const collectionLink = (collection: (typeof COLLECTIONS)[number] | undefined, label: string) => {
+    const active = shopParams.collection === collection
+    return (
+      <Link
+        key={collection ?? 'todo'}
+        href={shopHref(locale, shopParams, { collection })}
+        aria-current={active ? 'page' : undefined}
+        className={`-mb-px shrink-0 border-b-2 pb-3 font-sans text-[12px] tracking-[0.14em] uppercase transition-colors ${
+          active ? 'border-earth text-earth' : 'border-transparent text-slate hover:text-earth'
+        }`}
+      >
+        {label}
+      </Link>
+    )
+  }
 
   const viewLink = (view: 'grid' | 'list', label: string, path: string) => (
     <Link
@@ -98,6 +123,20 @@ export default async function ShopPage({
           <div className="mt-6 font-sans text-[11px] tracking-[0.18em] text-olive uppercase">
             {allProducts.length} {dict.shop.pieces} · {dict.shop.shipping} · {dict.shop.currency} <CurrentCurrency />
           </div>
+
+          {/* Las selecciones: el primer nivel de la tienda, antes que categoría
+              y color. Se combinan con los filtros de la barra. */}
+          {collections.length > 0 && (
+            <nav
+              aria-label={dict.shop.collections}
+              className="mt-9 flex gap-7 overflow-x-auto border-b border-earth/15"
+            >
+              {collectionLink(undefined, dict.shop.all)}
+              {collections.map(({ collection }) =>
+                collectionLink(collection, dict.shop.collection[collection]),
+              )}
+            </nav>
+          )}
         </div>
       </div>
 
@@ -125,12 +164,13 @@ export default async function ShopPage({
               />
             </ToolbarMenu>
 
-            {showTechniques && (
+            {colors.length > 0 && (
               <ToolbarMenu
-                label={activeFilters > 0 ? `${dict.shop.filters} (${activeFilters})` : dict.shop.filters}
+                label={activeFilters > 0 ? `${dict.shop.color} (${activeFilters})` : dict.shop.color}
                 active={activeFilters > 0}
+                wide
               >
-                <FilterOptions locale={locale} dict={dict} params={shopParams} />
+                <ColorOptions locale={locale} dict={dict} params={shopParams} colors={colors} />
               </ToolbarMenu>
             )}
           </div>
@@ -153,8 +193,6 @@ export default async function ShopPage({
               {viewLink('grid', dict.shop.viewGrid, 'M2 2h5v5H2zM9 2h5v5H9zM2 9h5v5H2zM9 9h5v5H9z')}
               {viewLink('list', dict.shop.viewList, 'M2 4h12M2 8h12M2 12h12')}
             </div>
-
-            <SortSelect locale={locale} dict={dict} params={shopParams} />
           </div>
         </div>
       </div>
@@ -172,7 +210,8 @@ export default async function ShopPage({
               href={shopHref(locale, shopParams, {
                 q: undefined,
                 category: undefined,
-                techniques: [],
+                collection: undefined,
+                colors: [],
               })}
               className="mt-6 inline-block border-b border-olive pb-1 font-sans text-[11px] tracking-[0.1em] text-olive uppercase"
             >
@@ -202,4 +241,19 @@ export default async function ShopPage({
       </div>
     </div>
   )
+}
+
+/**
+ * Los colores que existen en el catálogo, con cuántas piezas hay de cada uno.
+ * Del más frecuente al menos: el natural va primero porque es el de casi todo.
+ */
+function colorFacets(products: ProductSummary[]): ColorFacet[] {
+  const facets = new Map<string, ColorFacet>()
+  for (const product of products) {
+    for (const color of product.colors ?? []) {
+      const current = facets.get(color.slug)
+      facets.set(color.slug, { ...color, count: (current?.count ?? 0) + 1 })
+    }
+  }
+  return [...facets.values()].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name))
 }

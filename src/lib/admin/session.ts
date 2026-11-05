@@ -1,7 +1,7 @@
 import 'server-only'
 
 /**
- * Sesión del admin de reseñas.
+ * Sesión del admin.
  *
  * Es una puerta simple a propósito: lo único que hay del otro lado es cargar
  * una reseña. Una contraseña compartida en el entorno, comparada en tiempo
@@ -9,9 +9,11 @@ import 'server-only'
  * cambiarla invalida todas las sesiones abiertas, que es el comportamiento
  * que uno espera.
  *
- * Lo que esto **no** es: un sistema de usuarios. Si algún día el admin hace
- * algo más que cargar reseñas, esto se reemplaza por autenticación de verdad,
- * probablemente contra las cuentas de WordPress.
+ * Lo que esto **no** es: un sistema de usuarios. Desde el 04-11-2026 el admin
+ * también publica la línea de tiempo de Nosotros y las campañas, con subida de
+ * archivos: una sola contraseña compartida ya queda corta. Antes de abrirlo a
+ * más gente, reemplazar por autenticación de verdad (cuentas individuales,
+ * probablemente contra las de WordPress) con registro de quién cambió qué.
  */
 
 import { createHmac, timingSafeEqual } from 'node:crypto'

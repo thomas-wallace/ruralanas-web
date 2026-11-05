@@ -10,7 +10,7 @@ export function StoreVisit({ dict }: { dict: Dictionary }) {
 
   return (
     // Comparte el fondo `paper` con el catálogo de arriba: la línea superior es
-    // lo que las separa. La inferior marca el paso al mapa.
+    // lo que las separa. La inferior marca el paso a la galería de abajo.
     <section className="border-y border-earth/15 bg-paper px-[var(--spacing-gutter)] py-[var(--spacing-section)] text-earth">
       <div className="mx-auto grid max-w-[1100px] items-center gap-[clamp(36px,6vw,96px)] md:grid-cols-2">
         <Reveal className="relative aspect-4/5 overflow-hidden bg-ash">

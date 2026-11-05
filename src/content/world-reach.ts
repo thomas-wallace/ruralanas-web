@@ -1,5 +1,5 @@
 /**
- * A dónde llegaron las prendas. Es el dato que pinta el mapa de la home.
+ * A dónde llegaron las prendas. Es el dato que pinta el mapa de Nosotros → En el mundo.
  *
  * **País por país, nunca por continente ni por región.** "Europa" no es un dato:
  * se pinta Francia o no se pinta. Cada línea de `shipped` es un país concreto y

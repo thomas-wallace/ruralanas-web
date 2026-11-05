@@ -2,7 +2,7 @@ import type { Dictionary } from './es'
 
 export const pt: Dictionary = {
   meta: {
-    title: 'Ruralanas · Tecemos qualidade de vida',
+    title: 'Início - Ruralanas',
     description:
       'Roupas e peças para casa em lã merino 100% uruguaia, feitas à mão por mais de 150 mulheres rurais. Desde 2003.',
   },
@@ -17,6 +17,7 @@ export const pt: Dictionary = {
     cart: 'Carrinho',
     wishlist: 'Lista de desejos',
     skipToContent: 'Ir para o conteúdo',
+    campaigns: 'Campanhas',
   },
 
   hero: {
@@ -138,9 +139,6 @@ export const pt: Dictionary = {
     message: 'Mensagem',
     send: 'Enviar mensagem',
     sending: 'Enviando…',
-    newsletter: 'Newsletter',
-    newsletterPlaceholder: 'Seu e-mail',
-    newsletterCta: 'Assinar',
     contact: 'Contato',
     address: 'Pedragosa Sierra y San Ciro – Local 01',
     city: 'Punta del Este, Uruguai',
@@ -152,6 +150,7 @@ export const pt: Dictionary = {
   },
 
   notFound: {
+    pageTitle: 'Página não encontrada',
     title: 'Este fio não leva a lugar nenhum',
     text: 'A página que você procura não existe ou mudou de endereço.',
     home: 'Voltar ao início',
@@ -168,15 +167,15 @@ export const pt: Dictionary = {
     currency: 'Preços em',
     categories: 'Categorias',
     all: 'Todos',
-    technique: 'Técnica',
-    availability: 'Disponibilidade',
-    sort: 'Ordenar',
-    sortFeatured: 'Destaques',
-    sortPriceAsc: 'Preço ↑',
-    sortPriceDesc: 'Preço ↓',
+    color: 'Cor',
+    collections: 'Seleções',
+    collection: {
+      'best-sellers': 'Mais vendidos',
+      exclusivos: 'Exclusivos',
+      carryover: 'Carryover',
+    },
     viewGrid: 'Grade',
     viewList: 'Lista',
-    filters: 'Filtros',
     clearFilters: 'Limpar filtros',
     search: 'Buscar',
     searchPlaceholder: 'Buscar peças',
@@ -233,12 +232,18 @@ export const pt: Dictionary = {
     sku: 'Código',
     care: 'Cuidados',
     shipping: 'Envio',
-    shippingFrom: 'Sai de',
     relatedTitle: 'Também feitas à mão',
     storyTitle: 'Sobre esta peça',
     gallerySoon: 'Foto em breve',
     textureShot: 'Detalhe da textura',
     lifestyleShot: 'Foto em uso',
+    workshop: 'oficina envolvida',
+    workshops: 'oficinas envolvidas',
+    lifestyleTag: 'Em uso',
+    textureTag: 'Textura',
+    zoomIn: 'Ampliar foto',
+    zoomOut: 'Reduzir foto',
+    completeLook: 'Complete o look',
   },
 
   cart: {
@@ -351,6 +356,25 @@ export const pt: Dictionary = {
     back: 'Voltar às notícias',
     more: 'Mais notícias',
     originalLanguage: 'Esta matéria está disponível apenas em espanhol.',
+  },
+
+  campaigns: {
+    title: 'Campanhas',
+    lead: 'Nossas coleções em fotos e em vídeo.',
+    empty: 'Em breve, a primeira campanha.',
+    view: 'Ver a campanha',
+    back: 'Campanhas',
+    more: 'Outras campanhas',
+    shopCta: 'Ver a loja',
+  },
+
+  newsletter: {
+    eyebrow: 'Newsletter',
+    title: 'Novidades do campo',
+    text: 'Coleções novas, campanhas e peças recém-saídas do tear. Escrevemos pouco.',
+    placeholder: 'Seu e-mail',
+    cta: 'Inscrever-me',
+    consent: 'Ao se inscrever, você aceita receber nossos e-mails. Pode cancelar quando quiser.',
   },
 
   common: {

@@ -24,13 +24,17 @@ import 'server-only'
 
 import type { CatalogRepository } from './repository'
 import { matchesSearch } from './search'
+import { BEST_SELLERS_COUNT, CURATED_COLLECTIONS } from '@/content/collections'
 import { PRODUCT_COPY } from '@/content/product-copy'
+import { EXTRA_PRODUCT_IMAGES, IMAGE_KIND_BY_FILENAME } from '@/content/product-media'
+import { PRODUCT_PROCESS } from '@/content/product-process'
 import { decodeEntities, humanizeName, stripTags } from './woo-text'
 import { translateAttributeName, translateCategoryName, translateTermName } from './woo-translations'
 import type {
   Artisan,
   CategoryFacet,
   CategoryRef,
+  CollectionSlug,
   Money,
   Product,
   ProductImage,
@@ -175,14 +179,49 @@ function primaryCategory(categories: WooCategory[]): CategoryRef {
     : { id: '0', slug: 'sin-categoria', name: 'Catálogo' }
 }
 
+/** Orden de la galería después de la foto principal. */
+const KIND_ORDER: ProductImage['kind'][] = ['lifestyle', 'texture', 'product', 'packaging']
+
+function kindOf(src: string): ProductImage['kind'] {
+  return IMAGE_KIND_BY_FILENAME.find((item) => src.includes(item.match))?.kind ?? 'product'
+}
+
+/**
+ * Las fotos de Woo más las que se suman a mano, sin repetidas y en el orden de
+ * la galería: la principal, la prenda en uso, la textura, el resto y la caja.
+ * La Store API no dice qué muestra cada foto: se clasifica con
+ * `content/product-media.ts`.
+ */
 function toImages(product: WooProduct, name: string): ProductImage[] {
-  return product.images.map((image, index) => ({
-    src: image.src,
-    alt: decodeEntities(image.alt || '') || name,
-    // La Store API no clasifica las fotos. La primera es la de producto; el
-    // resto se ofrece como uso, que es lo que suele haber cargado.
-    kind: index === 0 ? 'product' : 'lifestyle',
-  }))
+  const seen = new Set<string>()
+  const images: ProductImage[] = []
+  const add = (image: ProductImage) => {
+    if (seen.has(image.src)) return
+    seen.add(image.src)
+    images.push(image)
+  }
+
+  product.images.forEach((image, index) =>
+    add({
+      src: image.src,
+      alt: decodeEntities(image.alt || '') || name,
+      kind: index === 0 ? 'product' : kindOf(image.src),
+    }),
+  )
+  for (const image of EXTRA_PRODUCT_IMAGES[product.slug] ?? []) {
+    add({ src: image.src, alt: name, kind: image.kind })
+  }
+
+  const [main, ...rest] = images
+  rest.sort((a, b) => KIND_ORDER.indexOf(a.kind) - KIND_ORDER.indexOf(b.kind))
+  return main ? [main, ...rest] : []
+}
+
+/** La foto de la tarjeta al pasar el mouse: la prenda en uso, o si no hay,
+ *  otra toma del producto. Nunca la caja ni un detalle de textura. */
+function hoverImageOf(images: ProductImage[]): ProductImage | undefined {
+  const rest = images.slice(1)
+  return rest.find((image) => image.kind === 'lifestyle') ?? rest.find((image) => image.kind === 'product')
 }
 
 function toAvailability(product: WooProduct): ProductSummary['availability'] {
@@ -246,9 +285,15 @@ function toSummary(product: WooProduct): ProductSummary {
       ? money(product.prices, product.prices.regular_price)
       : undefined,
     image: images[0] ?? { src: '', alt: name, kind: 'product' },
+    hoverImage: hoverImageOf(images),
     availability: toAvailability(product),
-    // Woo no modela la técnica de tejido. Llega con Dolibarr (Ola 1, tarea 1).
-    technique: undefined,
+    colors: colorOf(product).terms.map((term) => ({
+      slug: term.slug,
+      name: decodeEntities(term.name),
+    })),
+    // Woo no modela la técnica de tejido: sale de la descripción de cada pieza,
+    // declarada en `content/product-process.ts`. Llega con Dolibarr (Ola 1).
+    technique: PRODUCT_PROCESS[product.slug]?.technique,
     colorName: colorOf(product).name,
     featured: false,
   }
@@ -299,6 +344,7 @@ function toProduct(product: WooProduct, locale: Locale, all: WooProduct[]): Prod
     )
     .slice(0, 4)
     .map((item) => item.slug)
+  const handwork = PRODUCT_PROCESS[product.slug]
 
   return {
     ...summary,
@@ -312,10 +358,42 @@ function toProduct(product: WooProduct, locale: Locale, all: WooProduct[]): Prod
     care: [...CARE[locale]],
     // Sin artesana: la ficha esconde el bloque. Ver el comentario del tipo.
     artisan: undefined,
+    handworkHours: handwork?.hours,
+    workshops: handwork?.workshops,
     variants: toVariants(product),
     shipping: { ...SHIPPING[locale] },
     relatedSlugs: related,
+    lookSlugs: completeTheLook(product, all),
   }
+}
+
+/** Categorías de lo que se viste. La deco y la lana no arman un look. */
+const WEARABLE_CATEGORIES = ['pashminas-ruanas', 'accesorios']
+const LOOK_SIZE = 4
+
+/**
+ * "Completá el look": prendas de la otra categoría que se viste (a una ruana,
+ * un gorro o una bufanda; a un gorro, una ruana o un chaleco). Primero las que
+ * comparten más colores con esta, que son las que combinan seguro; después,
+ * en el orden del catálogo. Sólo lo que hay en stock.
+ */
+function completeTheLook(product: WooProduct, all: WooProduct[]): string[] {
+  const own = primaryCategory(product.categories).slug
+  if (!WEARABLE_CATEGORIES.includes(own)) return []
+
+  const colors = new Set(colorOf(product).terms.map((term) => term.slug))
+  return all
+    .filter((item) => {
+      const category = primaryCategory(item.categories).slug
+      return item.is_in_stock && category !== own && WEARABLE_CATEGORIES.includes(category)
+    })
+    .map((item) => ({
+      slug: item.slug,
+      shared: colorOf(item).terms.filter((term) => colors.has(term.slug)).length,
+    }))
+    .sort((a, b) => b.shared - a.shared)
+    .slice(0, LOOK_SIZE)
+    .map((item) => item.slug)
 }
 
 // ── Acceso a la API ──────────────────────────────────────────────────────────
@@ -392,6 +470,10 @@ function matches(product: WooProduct, query: ProductQuery): boolean {
   // ofrecer, y decirlo con una grilla vacía es más honesto que ignorar el filtro.
   if (query.techniques?.length) return false
   if (query.onlyAvailable && !product.is_in_stock) return false
+  if (query.colors?.length) {
+    const own = new Set(colorOf(product).terms.map((term) => term.slug))
+    if (!query.colors.some((color) => own.has(color))) return false
+  }
 
   // Nombre, categorías y colores es lo que la gente escribe; el SKU, lo que
   // escribe el mayorista que ya tiene la lista de precios.
@@ -411,12 +493,39 @@ function matches(product: WooProduct, query: ProductQuery): boolean {
   return true
 }
 
+/**
+ * Slugs de una selección, en su orden. La Store API no expone cuántas veces se
+ * vendió cada pieza, pero sí ordena por eso (`popularity`, que es el
+ * `total_sales` de Woo): los primeros son los más vendidos. Si algún día hay
+ * menos piezas con ventas que `BEST_SELLERS_COUNT`, el resto se completa con
+ * piezas sin ventas; con el catálogo de hoy no pasa.
+ */
+async function collectionSlugs(collection: CollectionSlug): Promise<string[]> {
+  if (collection !== 'best-sellers') return [...CURATED_COLLECTIONS[collection]]
+
+  const top = await request<Pick<WooProduct, 'slug'>[]>(
+    `/products?per_page=${BEST_SELLERS_COUNT}&orderby=popularity&order=desc&catalog_visibility=catalog`,
+    defaultLocale,
+  )
+  return top.map((product) => product.slug)
+}
+
 export const wooCatalogRepository: CatalogRepository = {
   async listProducts(query: ProductQuery): Promise<ProductSummary[]> {
-    const products = (await allProducts(query.locale)).filter((product) =>
-      matches(product, query),
+    const [all, order] = await Promise.all([
+      allProducts(query.locale),
+      query.collection ? collectionSlugs(query.collection) : undefined,
+    ])
+    const products = all.filter(
+      (product) => matches(product, query) && (!order || order.includes(product.slug)),
     )
     const summaries = products.map(toSummary)
+
+    // Una selección se muestra en su propio orden: el de ventas o el elegido.
+    if (order) {
+      summaries.sort((a, b) => order.indexOf(a.slug) - order.indexOf(b.slug))
+      return query.limit ? summaries.slice(0, query.limit) : summaries
+    }
 
     switch (query.sort) {
       case 'price-asc':

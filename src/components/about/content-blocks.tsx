@@ -3,9 +3,10 @@ import Link from 'next/link'
 
 import { Reveal } from '@/components/ui/reveal'
 import { Watermark } from '@/components/ui/watermark'
+import { WorldReach } from '@/components/world/world-reach'
 import type { ContentBlock } from '@/lib/about/types'
 import { catalog } from '@/lib/catalog'
-import type { Locale } from '@/lib/i18n'
+import { getDictionary, type Locale } from '@/lib/i18n'
 import { resolveTarget } from '@/lib/routes'
 
 /**
@@ -312,6 +313,9 @@ function Block({
 
     case 'artisans':
       return <Artisans block={block} locale={locale} />
+
+    case 'worldReach':
+      return <WorldReach dict={getDictionary(locale)} locale={locale} />
 
     case 'cta':
       return (

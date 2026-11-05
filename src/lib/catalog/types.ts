@@ -43,8 +43,11 @@ export interface Availability {
 export interface ProductImage {
   src: string
   alt: string
-  /** El módulo 08 exige las tres: producto, textura y uso. */
-  kind: 'product' | 'texture' | 'lifestyle'
+  /**
+   * El módulo 08 exige tres: producto, textura y uso. `packaging` es la caja
+   * de regalo: va al final de la galería y nunca como segunda foto.
+   */
+  kind: 'product' | 'texture' | 'lifestyle' | 'packaging'
 }
 
 /**
@@ -89,6 +92,13 @@ export interface ProductVariant {
   image?: ProductImage
 }
 
+/** Un color en el que existe la pieza. El slug es el del término de Woo. */
+export interface ProductColor {
+  slug: string
+  /** Nombre legible, ya en el idioma del catálogo. */
+  name: string
+}
+
 /** Lo que necesita una tarjeta de la grilla. Nada más: la ficha pide aparte. */
 export interface ProductSummary {
   id: string
@@ -111,7 +121,14 @@ export interface ProductSummary {
   /** Precio anterior, si la pieza está rebajada. */
   compareAtPrice?: Money
   image: ProductImage
+  /**
+   * Segunda foto, la de la prenda en uso: la tarjeta la muestra al pasar el
+   * mouse. Ausente si la pieza tiene una sola foto, y entonces no cambia.
+   */
+  hoverImage?: ProductImage
   availability: Availability
+  /** Todos los colores en que se ofrece. Es lo que usa el filtro de color. */
+  colors?: ProductColor[]
   /** Ausente en productos donde no aplica, como la madeja de lana. */
   technique?: Technique
   colorName: string
@@ -141,6 +158,12 @@ export interface Product extends ProductSummary {
    * ficha muestra el proceso sin cifra antes que inventar una.
    */
   handworkHours?: number
+  /**
+   * Cuántos talleres (casas de artesanas) intervienen en la pieza: hilado,
+   * teñido, tejido y terminación pueden pasar por manos distintas. Mismo
+   * criterio que las horas: sin el dato, no se muestra.
+   */
+  workshops?: number
   /** Vacío en productos simples. */
   variants?: ProductVariant[]
   /** Estimación de envío que se muestra en la ficha, no en el checkout. */
@@ -149,6 +172,11 @@ export interface Product extends ProductSummary {
     estimate: string
   }
   relatedSlugs: string[]
+  /**
+   * Piezas para "Completá el look": de otra categoría de prendas, para llevar
+   * con esta. Ausente o vacío en lo que no se viste, como la deco o la lana.
+   */
+  lookSlugs?: string[]
 }
 
 export interface CategoryFacet extends CategoryRef {
@@ -157,11 +185,22 @@ export interface CategoryFacet extends CategoryRef {
 
 export type SortOrder = 'featured' | 'price-asc' | 'price-desc'
 
+/**
+ * Selecciones de la tienda. "Best Sellers" sale de las ventas de Woo; las
+ * otras dos se eligen a mano en `src/content/collections.ts`.
+ */
+export const COLLECTIONS = ['best-sellers', 'exclusivos', 'carryover'] as const
+export type CollectionSlug = (typeof COLLECTIONS)[number]
+
 export interface ProductQuery {
   locale: Locale
   /** Slug de categoría. `undefined` = todas. */
   category?: string
   techniques?: Technique[]
+  /** Slugs de color. Alcanza con que la pieza exista en uno de ellos. */
+  colors?: string[]
+  /** Sólo las piezas de esa selección, en el orden de la selección. */
+  collection?: CollectionSlug
   /** `true` esconde lo agotado. Por defecto se muestra todo. */
   onlyAvailable?: boolean
   sort?: SortOrder
