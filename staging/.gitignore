@@ -1,2 +1,6 @@
 backup/
 data/
+# En mu-plugins sólo va el plugin propio de la copia. Al descomprimir el
+# código del sitio real se copian ahí los suyos: no se versionan.
+mu-plugins/*
+!mu-plugins/ruralanas-staging.php
