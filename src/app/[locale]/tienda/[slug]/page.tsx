@@ -15,9 +15,17 @@ import { interpolate } from '@/lib/format'
 import { getDictionary, resolveLocale } from '@/lib/i18n'
 import { locales } from '@/lib/i18n/config'
 
-export async function generateStaticParams() {
-  const slugs = await catalog.listProductSlugs()
-  return locales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })))
+/**
+ * Las fichas no se arman al compilar: se generan en la primera visita y quedan
+ * guardadas, y se renuevan solas con el catálogo (cada 5 minutos, ver
+ * `woo-repository`). Armar 18 piezas × 3 idiomas contra el WordPress de
+ * producción hacía fallar la compilación por tiempo: cada ficha tardaba hasta
+ * un minuto en responder.
+ */
+export const dynamicParams = true
+
+export function generateStaticParams() {
+  return []
 }
 
 export async function generateMetadata({

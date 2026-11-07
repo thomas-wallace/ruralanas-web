@@ -1,0 +1,10 @@
+/*
+Theme Name: Ruralanas Checkout
+Description: Tema mínimo para lo único que queda de WordPress a la vista del cliente: carrito, checkout, pedido recibido y "Mi cuenta". Viste esas páginas con el diseño de la tienda nueva (Next.js). El resto del sitio lo atiende la tienda nueva. Reemplaza a Astra y Elementor.
+Author: Ruralanas
+Version: 0.1.0
+Requires PHP: 8.1
+Text Domain: ruralanas-checkout
+*/
+
+/* Los estilos están en assets/checkout.css. Este archivo sólo declara el tema. */

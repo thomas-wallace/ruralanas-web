@@ -19,3 +19,12 @@ export const site = {
 export function absoluteUrl(path: string): string {
   return new URL(path, `${site.url}/`).toString()
 }
+
+/**
+ * Si los buscadores pueden indexar este despliegue. Sólo el dominio real: una
+ * copia en `*.vercel.app`, un preview o la copia de prueba local competirían
+ * con ruralanas.com como contenido duplicado. Los previews de Vercel
+ * (`VERCEL_ENV=preview`) nunca se indexan, aunque apunten al dominio.
+ */
+export const siteIndexable =
+  /(^|\.)ruralanas\.com$/.test(new URL(site.url).hostname) && process.env.VERCEL_ENV !== 'preview'

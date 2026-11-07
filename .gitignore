@@ -9,3 +9,7 @@ build/
 next-env.d.ts
 .DS_Store
 .data/
+
+# Compilación de la copia de prueba (npm run staging:web)
+.next-staging/
+.next-build/

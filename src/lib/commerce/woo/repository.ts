@@ -28,6 +28,7 @@ import type {
 } from '../types'
 import type { CurrencyCode } from '@/lib/catalog/types'
 import { humanizeName } from '@/lib/catalog/woo-text'
+import { localizeWpPageUrl } from '@/lib/i18n/translatepress'
 import { harvestCredentials, wooRequest, wooWrite, type WooCredentials } from './client'
 import { resolveSku } from './sku-map'
 
@@ -225,12 +226,37 @@ function toCart(cart: WooCart): Cart {
 
 // ── Repositorio ──────────────────────────────────────────────────────────────
 
+/**
+ * Con el checkout de Woo (`woo-hosted`), la sesión del carrito es **la cookie
+ * de sesión de Woo**, no el `Cart-Token`.
+ *
+ * Verificado en la copia de prueba el 07-11-2026: si la llamada lleva
+ * `Cart-Token`, Woo agrega la pieza pero no emite `wp_woocommerce_session_*`,
+ * y `/checkout/` —que busca el carrito por esa cookie— lo encuentra vacío. Sin
+ * `Cart-Token`, Woo usa la sesión por cookie de siempre, la emite, la tienda se
+ * la pasa al navegador y el checkout encuentra el mismo carrito.
+ *
+ * Con el checkout propio (`woo`) sigue el `Cart-Token`: ahí nadie más necesita
+ * leer el carrito.
+ */
+const COOKIE_SESSION = process.env.COMMERCE_SOURCE === 'woo-hosted'
+
 function credentialsFrom(context: CommerceContext): WooCredentials {
-  return { cartToken: context.token, nonce: null, cookie: context.cookie, locale: context.locale }
+  return {
+    cartToken: COOKIE_SESSION ? null : context.token,
+    cookieSession: COOKIE_SESSION,
+    nonce: null,
+    cookie: context.cookie,
+    locale: context.locale,
+  }
 }
 
 function wrap<T>(data: T, credentials: WooCredentials): CommerceResult<T> {
-  return { data, token: credentials.cartToken, cookies: credentials.setCookie }
+  return {
+    data,
+    token: COOKIE_SESSION ? null : credentials.cartToken,
+    cookies: credentials.setCookie,
+  }
 }
 
 async function readCart(credentials: WooCredentials): Promise<CommerceResult<Cart>> {
@@ -474,7 +500,8 @@ export const wooHostedRepository: CommerceRepository = {
         orderKey: '',
         status: 'redirect',
         total: { amount: cart.totals.total, currency: cart.totals.currency },
-        redirectUrl: url,
+        // En el idioma de la tienda: quien compró en inglés paga en inglés.
+        redirectUrl: localizeWpPageUrl(url, context.locale),
         simulated: false,
       },
       token,

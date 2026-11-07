@@ -1,0 +1,120 @@
+# Copia de prueba (staging) de ruralanas.com, en tu PC.
+#
+#   navegador ──> http://localhost:3020  (la tienda nueva, `npm run staging:web`)
+#                     │  /cart, /checkout, /my-account, /wp-*  ──>  WordPress :8080
+#                     └─ el resto lo atiende la tienda nueva
+#
+# Un solo origen (localhost:3020) para la tienda y para WooCommerce: es lo que
+# permite que el carrito llegue al checkout, igual que va a pasar en producción.
+#
+# Aislamiento — la copia no puede afectar al sitio real:
+#   · ruralanas.com y sus subdominios apuntan a 127.0.0.1 dentro del
+#     contenedor: ningún plugin puede llamar al sitio real ni a Dolibarr.
+#   · WordPress bloquea toda salida a internet salvo Stripe, Mercado Pago,
+#     PayPal y wordpress.org (ver WP_HTTP_BLOCK_EXTERNAL abajo).
+#   · Todo mail queda atrapado en Mailpit (http://localhost:8025). No sale
+#     ninguno a un cliente real.
+#   · Cron de WordPress apagado: no corren tareas programadas solas.
+#
+# Ver staging/README.md para importar el backup y arrancar.
+
+name: ruralanas-staging
+
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: staging-solo-local
+      MARIADB_ROOT_PASSWORD: staging-solo-local
+    volumes:
+      - db-data:/var/lib/mysql
+    healthcheck:
+      test: ['CMD', 'healthcheck.sh', '--connect', '--innodb_initialized']
+      interval: 5s
+      retries: 20
+
+  wordpress:
+    # Misma versión de PHP que producción (8.1, según las cabeceras del sitio).
+    image: wordpress:php8.1-apache
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - '8080:80'
+    extra_hosts:
+      - 'ruralanas.com:127.0.0.1'
+      - 'www.ruralanas.com:127.0.0.1'
+      - 'en.ruralanas.com:127.0.0.1'
+      - 'new.ruralanas.com:127.0.0.1'
+      - 'puntouyyarn.com:127.0.0.1'
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: staging-solo-local
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_TABLE_PREFIX: wpvo_
+      WORDPRESS_DEBUG: '1'
+      WORDPRESS_CONFIG_EXTRA: &config-extra |
+        define('WP_ENVIRONMENT_TYPE', 'staging');
+        define('WP_HOME', 'http://localhost:3020');
+        define('WP_SITEURL', 'http://localhost:3020');
+        // WordPress siempre "se ve" en el origen de la tienda, aunque el pedido
+        // le llegue por el puerto 8080: así no redirige en círculo.
+        $$_SERVER['HTTP_HOST'] = 'localhost:3020';
+        define('WP_HTTP_BLOCK_EXTERNAL', true);
+        define('WP_ACCESSIBLE_HOSTS', 'api.stripe.com,*.stripe.com,*.mercadopago.com,api.mercadopago.com,*.mercadolibre.com,*.paypal.com,api.wordpress.org,downloads.wordpress.org');
+        define('DISABLE_WP_CRON', true);
+        define('AUTOMATIC_UPDATER_DISABLED', true);
+        define('WP_DEBUG_LOG', true);
+        define('WP_DEBUG_DISPLAY', false);
+    volumes:
+      - wp-core:/var/www/html
+      # wp-content vive en un volumen de Docker, no en una carpeta de Windows:
+      # leer miles de archivos de plugins desde Windows tardaba ~40 s por
+      # pedido. Se carga una vez desde ./data/wp-content (ver README).
+      - wp-content:/var/www/html/wp-content
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins
+      # El tema de checkout con el diseño de la tienda nueva, en vivo desde el repo.
+      - ../wordpress/ruralanas-checkout:/var/www/html/wp-content/themes/ruralanas-checkout:ro
+
+  # Atrapa todos los mails que manda WordPress. Interfaz en http://localhost:8025
+  mailpit:
+    image: axllent/mailpit:v1.21
+    ports:
+      - '8025:8025'
+
+  # Línea de comandos de WordPress, para importar y configurar. No queda corriendo.
+  wpcli:
+    image: wordpress:cli-php8.1
+    profiles: ['tools']
+    user: '33:33'
+    depends_on:
+      db:
+        condition: service_healthy
+    extra_hosts:
+      - 'ruralanas.com:127.0.0.1'
+      - 'www.ruralanas.com:127.0.0.1'
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: staging-solo-local
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_TABLE_PREFIX: wpvo_
+      # El mismo bloqueo de salida que el sitio: un comando no puede hablar
+      # con el sitio real ni con servicios externos.
+      WORDPRESS_CONFIG_EXTRA: *config-extra
+    volumes:
+      - wp-core:/var/www/html
+      # wp-content vive en un volumen de Docker, no en una carpeta de Windows:
+      # leer miles de archivos de plugins desde Windows tardaba ~40 s por
+      # pedido. Se carga una vez desde ./data/wp-content (ver README).
+      - wp-content:/var/www/html/wp-content
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins
+      - ./backup:/backup:ro
+
+volumes:
+  db-data:
+  wp-core:
+  wp-content:

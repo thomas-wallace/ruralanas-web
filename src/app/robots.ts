@@ -1,8 +1,11 @@
 import type { MetadataRoute } from 'next'
 
-import { absoluteUrl, site } from '@/lib/site'
+import { absoluteUrl, site, siteIndexable } from '@/lib/site'
 
 export default function robots(): MetadataRoute.Robots {
+  // Fuera del dominio real, nada se indexa (ver `siteIndexable`).
+  if (!siteIndexable) return { rules: { userAgent: '*', disallow: '/' } }
+
   return {
     rules: {
       userAgent: '*',

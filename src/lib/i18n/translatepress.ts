@@ -19,9 +19,22 @@
 
 import { defaultLocale, type Locale } from './config'
 
-const TRANSLATED_IN_WORDPRESS: ReadonlySet<Locale> = new Set(['en'])
+export const TRANSLATED_IN_WORDPRESS: ReadonlySet<Locale> = new Set(['en'])
 
 export function localizeWpApiUrl(base: string, locale: Locale): string {
   if (locale === defaultLocale || !TRANSLATED_IN_WORDPRESS.has(locale)) return base
   return base.replace(/\/wp-json(\/|$)/, `/${locale}/wp-json$1`)
+}
+
+/**
+ * Página de WordPress (checkout, carrito, cuenta) en el idioma de la tienda:
+ * `https://ruralanas.com/checkout/` → `https://ruralanas.com/en/checkout/`.
+ * Así quien compró en inglés paga en inglés. Un idioma que WordPress no tiene
+ * (hoy, portugués) va a la versión en español.
+ */
+export function localizeWpPageUrl(url: string, locale: Locale): string {
+  if (locale === defaultLocale || !TRANSLATED_IN_WORDPRESS.has(locale)) return url
+  const parsed = new URL(url)
+  parsed.pathname = `/${locale}${parsed.pathname}`
+  return parsed.toString()
 }

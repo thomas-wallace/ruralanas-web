@@ -16,7 +16,7 @@ import { listCampaigns } from '@/lib/campaigns'
 import { getDictionary } from '@/lib/i18n'
 import { isLocale, localeHtmlLang, locales, type Locale } from '@/lib/i18n/config'
 import { routes } from '@/lib/routes'
-import { site } from '@/lib/site'
+import { site, siteIndexable } from '@/lib/site'
 
 /* Autoalojadas por next/font: sin request bloqueante a Google y sin CLS al
    cambiar de fuente. El prototipo las cargaba por CDN. */
@@ -52,6 +52,8 @@ export async function generateMetadata({
 
   return {
     metadataBase: new URL(site.url),
+    // Fuera de ruralanas.com (vercel.app, previews, copia local) no se indexa.
+    ...(siteIndexable ? {} : { robots: { index: false, follow: false } }),
     title: dict.meta.title,
     description: dict.meta.description,
     alternates: {

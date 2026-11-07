@@ -10,7 +10,8 @@
     "clean": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\"",
     "dev:clean": "npm run clean && next dev",
     "typecheck": "tsc --noEmit",
-    "verificar:dolibarr": "node scripts/verificar-dolibarr.mjs"
+    "verificar:dolibarr": "node scripts/verificar-dolibarr.mjs",
+    "staging:web": "node staging/web.mjs"
   },
   "dependencies": {
     "next": "^15.5.0",

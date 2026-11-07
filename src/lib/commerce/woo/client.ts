@@ -33,6 +33,13 @@ export interface WooCredentials {
   cartToken: string | null
   nonce: string | null
   /**
+   * La sesión es la cookie de Woo y no el `Cart-Token` (checkout de Woo, ver
+   * `COOKIE_SESSION` en el repositorio). Woo igual devuelve un `Cart-Token` en
+   * cada respuesta; en este modo se ignora, porque mandarlo de vuelta hace que
+   * Woo deje de emitir la cookie de sesión.
+   */
+  cookieSession?: boolean
+  /**
    * Cookies del navegador que hay que reenviar a Woo, y las que Woo devuelve.
    * Con storefront y Woo en el mismo origen, esta es la vía por la que el
    * carrito armado acá sigue vivo al entrar a `/checkout/`.
@@ -78,12 +85,33 @@ function setCookiesOf(headers: Headers): string[] {
   return single ? [single] : []
 }
 
+/**
+ * Suma a la cabecera `cookie` las que Woo acaba de emitir, para que la próxima
+ * llamada del mismo pedido ya viaje con la sesión recién creada.
+ */
+function mergeCookies(header: string | undefined, setCookies: string[]): string | undefined {
+  const jar = new Map<string, string>()
+  for (const part of header?.split(';') ?? []) {
+    const [name, ...value] = part.trim().split('=')
+    if (name) jar.set(name, value.join('='))
+  }
+  for (const raw of setCookies) {
+    const [pair = ''] = raw.split(';')
+    const [name, ...value] = pair.trim().split('=')
+    if (name) jar.set(name, value.join('='))
+  }
+  return jar.size > 0 ? [...jar].map(([name, value]) => `${name}=${value}`).join('; ') : undefined
+}
+
 function readCredentials(response: Response, previous: WooCredentials): WooCredentials {
   const fresh = setCookiesOf(response.headers)
   return {
-    cartToken: response.headers.get('cart-token') ?? previous.cartToken,
+    cartToken: previous.cookieSession
+      ? null
+      : (response.headers.get('cart-token') ?? previous.cartToken),
     nonce: response.headers.get('nonce') ?? previous.nonce,
-    cookie: previous.cookie,
+    cookieSession: previous.cookieSession,
+    cookie: fresh.length > 0 ? mergeCookies(previous.cookie, fresh) : previous.cookie,
     setCookie: fresh.length > 0 ? [...(previous.setCookie ?? []), ...fresh] : previous.setCookie,
     locale: previous.locale,
   }

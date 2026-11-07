@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server'
 import { CURRENCY_COOKIE, currencyForCountry, isDisplayCurrency } from '@/lib/currency/config'
 import { defaultLocale, locales, type Locale } from '@/lib/i18n/config'
+import { TRANSLATED_IN_WORDPRESS } from '@/lib/i18n/translatepress'
 
 /** Primer idioma soportado que pida el navegador; si ninguno, español. */
 function negotiate(acceptLanguage: string | null): Locale {
@@ -49,8 +50,46 @@ function withCurrency(request: NextRequest, response: NextResponse): NextRespons
   return response
 }
 
+/**
+ * Rutas que son de WordPress y no de la tienda: carrito, checkout y cuenta de
+ * Woo, el panel, sus archivos y las llamadas AJAX de WooCommerce y de las
+ * pasarelas de pago (`?wc-ajax=` y `?wc-api=`).
+ */
+const WORDPRESS_PREFIXES = [
+  '/cart',
+  '/checkout/',
+  '/my-account',
+  '/wp-admin',
+  '/wp-content/',
+  '/wp-includes/',
+  '/wp-json/',
+  '/wp-login.php',
+  '/wc-api/',
+  // Las mismas páginas en los idiomas que traduce TranslatePress (`/en/checkout/`).
+  // `/en/checkout` sin barra es la página propia de la tienda; con barra, la de Woo.
+  ...[...TRANSLATED_IN_WORDPRESS].flatMap((locale) => [
+    `/${locale}/cart`,
+    `/${locale}/checkout/`,
+    `/${locale}/my-account`,
+  ]),
+]
+
+function isWordPressRequest({ pathname, searchParams }: NextRequest['nextUrl']): boolean {
+  if (searchParams.has('wc-ajax') || searchParams.has('wc-api')) return true
+  // `/checkout` sin barra no existe en la tienda; `/checkout/…` es el de Woo.
+  return WORDPRESS_PREFIXES.some((prefix) => pathname === prefix || pathname.startsWith(prefix))
+}
+
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
+
+  // Copia de prueba (staging/README.md): la tienda atiende el origen entero y le
+  // pasa a WordPress lo que es suyo, así el carrito llega al checkout con la
+  // misma cookie. Sin `WP_PROXY_ORIGIN` —producción hoy— esto no existe.
+  const wordpress = process.env.WP_PROXY_ORIGIN
+  if (wordpress && isWordPressRequest(request.nextUrl)) {
+    return NextResponse.rewrite(new URL(`${pathname}${request.nextUrl.search}`, wordpress))
+  }
 
   const hasLocale = locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`),
@@ -64,6 +103,14 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Todo salvo API, estáticos de Next y archivos con extensión.
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)'],
+  // Todo salvo API, estáticos de Next y archivos con extensión. Más las rutas
+  // de WordPress con extensión (`.php`, `.css`, `.js`), que sólo pasan por acá
+  // en la copia de prueba; en producción las atiende el servidor de WordPress.
+  matcher: [
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)',
+    '/wp-admin/:path*',
+    '/wp-content/:path*',
+    '/wp-includes/:path*',
+    '/wp-login.php',
+  ],
 }

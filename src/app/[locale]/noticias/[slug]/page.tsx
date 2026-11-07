@@ -16,14 +16,10 @@ import { absoluteUrl, site } from '@/lib/site'
 export const dynamicParams = true
 export const revalidate = 3600
 
-export async function generateStaticParams() {
-  try {
-    const slugs = await blog.listSlugs()
-    return locales.flatMap((locale) => slugs.map((slug) => ({ locale, slug })))
-  } catch {
-    // Sin WordPress al compilar, las notas se generan en la primera visita.
-    return []
-  }
+// Las notas se generan en la primera visita, no al compilar: WordPress tarda
+// ~11 s por nota y a veces responde 503, y eso tiraba la compilación entera.
+export function generateStaticParams() {
+  return []
 }
 
 export async function generateMetadata({
