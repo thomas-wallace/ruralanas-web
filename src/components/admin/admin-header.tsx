@@ -2,6 +2,8 @@ import Link from 'next/link'
 
 import type { Locale } from '@/lib/i18n/config'
 
+import { AdminSignOut } from './admin-sign-out'
+
 /**
  * Encabezado común de las páginas del admin, con la navegación entre sus
  * secciones. Agregar una sección nueva del admin es sumar una línea acá.
@@ -36,23 +38,26 @@ export function AdminHeader({
         </h1>
         {lead && <p className="mt-4 mb-0 max-w-[620px] text-[15px] leading-relaxed text-slate">{lead}</p>}
 
-        <nav aria-label="Secciones del admin" className="mt-8 flex gap-7 overflow-x-auto">
-          {ADMIN_SECTIONS.map((section) => {
-            const active = section.slug === current
-            return (
-              <Link
-                key={section.slug}
-                href={`/${locale}/admin/${section.slug}`}
-                aria-current={active ? 'page' : undefined}
-                className={`shrink-0 border-b-2 pb-3 font-sans text-[12px] tracking-[0.14em] uppercase transition-colors ${
-                  active ? 'border-earth text-earth' : 'border-transparent text-slate hover:text-earth'
-                }`}
-              >
-                {section.label}
-              </Link>
-            )
-          })}
-        </nav>
+        <div className="mt-8 flex items-end justify-between gap-7">
+          <nav aria-label="Secciones del admin" className="flex gap-7 overflow-x-auto">
+            {ADMIN_SECTIONS.map((section) => {
+              const active = section.slug === current
+              return (
+                <Link
+                  key={section.slug}
+                  href={`/${locale}/admin/${section.slug}`}
+                  aria-current={active ? 'page' : undefined}
+                  className={`shrink-0 border-b-2 pb-3 font-sans text-[12px] tracking-[0.14em] uppercase transition-colors ${
+                    active ? 'border-earth text-earth' : 'border-transparent text-slate hover:text-earth'
+                  }`}
+                >
+                  {section.label}
+                </Link>
+              )
+            })}
+          </nav>
+          <AdminSignOut />
+        </div>
       </div>
     </div>
   )

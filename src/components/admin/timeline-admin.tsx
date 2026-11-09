@@ -15,7 +15,7 @@ import { buttonClass } from '@/components/ui/button'
 import type { TimelineEntry } from '@/lib/about/timeline'
 import { locales, localeNames, type Locale } from '@/lib/i18n/config'
 
-import { AdminGate } from './admin-gate'
+import { adminFetch } from './admin-fetch'
 import { adminField, adminLabel, adminLink, adminNotice } from './admin-ui'
 
 const emptyTranslated = () => Object.fromEntries(locales.map((l) => [l, ''])) as TimelineEntry['title']
@@ -28,7 +28,7 @@ function missingTranslations(entry: TimelineEntry): Locale[] {
   return locales.filter((l) => l !== 'es' && (!entry.title[l] || !entry.text[l]))
 }
 
-function Editor({ signOut, aboutUrl }: { signOut: () => Promise<void>; aboutUrl: string }) {
+export function TimelineAdmin({ aboutUrl }: { aboutUrl: string }) {
   const [entries, setEntries] = useState<TimelineEntry[] | null>(null)
   const [language, setLanguage] = useState<Locale>('es')
   const [dirty, setDirty] = useState(false)
@@ -37,7 +37,7 @@ function Editor({ signOut, aboutUrl }: { signOut: () => Promise<void>; aboutUrl:
   const [notice, setNotice] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    const response = await fetch('/api/admin/nosotros')
+    const response = await adminFetch('/api/admin/nosotros')
     const body = (await response.json().catch(() => ({}))) as {
       entries?: TimelineEntry[]
       error?: string
@@ -95,7 +95,7 @@ function Editor({ signOut, aboutUrl }: { signOut: () => Promise<void>; aboutUrl:
     setError(null)
     setNotice(null)
     try {
-      const response = await fetch('/api/admin/nosotros', {
+      const response = await adminFetch('/api/admin/nosotros', {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ entries }),
@@ -138,9 +138,6 @@ function Editor({ signOut, aboutUrl }: { signOut: () => Promise<void>; aboutUrl:
             </a>
           </p>
         </div>
-        <button type="button" onClick={() => void signOut()} className={adminLink}>
-          Salir
-        </button>
       </div>
 
       {/* Idioma que se está editando. La fecha es común a los tres. */}
@@ -271,8 +268,3 @@ function Editor({ signOut, aboutUrl }: { signOut: () => Promise<void>; aboutUrl:
   )
 }
 
-export function TimelineAdmin({ aboutUrl }: { aboutUrl: string }) {
-  return (
-    <AdminGate title="Nosotros">{(signOut) => <Editor signOut={signOut} aboutUrl={aboutUrl} />}</AdminGate>
-  )
-}

@@ -17,7 +17,7 @@ import type { Campaign, CampaignMedia, Translated } from '@/lib/campaigns'
 import { locales, localeNames, type Locale } from '@/lib/i18n/config'
 import { slugify } from '@/lib/slug'
 
-import { AdminGate } from './admin-gate'
+import { adminFetch } from './admin-fetch'
 import { adminField, adminLabel, adminLink, adminNotice } from './admin-ui'
 
 const emptyTranslated = (): Translated =>
@@ -122,7 +122,7 @@ function CampaignEditor({
       try {
         const body = new FormData()
         body.append('file', file)
-        const response = await fetch('/api/admin/medios', { method: 'POST', body })
+        const response = await adminFetch('/api/admin/medios', { method: 'POST', body })
         const result = (await response.json().catch(() => ({}))) as {
           src?: string
           kind?: 'image' | 'video'
@@ -342,7 +342,7 @@ function CampaignEditor({
   )
 }
 
-function Manager({ signOut, campaignsUrl }: { signOut: () => Promise<void>; campaignsUrl: string }) {
+export function CampaignsAdmin({ campaignsUrl }: { campaignsUrl: string }) {
   const [campaigns, setCampaigns] = useState<Campaign[] | null>(null)
   const [editing, setEditing] = useState<string | null>(null)
   const [dirty, setDirty] = useState(false)
@@ -351,7 +351,7 @@ function Manager({ signOut, campaignsUrl }: { signOut: () => Promise<void>; camp
   const [notice, setNotice] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    const response = await fetch('/api/admin/campanas')
+    const response = await adminFetch('/api/admin/campanas')
     const body = (await response.json().catch(() => ({}))) as { campaigns?: Campaign[]; error?: string }
     if (!response.ok || !body.campaigns) {
       setError(body.error ?? 'No se pudieron leer las campañas.')
@@ -384,7 +384,7 @@ function Manager({ signOut, campaignsUrl }: { signOut: () => Promise<void>; camp
     setError(null)
     setNotice(null)
     try {
-      const response = await fetch('/api/admin/campanas', {
+      const response = await adminFetch('/api/admin/campanas', {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ campaigns }),
@@ -441,9 +441,6 @@ function Manager({ signOut, campaignsUrl }: { signOut: () => Promise<void>; camp
                 </a>
               </p>
             </div>
-            <button type="button" onClick={() => void signOut()} className={adminLink}>
-              Salir
-            </button>
           </div>
 
           <ol className="m-0 flex list-none flex-col gap-3 p-0">
@@ -535,10 +532,3 @@ function Manager({ signOut, campaignsUrl }: { signOut: () => Promise<void>; camp
   )
 }
 
-export function CampaignsAdmin({ campaignsUrl }: { campaignsUrl: string }) {
-  return (
-    <AdminGate title="Campañas">
-      {(signOut) => <Manager signOut={signOut} campaignsUrl={campaignsUrl} />}
-    </AdminGate>
-  )
-}

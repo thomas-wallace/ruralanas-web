@@ -16,7 +16,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { buttonClass } from '@/components/ui/button'
 import type { ReachDocument, SalesByCountry } from '@/lib/world/reach-store'
 
-import { AdminGate } from './admin-gate'
+import { adminFetch } from './admin-fetch'
 import { adminField, adminLabel, adminLink, adminNotice } from './admin-ui'
 
 interface State {
@@ -48,15 +48,7 @@ function formatDay(day: string): string {
   return year && month && date ? `${date}/${month}/${year}` : day
 }
 
-function Editor({
-  signOut,
-  mapUrl,
-  drawable,
-}: {
-  signOut: () => Promise<void>
-  mapUrl: string
-  drawable: string[]
-}) {
+export function WorldReachAdmin({ mapUrl, drawable }: { mapUrl: string; drawable: string[] }) {
   const [state, setState] = useState<State | null>(null)
   const [adding, setAdding] = useState('')
   const [dirty, setDirty] = useState(false)
@@ -66,7 +58,7 @@ function Editor({
   const [notice, setNotice] = useState<string | null>(null)
 
   const load = useCallback(async () => {
-    const response = await fetch('/api/admin/mapa')
+    const response = await adminFetch('/api/admin/mapa')
     const body = (await response.json().catch(() => ({}))) as Partial<State> & { error?: string }
     if (!response.ok || !body.document) {
       setError(body.error ?? 'No se pudo leer el mapa.')
@@ -153,7 +145,7 @@ function Editor({
     setError(null)
     setNotice(null)
     try {
-      const response = await fetch('/api/admin/mapa', {
+      const response = await adminFetch('/api/admin/mapa', {
         method: 'PUT',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ document }),
@@ -180,7 +172,7 @@ function Editor({
     const before = Object.keys(sales).length
     try {
       for (let page = 1; ; page++) {
-        const response = await fetch('/api/admin/mapa', {
+        const response = await adminFetch('/api/admin/mapa', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
           body: JSON.stringify({ page }),
@@ -225,9 +217,6 @@ function Editor({
             </a>
           </p>
         </div>
-        <button type="button" onClick={() => void signOut()} className={adminLink}>
-          Salir
-        </button>
       </div>
 
       {!state.salesAvailable && (
@@ -427,10 +416,3 @@ function Editor({
   )
 }
 
-export function WorldReachAdmin({ mapUrl, drawable }: { mapUrl: string; drawable: string[] }) {
-  return (
-    <AdminGate title="Mapa">
-      {(signOut) => <Editor signOut={signOut} mapUrl={mapUrl} drawable={drawable} />}
-    </AdminGate>
-  )
-}

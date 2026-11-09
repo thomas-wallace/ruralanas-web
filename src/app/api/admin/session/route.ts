@@ -1,5 +1,5 @@
 /**
- * Entrar y salir del admin de reseñas.
+ * Entrar y salir del admin. La pantalla de ingreso es `/[locale]/admin/ingresar`.
  *
  * `GET`    dice si hay sesión y si el admin siquiera está configurado.
  * `POST`   valida la contraseña y deja la cookie.
@@ -16,8 +16,18 @@ import {
   isAdmin,
   issueToken,
   recordFailure,
+  SESSION_TTL_MS,
   tooManyAttempts,
 } from '@/lib/admin/session'
+
+/** Atributos de la cookie. `__Host-` exige `Secure` y ruta `/`, también al borrarla. */
+const COOKIE = {
+  name: ADMIN_COOKIE,
+  httpOnly: true,
+  sameSite: 'strict' as const,
+  secure: process.env.NODE_ENV === 'production',
+  path: '/',
+}
 
 export const dynamic = 'force-dynamic'
 
@@ -60,20 +70,12 @@ export async function POST(request: Request) {
 
   clearAttempts(key)
   const response = NextResponse.json({ authenticated: true })
-  response.cookies.set({
-    name: ADMIN_COOKIE,
-    value: issueToken(),
-    httpOnly: true,
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production',
-    path: '/',
-    maxAge: 12 * 60 * 60,
-  })
+  response.cookies.set({ ...COOKIE, value: issueToken(), maxAge: SESSION_TTL_MS / 1000 })
   return response
 }
 
 export function DELETE() {
   const response = NextResponse.json({ authenticated: false })
-  response.cookies.set({ name: ADMIN_COOKIE, value: '', path: '/', maxAge: 0 })
+  response.cookies.set({ ...COOKIE, value: '', maxAge: 0 })
   return response
 }

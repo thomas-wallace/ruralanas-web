@@ -3,28 +3,30 @@ import 'server-only'
 /**
  * Sesión del admin.
  *
- * Es una puerta simple a propósito: lo único que hay del otro lado es cargar
- * una reseña. Una contraseña compartida en el entorno, comparada en tiempo
- * constante, y una cookie `httpOnly` firmada con esa misma contraseña — así
- * cambiarla invalida todas las sesiones abiertas, que es el comportamiento
- * que uno espera.
+ * Una contraseña compartida en el entorno (`ADMIN_PASSWORD`), comparada en
+ * tiempo constante, y una cookie `httpOnly`, `SameSite=Strict` y, en
+ * producción, `Secure` con prefijo `__Host-`, firmada con esa misma contraseña:
+ * cambiarla invalida todas las sesiones abiertas.
  *
- * Lo que esto **no** es: un sistema de usuarios. Desde el 04-11-2026 el admin
- * también publica la línea de tiempo de Nosotros y las campañas, con subida de
- * archivos: una sola contraseña compartida ya queda corta. Antes de abrirlo a
- * más gente, reemplazar por autenticación de verdad (cuentas individuales,
- * probablemente contra las de WordPress) con registro de quién cambió qué.
+ * Tres capas, de afuera hacia adentro:
+ *   1. El middleware (`src/middleware.ts`) no deja ver ninguna página del
+ *      admin ni llamar a `/api/admin/*` sin sesión, y rechaza las escrituras
+ *      que no vengan de este mismo sitio (CSRF).
+ *   2. El layout de las páginas del admin vuelve a verificar en el servidor.
+ *   3. Cada ruta de `/api/admin/*` verifica con `isAdmin()`.
+ *
+ * Lo que esto **no** es: un sistema de usuarios. Una sola contraseña compartida
+ * no dice quién cambió qué. El paso siguiente es entrar con cuentas
+ * individuales, contra las de WordPress, con registro de cambios.
  */
 
 import { createHmac, timingSafeEqual } from 'node:crypto'
 
-export const ADMIN_COOKIE = 'ruralanas_admin'
-const TTL_MS = 12 * 60 * 60 * 1000
+import { ADMIN_COOKIE, adminSecret, SESSION_TTL_MS } from './token'
 
-function secret(): string | null {
-  const password = process.env.ADMIN_PASSWORD
-  return password && password.length >= 12 ? password : null
-}
+export { ADMIN_COOKIE, SESSION_TTL_MS }
+
+const secret = adminSecret
 
 /** `true` sólo si el admin está configurado con una contraseña usable. */
 export function adminEnabled(): boolean {
@@ -49,7 +51,7 @@ export function checkPassword(candidate: unknown): boolean {
 }
 
 export function issueToken(): string {
-  const expires = String(Date.now() + TTL_MS)
+  const expires = String(Date.now() + SESSION_TTL_MS)
   return `${expires}.${sign(expires)}`
 }
 

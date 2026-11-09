@@ -1,40 +1,22 @@
 'use client'
 
 /**
- * Puerta del admin: comprueba la sesión y, si no hay, pide la contraseña.
- * Cuando hay sesión, dibuja la sección y le pasa cómo salir.
+ * Formulario de ingreso al admin. Es lo único del admin que se ve sin sesión.
  *
- * Es la misma sesión que usa el admin de reseñas (`/api/admin/session`).
+ * Al entrar se navega de verdad (no con el router del cliente): así el pedido
+ * pasa otra vez por el middleware y por la verificación del servidor.
  */
 
-import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
+import { useState, type FormEvent } from 'react'
 
 import { buttonClass } from '@/components/ui/button'
 
 import { adminField, adminLabel, adminNotice } from './admin-ui'
 
-export function AdminGate({
-  title,
-  children,
-}: {
-  title: string
-  children: (signOut: () => Promise<void>) => ReactNode
-}) {
-  const [state, setState] = useState<'checking' | 'locked' | 'open'>('checking')
-  const [enabled, setEnabled] = useState(true)
+export function AdminLogin({ enabled, target }: { enabled: boolean; target: string }) {
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
-
-  useEffect(() => {
-    fetch('/api/admin/session')
-      .then((response) => response.json() as Promise<{ enabled: boolean; authenticated: boolean }>)
-      .then((session) => {
-        setEnabled(session.enabled)
-        setState(session.authenticated ? 'open' : 'locked')
-      })
-      .catch(() => setState('locked'))
-  }, [])
 
   async function signIn(event: FormEvent) {
     event.preventDefault()
@@ -49,38 +31,26 @@ export function AdminGate({
       if (!response.ok) {
         const body = (await response.json().catch(() => ({}))) as { error?: string }
         setError(body.error ?? 'No se pudo entrar.')
+        setBusy(false)
         return
       }
       setPassword('')
-      setState('open')
-    } finally {
+      window.location.replace(target)
+    } catch {
+      setError('No hay conexión con el servidor.')
       setBusy(false)
     }
   }
 
-  async function signOut() {
-    await fetch('/api/admin/session', { method: 'DELETE' })
-    setState('locked')
-  }
-
-  if (state === 'checking') {
-    return (
-      <p className="py-20 text-center font-sans text-[12px] tracking-[0.12em] text-slate uppercase">
-        Cargando…
-      </p>
-    )
-  }
-
-  if (state === 'open') return <>{children(signOut)}</>
-
   return (
-    <form onSubmit={signIn} className="mx-auto max-w-[380px] py-20">
-      <h2 className="m-0 mb-6 font-display text-[26px] text-earth">{title}</h2>
+    <form onSubmit={signIn} className="w-full max-w-[380px] border border-earth/15 bg-paper p-8">
+      <div className="font-sans text-[11px] tracking-[0.2em] text-olive uppercase">Admin</div>
+      <h1 className="mt-3 mb-6 font-display text-[32px] font-medium leading-none text-earth">Ingresar</h1>
 
       {!enabled ? (
         <p className={adminNotice}>
-          El admin todavía no está configurado. Hay que poner <code>ADMIN_PASSWORD</code> en el
-          entorno, con al menos doce caracteres, y reiniciar.
+          El admin todavía no está configurado. Hay que poner <code>ADMIN_PASSWORD</code> en el entorno, con
+          al menos doce caracteres, y reiniciar.
         </p>
       ) : (
         <>
@@ -91,6 +61,7 @@ export function AdminGate({
               value={password}
               onChange={(event) => setPassword(event.target.value)}
               autoComplete="current-password"
+              autoFocus
               className={adminField}
               required
             />

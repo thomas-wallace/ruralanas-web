@@ -50,7 +50,8 @@ pisan. Parar el dev primero, o compilar desde otra copia del repo.
 | `/[locale]/checkout` | Checkout híbrido: contacto, envío, tarifa elegida y resumen con total real antes de pagar |
 | `/[locale]/gracias` | Retorno de la pasarela; muestra el estado real del pedido, no un "gracias" optimista |
 | `/[locale]/campanas` · `/[locale]/campanas/[slug]` | Campañas: contenido editorial de moda (fotos y videos). El menú las muestra sólo si hay alguna publicada |
-| `/[locale]/admin/resenas` | Admin interno: cargar reseñas, protegido por contraseña |
+| `/[locale]/admin/ingresar` | Única entrada al admin. Sin sesión, cualquier página del admin redirige acá antes de mostrar nada |
+| `/[locale]/admin/resenas` | Admin: cargar reseñas |
 | `/[locale]/admin/nosotros` | Admin: línea de tiempo de «Nuestra historia» |
 | `/[locale]/admin/campanas` | Admin: crear, ordenar y publicar campañas; subir fotos y videos |
 | `/[locale]/admin/mapa` | Admin: países del mapa de Nosotros (los de las ventas se suman solos) y locales propios |
@@ -288,6 +289,25 @@ Para cargar reseñas hacen falta dos cosas en el entorno: `ADMIN_PASSWORD` (mín
 caracteres) y las claves `WOO_API_KEY` / `WOO_API_SECRET`, que se generan en WooCommerce →
 Ajustes → Avanzado → API REST con permiso de lectura/escritura. Para **leerlas** no hace
 falta ninguna clave.
+
+**Acceso al admin** — `src/lib/admin/`
+
+Se entra por `/[locale]/admin/ingresar` con `ADMIN_PASSWORD` (mínimo doce caracteres). La
+puerta tiene tres capas, para que no dependa de que una sola esté bien escrita:
+
+1. **Middleware**: sin sesión válida, ninguna página del admin se dibuja (redirige al
+   ingreso) y ninguna API de `/api/admin/*` responde (401), salvo la de entrar. Las
+   escrituras que no vienen de una página de este mismo sitio se rechazan (403, CSRF).
+   Todo el admin sale con `no-store`, `noindex` y `X-Frame-Options: DENY`.
+2. **Layout del panel** (`app/[locale]/admin/(panel)/layout.tsx`): vuelve a verificar la
+   sesión en el servidor antes de dibujar.
+3. **Cada API** verifica con `isAdmin()`.
+
+La sesión es una cookie `httpOnly`, `SameSite=Strict` y, en producción, `Secure` con
+prefijo `__Host-`, firmada con la contraseña: dura 8 horas y cambiar la contraseña cierra
+todas las sesiones. Límites conocidos: el freno de intentos fallidos vive en la memoria de
+cada instancia (en Vercel no se comparte entre instancias), y una contraseña compartida no
+dice quién cambió qué. El paso siguiente es entrar con cuentas individuales de WordPress.
 
 **Dolibarr, sólo lectura** — `src/lib/dolibarr/`
 

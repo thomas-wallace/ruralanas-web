@@ -18,6 +18,8 @@ import { formatMonthYear } from '@/lib/format'
 import type { Review, ReviewsSummary } from '@/lib/reviews/types'
 import type { Locale } from '@/lib/i18n/config'
 
+import { adminFetch } from './admin-fetch'
+
 interface ProductOption {
   id: string
   name: string
@@ -37,9 +39,7 @@ const field =
 const label = 'font-sans text-[11px] tracking-[0.1em] text-slate uppercase'
 
 export function ReviewsAdmin({ locale }: { locale: Locale }) {
-  const [state, setState] = useState<'checking' | 'locked' | 'open'>('checking')
-  const [enabled, setEnabled] = useState(true)
-  const [password, setPassword] = useState('')
+  const [loaded, setLoaded] = useState(false)
   const [data, setData] = useState<Payload | null>(null)
   const [form, setForm] = useState(EMPTY_FORM)
   const [error, setError] = useState<string | null>(null)
@@ -47,59 +47,19 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
   const [busy, setBusy] = useState(false)
 
   const load = useCallback(async () => {
-    const response = await fetch(`/api/admin/reviews?locale=${locale}`)
-    if (response.status === 401) {
-      setState('locked')
-      return
-    }
+    const response = await adminFetch(`/api/admin/reviews?locale=${locale}`)
     if (!response.ok) {
       const body = (await response.json().catch(() => ({}))) as { error?: string }
       setError(body.error ?? 'No se pudieron leer las reseñas.')
-      setState('open')
-      return
+    } else {
+      setData((await response.json()) as Payload)
     }
-    setData((await response.json()) as Payload)
-    setState('open')
+    setLoaded(true)
   }, [locale])
 
   useEffect(() => {
-    fetch('/api/admin/session')
-      .then((response) => response.json() as Promise<{ enabled: boolean; authenticated: boolean }>)
-      .then((session) => {
-        setEnabled(session.enabled)
-        if (session.authenticated) return load()
-        setState('locked')
-      })
-      .catch(() => setState('locked'))
+    void load()
   }, [load])
-
-  async function signIn(event: React.FormEvent) {
-    event.preventDefault()
-    setBusy(true)
-    setError(null)
-    try {
-      const response = await fetch('/api/admin/session', {
-        method: 'POST',
-        headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ password }),
-      })
-      if (!response.ok) {
-        const body = (await response.json().catch(() => ({}))) as { error?: string }
-        setError(body.error ?? 'No se pudo entrar.')
-        return
-      }
-      setPassword('')
-      await load()
-    } finally {
-      setBusy(false)
-    }
-  }
-
-  async function signOut() {
-    await fetch('/api/admin/session', { method: 'DELETE' })
-    setData(null)
-    setState('locked')
-  }
 
   async function submit(event: React.FormEvent) {
     event.preventDefault()
@@ -107,7 +67,7 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
     setError(null)
     setNotice(null)
     try {
-      const response = await fetch(`/api/admin/reviews?locale=${locale}`, {
+      const response = await adminFetch(`/api/admin/reviews?locale=${locale}`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ ...form, rating: Number(form.rating) }),
@@ -130,54 +90,11 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
     (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
       setForm((current) => ({ ...current, [key]: event.target.value }))
 
-  if (state === 'checking') {
+  if (!loaded) {
     return (
       <p className="py-20 text-center font-sans text-[12px] tracking-[0.12em] text-slate uppercase">
         Cargando…
       </p>
-    )
-  }
-
-  if (state === 'locked') {
-    return (
-      <form onSubmit={signIn} className="mx-auto max-w-[380px] py-20">
-        <h2 className="m-0 mb-6 font-display text-[26px] text-earth">Reseñas</h2>
-
-        {!enabled ? (
-          <p className="m-0 border-l-2 border-caramel bg-caramel/10 px-4 py-3 text-[14px] leading-relaxed text-slate">
-            El admin todavía no está configurado. Hay que poner <code>ADMIN_PASSWORD</code> en el
-            entorno, con al menos doce caracteres, y reiniciar.
-          </p>
-        ) : (
-          <>
-            <label className="flex flex-col gap-1.5">
-              <span className={label}>Contraseña</span>
-              <input
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                autoComplete="current-password"
-                className={field}
-                required
-              />
-            </label>
-
-            {error && (
-              <p role="alert" className="mt-4 mb-0 text-[13px] text-olive">
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={busy}
-              className="mt-5 w-full cursor-pointer bg-earth py-3.5 font-sans text-[11px] tracking-[0.12em] text-paper uppercase hover:bg-olive disabled:opacity-50"
-            >
-              {busy ? 'Entrando…' : 'Entrar'}
-            </button>
-          </>
-        )}
-      </form>
     )
   }
 
@@ -186,13 +103,6 @@ export function ReviewsAdmin({ locale }: { locale: Locale }) {
       <section>
         <div className="mb-6 flex items-baseline justify-between gap-4">
           <h2 className="m-0 font-display text-[24px] text-earth">Cargar una reseña</h2>
-          <button
-            type="button"
-            onClick={() => void signOut()}
-            className="cursor-pointer font-sans text-[11px] tracking-[0.1em] text-slate uppercase underline underline-offset-4 hover:text-olive"
-          >
-            Salir
-          </button>
         </div>
 
         {data && !data.canCreate ? (
