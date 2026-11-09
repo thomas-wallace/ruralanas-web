@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Ruralanas · Contenido de la tienda
  * Description: Guarda lo que se edita desde el admin de la tienda nueva (línea de tiempo, campañas, mapa de países) y anota a qué países se vende. Sin pantallas propias: la tienda le habla por la API REST.
- * Version: 0.1.0
+ * Version: 0.2.0
  * Requires PHP: 8.1
  * Author: Ruralanas
  *
@@ -15,9 +15,12 @@
  *     guardados como opciones de WordPress que no se cargan en cada página.
  *   · Países con ventas (`/wp-json/ruralanas/v1/paises-ventas`): cada pedido
  *     pagado anota su país de envío. Es lo que alimenta el mapa de Nosotros.
- *   · Un rol "Ruralanas · Contenido de la tienda" que sólo puede leer y escribir
- *     estos documentos y subir archivos a la biblioteca. Con ese usuario y una
- *     contraseña de aplicación se conecta la tienda: nunca con un administrador.
+ *   · Un rol "Ruralanas · Contenido de la tienda" que puede leer y escribir
+ *     estos documentos, subir archivos a la biblioteca y escribir, publicar y
+ *     mandar a la papelera noticias (entradas). Nada más: ni páginas, ni
+ *     productos, ni pedidos, ni ajustes, ni HTML sin filtrar. Con ese usuario y
+ *     una contraseña de aplicación se conecta la tienda: nunca con un
+ *     administrador.
  *
  * Desactivarlo no rompe la tienda: el admin deja de guardar y el sitio muestra
  * el contenido escrito en el código. Los datos quedan en la base hasta que se
@@ -28,7 +31,7 @@ if (!defined('ABSPATH')) {
 	exit;
 }
 
-const RURALANAS_CONTENIDO_VERSION = '0.1.0';
+const RURALANAS_CONTENIDO_VERSION = '0.2.0';
 const RURALANAS_CONTENIDO_CAP = 'manage_ruralanas_content';
 const RURALANAS_CONTENIDO_ROLE = 'ruralanas_contenido';
 const RURALANAS_CONTENIDO_DOC = 'ruralanas_doc_';
@@ -60,6 +63,15 @@ function ruralanas_contenido_roles(): void {
 		'read'                     => true,
 		'upload_files'             => true,
 		RURALANAS_CONTENIDO_CAP    => true,
+		// Noticias (entradas), también las que escribió otra persona. Sin
+		// `unfiltered_html`: WordPress limpia el HTML que llega.
+		'edit_posts'               => true,
+		'edit_others_posts'        => true,
+		'edit_published_posts'     => true,
+		'publish_posts'            => true,
+		'delete_posts'             => true,
+		'delete_others_posts'      => true,
+		'delete_published_posts'   => true,
 	]);
 	update_option('ruralanas_contenido_roles', RURALANAS_CONTENIDO_VERSION, true);
 }
@@ -227,6 +239,20 @@ function ruralanas_contenido_recalcular(WP_REST_Request $request) {
 		'paises'  => count($sales),
 	];
 }
+
+// ── Noticias ─────────────────────────────────────────────────────────────────
+
+/**
+ * Las noticias viejas se armaron con Elementor: su texto vive en Elementor y no
+ * en el contenido de la entrada, así que cambiarlo por la API no se vería. El
+ * admin de la tienda lo sabe por este campo y no deja editar ese texto.
+ */
+add_action('rest_api_init', function () {
+	register_rest_field('post', 'ruralanas_builder', [
+		'get_callback' => fn ($post) => get_post_meta($post['id'], '_elementor_edit_mode', true) === 'builder',
+		'schema'       => ['type' => 'boolean', 'context' => ['edit'], 'readonly' => true],
+	]);
+});
 
 // ── Rutas ────────────────────────────────────────────────────────────────────
 

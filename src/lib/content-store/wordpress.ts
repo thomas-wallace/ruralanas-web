@@ -46,7 +46,7 @@ function authorization(): string {
 }
 
 /** Mensaje de un error de WordPress, para mostrar en el admin. */
-async function failure(response: Response, what: string): Promise<Error> {
+export async function failure(response: Response, what: string): Promise<Error> {
   const body = (await response.json().catch(() => null)) as { message?: string } | null
   const detail = body?.message ? `: ${body.message}` : ''
   return new Error(`WordPress respondió ${response.status} al ${what}${detail}`)
@@ -82,6 +82,30 @@ function libraryName(originalName: string, extension: MediaExtension): string {
   return `${base || 'campana'}.${extension}`
 }
 
+/**
+ * Sube un archivo a la biblioteca de medios. Devuelve también su id, que hace
+ * falta para usarlo como imagen destacada de una noticia.
+ */
+export async function uploadToLibrary(
+  data: Buffer,
+  extension: MediaExtension,
+  originalName: string,
+): Promise<{ id: number; url: string }> {
+  const response = await wordpressRequest('/wp/v2/media', {
+    method: 'POST',
+    cache: 'no-store',
+    headers: {
+      'content-type': MEDIA_TYPES[extension],
+      'content-disposition': `attachment; filename="${libraryName(originalName, extension)}"`,
+    },
+    body: new Uint8Array(data),
+  })
+  if (!response.ok) throw await failure(response, 'subir el archivo')
+  const body = (await response.json()) as { id?: number; source_url?: string }
+  if (!body.id || !body.source_url) throw new Error('WordPress no devolvió la dirección del archivo.')
+  return { id: body.id, url: body.source_url }
+}
+
 export const wordpressStore: ContentStore = {
   async read<T>(name: string, options: ReadOptions = {}): Promise<T | null> {
     // Sin configurar: como si nunca se hubiera guardado. El sitio muestra el
@@ -112,18 +136,6 @@ export const wordpressStore: ContentStore = {
   },
 
   async saveMedia(data: Buffer, extension: MediaExtension, originalName: string): Promise<string> {
-    const response = await wordpressRequest('/wp/v2/media', {
-      method: 'POST',
-      cache: 'no-store',
-      headers: {
-        'content-type': MEDIA_TYPES[extension],
-        'content-disposition': `attachment; filename="${libraryName(originalName, extension)}"`,
-      },
-      body: new Uint8Array(data),
-    })
-    if (!response.ok) throw await failure(response, 'subir el archivo')
-    const body = (await response.json()) as { source_url?: string }
-    if (!body.source_url) throw new Error('WordPress no devolvió la dirección del archivo.')
-    return body.source_url
+    return (await uploadToLibrary(data, extension, originalName)).url
   },
 }

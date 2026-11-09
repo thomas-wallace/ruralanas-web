@@ -9,22 +9,14 @@
 import { NextResponse } from 'next/server'
 
 import { isAdmin } from '@/lib/admin/session'
-import { saveMedia, type MediaExtension } from '@/lib/content-store'
+import { saveMedia } from '@/lib/content-store'
+import { isVideo, sniffMedia } from '@/lib/content-store/sniff'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 const MAX_IMAGE = 15 * 1024 * 1024
 const MAX_VIDEO = 200 * 1024 * 1024
-
-function sniff(bytes: Buffer): MediaExtension | null {
-  if (bytes[0] === 0xff && bytes[1] === 0xd8 && bytes[2] === 0xff) return 'jpg'
-  if (bytes.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) return 'png'
-  if (bytes.toString('ascii', 0, 4) === 'RIFF' && bytes.toString('ascii', 8, 12) === 'WEBP') return 'webp'
-  if (bytes.toString('ascii', 4, 8) === 'ftyp') return 'mp4'
-  if (bytes.subarray(0, 4).equals(Buffer.from([0x1a, 0x45, 0xdf, 0xa3]))) return 'webm'
-  return null
-}
 
 export async function POST(request: Request) {
   if (!isAdmin(request)) {
@@ -42,7 +34,7 @@ export async function POST(request: Request) {
   }
 
   const data = Buffer.from(await file.arrayBuffer())
-  const extension = sniff(data)
+  const extension = sniffMedia(data)
   if (!extension) {
     return NextResponse.json(
       { error: `«${file.name}» no es JPG, PNG, WebP, MP4 ni WebM.` },
@@ -50,7 +42,7 @@ export async function POST(request: Request) {
     )
   }
 
-  const video = extension === 'mp4' || extension === 'webm'
+  const video = isVideo(extension)
   if (data.length > (video ? MAX_VIDEO : MAX_IMAGE)) {
     return NextResponse.json(
       { error: `«${file.name}» pesa demasiado: hasta ${video ? '200' : '15'} MB.` },

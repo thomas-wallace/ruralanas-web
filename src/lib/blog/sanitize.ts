@@ -80,3 +80,21 @@ export function dropLeadingImage(html: string, featuredSrc: string | undefined):
   if (!match?.[2] || imageStem(match[2]) !== imageStem(featuredSrc)) return html
   return html.slice(match[0].length).trim()
 }
+
+/**
+ * Limpieza de lo que escribe el editor de noticias del admin, antes de
+ * mandarlo a WordPress. Más estricta que la de lectura: sólo lo que el editor
+ * sabe producir —párrafos, dos niveles de título, listas, cita, negrita,
+ * cursiva, enlaces y fotos con epígrafe—, sin estilos, clases ni scripts.
+ * WordPress vuelve a filtrar al guardar (el rol no tiene `unfiltered_html`).
+ */
+export function sanitizeEditorHtml(html: string): string {
+  return sanitizeHtml(html, {
+    allowedTags: ['p', 'h2', 'h3', 'ul', 'ol', 'li', 'strong', 'em', 'a', 'blockquote', 'figure', 'figcaption', 'img', 'br'],
+    allowedAttributes: { a: ['href'], img: ['src', 'alt'] },
+    allowedSchemes: ['https', 'http', 'mailto', 'tel'],
+    transformTags: { b: 'strong', i: 'em', h1: 'h2', h4: 'h3', div: 'p' },
+    exclusiveFilter: (frame) =>
+      ['p', 'h2', 'h3', 'li'].includes(frame.tag) && !frame.text.trim() && frame.mediaChildren.length === 0,
+  }).trim()
+}

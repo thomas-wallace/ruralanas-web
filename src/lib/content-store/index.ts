@@ -64,5 +64,5 @@ export function uploadOrigins(): string[] {
 }
 
 export { findMedia } from './file'
-export { wordpressConfigured, wordpressRequest } from './wordpress'
+export { failure as wordpressFailure, uploadToLibrary, wordpressConfigured, wordpressRequest } from './wordpress'
 export { MEDIA_TYPES, type MediaExtension } from './types'

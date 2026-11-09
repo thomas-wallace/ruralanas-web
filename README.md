@@ -51,12 +51,13 @@ pisan. Parar el dev primero, o compilar desde otra copia del repo.
 | `/[locale]/gracias` | Retorno de la pasarela; muestra el estado real del pedido, no un "gracias" optimista |
 | `/[locale]/campanas` · `/[locale]/campanas/[slug]` | Campañas: contenido editorial de moda (fotos y videos). El menú las muestra sólo si hay alguna publicada |
 | `/[locale]/admin/ingresar` | Única entrada al admin. Sin sesión, cualquier página del admin redirige acá antes de mostrar nada |
+| `/[locale]/admin/noticias` | Admin: escribir, publicar, programar y mandar a la papelera noticias (se guardan en WordPress) |
 | `/[locale]/admin/resenas` | Admin: cargar reseñas |
 | `/[locale]/admin/nosotros` | Admin: línea de tiempo de «Nuestra historia» |
 | `/[locale]/admin/campanas` | Admin: crear, ordenar y publicar campañas; subir fotos y videos |
 | `/[locale]/admin/mapa` | Admin: países del mapa de Nosotros (los de las ventas se suman solos) y locales propios |
 | `/api/cart` · `/api/checkout` · `/api/orders` | Capa BFF del motor transaccional |
-| `/api/admin/*` | Sesión del admin, reseñas, línea de tiempo, campañas, mapa y subida de medios |
+| `/api/admin/*` | Sesión del admin, noticias, reseñas, línea de tiempo, campañas, mapa y subida de medios |
 | `/api/medios/[archivo]` | Fotos y videos subidos desde el admin, con pedidos por rango para el video |
 | `/api/revalidate` | Invalida caché por etiqueta: `catalog` tras sincronizar stock, `blog` tras publicar una nota |
 | `/sitemap.xml` · `/robots.txt` | Generados: productos, Nosotros y notas en los tres idiomas |
