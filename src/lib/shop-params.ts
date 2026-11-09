@@ -23,6 +23,11 @@ export interface ShopParams {
   q?: string
   /** Slugs de color. Se validan contra el catálogo, no acá: los define Woo. */
   colors: string[]
+  /**
+   * `true` suma las piezas agotadas. Por defecto la tienda no las muestra: el
+   * catálogo es chico y una grilla con muchas "agotadas" se lee como vacía.
+   */
+  soldOut: boolean
   view: ShopView
 }
 
@@ -51,6 +56,7 @@ export function parseShopParams(raw: RawParams): ShopParams {
       : undefined,
     q: q || undefined,
     colors,
+    soldOut: first(raw.agotados) === '1',
     view: view === 'list' ? 'list' : 'grid',
   }
 }
@@ -68,6 +74,7 @@ export function shopHref(
   if (next.q) search.set('q', next.q)
   if (next.category) search.set('categoria', next.category)
   if (next.colors.length) search.set('color', next.colors.join(','))
+  if (next.soldOut) search.set('agotados', '1')
   if (next.view !== 'grid') search.set('vista', next.view)
 
   const query = search.toString()
@@ -84,6 +91,7 @@ export function hasActiveFilters(params: ShopParams): boolean {
     Boolean(params.q) ||
     Boolean(params.category) ||
     Boolean(params.collection) ||
-    params.colors.length > 0
+    params.colors.length > 0 ||
+    params.soldOut
   )
 }

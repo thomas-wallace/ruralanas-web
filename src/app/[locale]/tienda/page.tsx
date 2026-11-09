@@ -54,6 +54,8 @@ export default async function ShopPage({
       collection: shopParams.collection,
       search: shopParams.q,
       colors: shopParams.colors,
+      // Lo agotado no se muestra salvo que se pida con "Ver agotados".
+      onlyAvailable: !shopParams.soldOut,
     }),
     catalog.listCategories(locale),
     catalog.listProducts({ locale }),
@@ -61,13 +63,29 @@ export default async function ShopPage({
     Promise.all(
       COLLECTIONS.map(async (collection) => ({
         collection,
-        count: (await catalog.listProducts({ locale, collection })).length,
+        count: (await catalog.listProducts({ locale, collection, onlyAvailable: !shopParams.soldOut }))
+          .length,
       })),
     ),
   ])
 
+  // Los contadores (piezas, categorías, colores) cuentan lo que se ve: sin las
+  // agotadas, salvo que estén a la vista.
+  const available = allProducts.filter((product) => product.availability.state !== 'sold_out')
+  const soldOutCount = allProducts.length - available.length
+  const visible = shopParams.soldOut ? allProducts : available
+  const categoryFacets = categories
+    .map((category) => ({
+      ...category,
+      count: visible.filter((product) =>
+        (product.categories ?? [product.category]).some((item) => item.slug === category.slug),
+      ).length,
+    }))
+    // Una categoría con todo agotado desaparece, salvo que sea la elegida.
+    .filter((category) => category.count > 0 || category.slug === shopParams.category)
+
   const collections = collectionSizes.filter((item) => item.count > 0)
-  const colors = colorFacets(allProducts)
+  const colors = colorFacets(visible)
   const activeFilters = shopParams.colors.length
   const onlySearch =
     Boolean(shopParams.q) && !shopParams.category && !shopParams.collection && activeFilters === 0
@@ -121,7 +139,7 @@ export default async function ShopPage({
             {dict.shop.lead}
           </p>
           <div className="mt-6 font-sans text-[11px] tracking-[0.18em] text-olive uppercase">
-            {allProducts.length} {dict.shop.pieces} · {dict.shop.shipping} · {dict.shop.currency} <CurrentCurrency />
+            {visible.length} {dict.shop.pieces} · {dict.shop.shipping} · {dict.shop.currency} <CurrentCurrency />
           </div>
 
           {/* Las selecciones: el primer nivel de la tienda, antes que categoría
@@ -158,9 +176,9 @@ export default async function ShopPage({
               <CategoryOptions
                 locale={locale}
                 dict={dict}
-                categories={categories}
+                categories={categoryFacets}
                 params={shopParams}
-                totalCount={allProducts.length}
+                totalCount={visible.length}
               />
             </ToolbarMenu>
 
@@ -172,6 +190,33 @@ export default async function ShopPage({
               >
                 <ColorOptions locale={locale} dict={dict} params={shopParams} colors={colors} />
               </ToolbarMenu>
+            )}
+
+            {/* Agotados: fuera por defecto; un enlace los suma o los saca. */}
+            {soldOutCount > 0 && (
+              <Link
+                href={shopHref(locale, shopParams, { soldOut: !shopParams.soldOut })}
+                aria-pressed={shopParams.soldOut}
+                className={`flex items-center gap-2 rounded-sm border px-3 py-2 font-sans text-[11px] tracking-[0.06em] uppercase transition-colors ${
+                  shopParams.soldOut
+                    ? 'border-earth bg-earth text-paper'
+                    : 'border-earth/30 text-earth hover:border-earth'
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  className={`flex h-3 w-3 items-center justify-center border ${
+                    shopParams.soldOut ? 'border-paper' : 'border-earth/50'
+                  }`}
+                >
+                  {shopParams.soldOut && (
+                    <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M2 6.5 5 9.5 10 3" />
+                    </svg>
+                  )}
+                </span>
+                {dict.shop.showSoldOut} ({soldOutCount})
+              </Link>
             )}
           </div>
 

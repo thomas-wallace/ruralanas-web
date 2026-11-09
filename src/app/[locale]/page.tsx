@@ -16,7 +16,8 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   const { catalogPeek } = homeContent
 
   const [featured, decoProduct, latest] = await Promise.all([
-    catalog.listProducts({ locale, sort: 'featured', limit: catalogPeek.limit }),
+    // Sin piezas agotadas, igual que la tienda por defecto.
+    catalog.listProducts({ locale, sort: 'featured', limit: catalogPeek.limit, onlyAvailable: true }),
     catalog.getProduct(catalogPeek.lines.deco.productSlug, locale),
     // Si WordPress no responde, la home se sirve igual, sin la sección de noticias.
     blog.listPosts({ locale, perPage: homeContent.news.limit }).catch((error: unknown) => {

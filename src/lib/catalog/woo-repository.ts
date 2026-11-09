@@ -469,7 +469,8 @@ function matches(product: WooProduct, query: ProductQuery): boolean {
   // La técnica todavía no existe en Woo: si se filtra por ella no hay nada que
   // ofrecer, y decirlo con una grilla vacía es más honesto que ignorar el filtro.
   if (query.techniques?.length) return false
-  if (query.onlyAvailable && !product.is_in_stock) return false
+  // Mismo criterio que la etiqueta "Agotado" de la tarjeta (`toAvailability`).
+  if (query.onlyAvailable && toAvailability(product).state === 'sold_out') return false
   if (query.colors?.length) {
     const own = new Set(colorOf(product).terms.map((term) => term.slug))
     if (!query.colors.some((color) => own.has(color))) return false

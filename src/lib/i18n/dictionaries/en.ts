@@ -168,6 +168,7 @@ export const en: Dictionary = {
     categories: 'Categories',
     all: 'All',
     color: 'Colour',
+    showSoldOut: 'Show sold out',
     collections: 'Collections',
     collection: {
       'best-sellers': 'Best Sellers',

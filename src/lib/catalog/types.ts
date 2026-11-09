@@ -201,7 +201,11 @@ export interface ProductQuery {
   colors?: string[]
   /** Sólo las piezas de esa selección, en el orden de la selección. */
   collection?: CollectionSlug
-  /** `true` esconde lo agotado. Por defecto se muestra todo. */
+  /**
+   * `true` esconde lo agotado. La tienda lo pide por defecto y lo muestra sólo
+   * si el visitante elige "Ver agotados"; la ficha de una pieza agotada sigue
+   * existiendo, con su aviso de reposición.
+   */
   onlyAvailable?: boolean
   sort?: SortOrder
   search?: string

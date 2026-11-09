@@ -171,6 +171,7 @@ export const es = {
     categories: 'Categorías',
     all: 'Todos',
     color: 'Color',
+    showSoldOut: 'Ver agotados',
     collections: 'Selecciones',
     collection: {
       'best-sellers': 'Best Sellers',

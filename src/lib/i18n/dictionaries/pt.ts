@@ -168,6 +168,7 @@ export const pt: Dictionary = {
     categories: 'Categorias',
     all: 'Todos',
     color: 'Cor',
+    showSoldOut: 'Ver esgotados',
     collections: 'Seleções',
     collection: {
       'best-sellers': 'Mais vendidos',
