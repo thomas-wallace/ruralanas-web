@@ -20,7 +20,7 @@ function unauthorized() {
 
 export async function GET(request: Request) {
   if (!isAdmin(request)) return unauthorized()
-  return NextResponse.json({ campaigns: await getAllCampaigns() })
+  return NextResponse.json({ campaigns: await getAllCampaigns({ fresh: true }) })
 }
 
 export async function PUT(request: Request) {

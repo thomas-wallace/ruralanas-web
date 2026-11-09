@@ -9,7 +9,7 @@
 import { NextResponse } from 'next/server'
 
 import { isAdmin } from '@/lib/admin/session'
-import { mediaUrl, saveMedia, type MediaExtension } from '@/lib/content-store'
+import { saveMedia, type MediaExtension } from '@/lib/content-store'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -58,6 +58,14 @@ export async function POST(request: Request) {
     )
   }
 
-  const saved = await saveMedia(data, extension)
-  return NextResponse.json({ src: mediaUrl(saved), kind: video ? 'video' : 'image' })
+  try {
+    const src = await saveMedia(data, extension, file.name)
+    return NextResponse.json({ src, kind: video ? 'video' : 'image' })
+  } catch (error) {
+    console.error('[admin/medios] POST', error)
+    return NextResponse.json(
+      { error: `No se pudo guardar «${file.name}». ${(error as Error).message}` },
+      { status: 502 },
+    )
+  }
 }

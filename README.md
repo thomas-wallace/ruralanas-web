@@ -44,7 +44,7 @@ pisan. Parar el dev primero, o compilar desde otra copia del repo.
 | `/[locale]/nosotros/[slug]` | Secciones de Nosotros: `materiales`, `artesanas`, `procesos`, `sustentabilidad` y `en-el-mundo` (el mapa de países alcanzados, que antes estaba en la home) |
 | `/[locale]/noticias` | Blog: notas publicadas en WordPress, con filtro por tema y paginación |
 | `/[locale]/noticias/[slug]` | Nota completa, con el HTML de WordPress saneado y el diseño del sitio |
-| `/[locale]/tienda` | Listado con selecciones (Best Sellers, Exclusivos, Carryover), filtros por categoría y color, y dos vistas (grilla y lista). Sin orden por precio |
+| `/[locale]/tienda` | Listado con selecciones (Best Sellers, Exclusivos, Carryover), filtros por categoría y color, y dos vistas (grilla y lista). Sin orden por precio. Las piezas agotadas no se muestran salvo con "Ver agotados" (`?agotados=1`); tampoco aparecen en el adelanto del catálogo de la home |
 | `/[locale]/tienda/[slug]` | Ficha con galería con zoom (producto, en uso, textura), caja de compra, bloque de proceso, ficha técnica, cuidados, relacionados y "Completá el look" |
 | `/[locale]/carrito` | Carrito propio, con cantidades limitadas por el stock real y totales del motor |
 | `/[locale]/checkout` | Checkout híbrido: contacto, envío, tarifa elegida y resumen con total real antes de pagar |
@@ -53,8 +53,9 @@ pisan. Parar el dev primero, o compilar desde otra copia del repo.
 | `/[locale]/admin/resenas` | Admin interno: cargar reseñas, protegido por contraseña |
 | `/[locale]/admin/nosotros` | Admin: línea de tiempo de «Nuestra historia» |
 | `/[locale]/admin/campanas` | Admin: crear, ordenar y publicar campañas; subir fotos y videos |
+| `/[locale]/admin/mapa` | Admin: países del mapa de Nosotros (los de las ventas se suman solos) y locales propios |
 | `/api/cart` · `/api/checkout` · `/api/orders` | Capa BFF del motor transaccional |
-| `/api/admin/*` | Sesión del admin, reseñas, línea de tiempo, campañas y subida de medios |
+| `/api/admin/*` | Sesión del admin, reseñas, línea de tiempo, campañas, mapa y subida de medios |
 | `/api/medios/[archivo]` | Fotos y videos subidos desde el admin, con pedidos por rango para el video |
 | `/api/revalidate` | Invalida caché por etiqueta: `catalog` tras sincronizar stock, `blog` tras publicar una nota |
 | `/sitemap.xml` · `/robots.txt` | Generados: productos, Nosotros y notas en los tres idiomas |
@@ -79,7 +80,7 @@ Ningún texto, foto ni URL vive dentro de un componente. Cada cosa tiene un úni
 |---|---|
 | Textos de interfaz y de la home (ES/EN/PT) | `src/lib/i18n/dictionaries/` |
 | Fotos, video, producto destacado y cantidades de la home | `src/content/home.ts` |
-| Países del mapa de alcance | `src/content/world-reach.ts` |
+| Países del mapa de alcance | Admin → Mapa (la lista inicial está en `src/content/world-reach.ts`) |
 | Páginas de Nosotros: secciones, bloques y fotos | `src/content/about/{es,en,pt}.ts` |
 | Línea de tiempo de «Nuestra historia» | Admin → Nosotros (no se toca código) |
 | Campañas, sus fotos y videos | Admin → Campañas (no se toca código) |
@@ -187,10 +188,15 @@ Contrastes de `earth` sobre cada fondo, por si hace falta decidir rápido: **8,3
 Ojo con un falso amigo: `merlot` sigue existiendo en `src/lib/catalog/colors.ts`, pero ahí
 es el color de una lana teñida —un dato de producto—, no un color de interfaz.
 
-**Marcar un país en el mapa** es agregar su código ISO alfa-2 a `shipped` en
-`src/content/world-reach.ts`, o sumarlo a `stores` si además hay local. Nada más: el mapa,
-la leyenda y el conteo salen de ahí. El dato es **provisional** hasta que lo confirme el
-negocio; el mapa es una afirmación comercial, no una lista de deseos.
+**El mapa se arma solo con las ventas.** Entra todo país de la lista cargada en Admin →
+Mapa más todo país con un pedido pagado: el plugin `wordpress/ruralanas-contenido` anota el
+país de envío de cada pedido que pasa a "procesando" o "completado", sin que nadie lo cargue.
+Desde el admin se agrega un país a mano, se oculta uno (también uno con ventas: si sólo se lo
+sacara de la lista, el próximo pedido lo volvería a poner), se editan los locales y se
+revisan una vez los pedidos de antes de instalar el plugin. La lista inicial —la que manda
+mientras nadie guarde— es `src/content/world-reach.ts`. Las ventas sólo se leen con
+`CONTENT_STORE=wordpress`; un país nuevo aparece en el mapa en menos de una hora, o al
+instante si WordPress tiene `RURALANAS_TIENDA_URL` y `RURALANAS_REVALIDATE_TOKEN`.
 
 El mapa en sí —`src/lib/world/geometry.ts`— es un archivo generado, no se edita a mano. Lo
 produce `node scripts/generar-mapa-mundial.mjs` desde Natural Earth 110m, y sólo hay que
@@ -200,9 +206,9 @@ no tiene ninguna dependencia de UI, y el SVG lo arma el servidor, de modo que lo
 siluetas viajan en el HTML y **nunca** en el bundle de JavaScript. Lo único que se hidrata
 es la etiqueta que sigue al mouse.
 
-A esa resolución no existen los micro-estados (Singapur, Malta, Andorra). Si se envía a uno,
-va en `shippedNodes` con sus coordenadas y se dibuja como nodo; si alguien lo olvida, la
-consola de desarrollo lo avisa.
+A esa resolución no existen los micro-estados (Singapur, Malta, Andorra). Se dibujan como
+nodo con las coordenadas de `COUNTRY_NODES` (`src/content/world-reach.ts`), que ya trae los
+habituales; si llega una venta de uno que falte, la consola de desarrollo lo avisa.
 
 **Publicar una nota** se hace en WordPress, como siempre. Aparece en menos de una hora, o
 al instante con `POST /api/revalidate { "tags": ["blog"] }`. El HTML de Elementor se limpia
@@ -335,14 +341,23 @@ HubSpot siga siendo el único maestro del contacto.
 
 **Contenido editable desde el admin** — `src/lib/content-store/`
 
-La línea de tiempo de Nosotros y las campañas se guardan como JSON en el disco del
-servidor (`CONTENT_DATA_DIR`, por defecto `.data/content`), y los archivos subidos en su
-subcarpeta `media/`. Mientras nadie guarde, la línea de tiempo sale de
-`src/content/about/` y las campañas arrancan con un borrador hecho con la sesión de fotos
-con modelos de la biblioteca de WordPress. **Requisito de despliegue:** esa carpeta tiene
-que persistir entre despliegues y entrar en el backup. En una plataforma sin disco
-persistente hay que cambiar la implementación de `content-store` por una base o un
-almacenamiento de objetos; el resto no se entera.
+La línea de tiempo de Nosotros, las campañas y el mapa se guardan como documentos JSON en
+uno de dos lugares, según `CONTENT_STORE`:
+
+- `wordpress` — **el de producción y Vercel.** En la base del WordPress de ruralanas.com,
+  por el plugin `wordpress/ruralanas-contenido`; las fotos y videos van a su biblioteca de
+  medios. Entra en el mismo backup que los pedidos y no necesita disco en el servidor de la
+  tienda. La tienda se conecta con un usuario de rol «Ruralanas · Contenido de la tienda» y
+  una contraseña de aplicación (`CONTENT_WP_USER`, `CONTENT_WP_APP_PASSWORD`); ese rol sólo
+  puede tocar estos documentos y subir archivos. Instalación en
+  `wordpress/ruralanas-contenido/README.md`.
+- `file` (por defecto) — en el disco (`CONTENT_DATA_DIR`, por defecto `.data/content`), y
+  los archivos subidos en `media/`. Sirve en desarrollo; en un servidor propio, la carpeta
+  tiene que persistir entre despliegues.
+
+Mientras nadie guarde, la línea de tiempo sale de `src/content/about/`, el mapa de
+`src/content/world-reach.ts` y las campañas arrancan con un borrador hecho con la sesión de
+fotos con modelos de la biblioteca de WordPress.
 
 ## Decisiones tomadas al portar
 

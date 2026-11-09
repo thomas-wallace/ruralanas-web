@@ -24,7 +24,7 @@ function unauthorized() {
 
 export async function GET(request: Request) {
   if (!isAdmin(request)) return unauthorized()
-  return NextResponse.json({ entries: await getTimeline() })
+  return NextResponse.json({ entries: await getTimeline({ fresh: true }) })
 }
 
 export async function PUT(request: Request) {

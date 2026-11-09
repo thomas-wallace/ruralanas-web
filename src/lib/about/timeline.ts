@@ -52,8 +52,9 @@ function seed(): TimelineEntry[] {
   })
 }
 
-export async function getTimeline(): Promise<TimelineEntry[]> {
-  return (await readDocument<TimelineEntry[]>(DOCUMENT)) ?? seed()
+/** `fresh`: lo guardado ahora mismo, sin caché (para el admin). */
+export async function getTimeline(options?: { fresh?: boolean }): Promise<TimelineEntry[]> {
+  return (await readDocument<TimelineEntry[]>(DOCUMENT, options)) ?? seed()
 }
 
 // ── Validación de lo que llega del admin ─────────────────────────────────────

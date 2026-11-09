@@ -11,6 +11,7 @@ export const ADMIN_SECTIONS = [
   { slug: 'resenas', label: 'Reseñas' },
   { slug: 'nosotros', label: 'Nosotros' },
   { slug: 'campanas', label: 'Campañas' },
+  { slug: 'mapa', label: 'Mapa' },
 ] as const
 
 export type AdminSection = (typeof ADMIN_SECTIONS)[number]['slug']

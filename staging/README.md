@@ -60,7 +60,22 @@ tiempo que `npm run dev` sin pisarse.
    All-in-One WP Migration, WP Migrate DB y EWWW, y borrar las opciones
    `woocommerce_ppcp_api_settings`, `woocommerce-ppcp-settings`,
    `woocommerce_paypal_settings` y el transitorio `ppcp-paypal-bearer`.
-6. `docker compose up -d` y `npm run staging:web`.
+6. `docker compose up -d`.
+7. Activar el plugin de contenido del admin y crear su usuario (la contraseña de
+   aplicación queda en `data/web.local.env`, fuera de git):
+   ```bash
+   docker compose cp setup-contenido.php wordpress:/tmp/setup-contenido.php
+   MSYS_NO_PATHCONV=1 docker compose exec -T wordpress php -d memory_limit=1024M /tmp/setup-contenido.php > data/web.local.env
+   ```
+8. `npm run staging:web`.
+
+## Contenido del admin
+
+La tienda de la copia guarda lo del admin (línea de tiempo, campañas, mapa) en el
+WordPress de la copia, igual que va a hacer en producción
+(`CONTENT_STORE=wordpress`, plugin `wordpress/ruralanas-contenido`, montado en
+vivo desde el repo). Las fotos subidas quedan en la biblioteca de la copia y se
+ven en `localhost:3020/wp-content/uploads/…`.
 
 ## Lo que ya se probó (07-11-2026)
 
@@ -70,3 +85,12 @@ tiempo que `npm run dev` sin pisarse.
   vacío; no se podía ver sin un origen compartido.
 - Pedido #6127 por transferencia: creado, stock descontado (185 → 184), mail al
   cliente y aviso a la tienda atrapados en Mailpit.
+
+## Lo que se probó el 09-11-2026
+
+- Admin → Mapa guardando en el WordPress de la copia: la lista, los ocultos y
+  los locales se guardan y el mapa público cambia al instante.
+- Pedido #6128 pasado a "procesando" con envío a Chile: el país quedó anotado
+  solo. La revisión de pedidos anteriores encontró Francia, Uruguay, Estados
+  Unidos y Polonia (este último no estaba en la lista y entró por ventas).
+- Foto subida desde el admin: va a la biblioteca de medios y `next/image` la sirve.

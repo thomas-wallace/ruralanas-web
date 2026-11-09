@@ -8,16 +8,21 @@
  */
 
 import { spawn } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const here = dirname(fileURLToPath(import.meta.url))
 const env = { ...process.env }
 
-for (const line of readFileSync(join(here, 'web.env'), 'utf8').split(/\r?\n/)) {
-  const match = /^([A-Z0-9_]+)=(.*)$/.exec(line.trim())
-  if (match) env[match[1]] = match[2]
+// `data/web.local.env` (fuera de git) guarda lo que no se versiona: la
+// contraseña de aplicación del usuario de contenido de la copia.
+for (const file of [join(here, 'web.env'), join(here, 'data', 'web.local.env')]) {
+  if (!existsSync(file)) continue
+  for (const line of readFileSync(file, 'utf8').split(/\r?\n/)) {
+    const match = /^([A-Z0-9_]+)=(.*)$/.exec(line.trim())
+    if (match) env[match[1]] = match[2]
+  }
 }
 
 const next = spawn('npx', ['next', 'dev', '-p', '3020'], {

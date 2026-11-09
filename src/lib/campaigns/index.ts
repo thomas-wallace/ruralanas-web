@@ -10,6 +10,7 @@ import 'server-only'
  * De dónde puede venir cada foto o video (se valida al guardar):
  *   · subido desde el admin → `/api/medios/…`
  *   · la biblioteca de medios de ruralanas.com → `https://ruralanas.com/wp-content/uploads/…`
+ *     (adonde también va lo subido desde el admin con `CONTENT_STORE=wordpress`)
  *   · un video de YouTube o Vimeo, por su URL
  * Nada más: `next/image` sólo optimiza orígenes declarados, y un enlace a
  * cualquier sitio sería una foto que mañana puede desaparecer.
@@ -17,7 +18,7 @@ import 'server-only'
 
 import { randomUUID } from 'node:crypto'
 
-import { readDocument, writeDocument } from '@/lib/content-store'
+import { readDocument, uploadOrigins, writeDocument } from '@/lib/content-store'
 import { locales, type Locale } from '@/lib/i18n/config'
 import { slugify } from '@/lib/slug'
 
@@ -109,8 +110,9 @@ function seed(): Campaign[] {
   ]
 }
 
-export async function getAllCampaigns(): Promise<Campaign[]> {
-  return (await readDocument<Campaign[]>(DOCUMENT)) ?? seed()
+/** `fresh`: lo guardado ahora mismo, sin caché (para el admin). */
+export async function getAllCampaigns(options?: { fresh?: boolean }): Promise<Campaign[]> {
+  return (await readDocument<Campaign[]>(DOCUMENT, options)) ?? seed()
 }
 
 export async function saveAllCampaigns(campaigns: Campaign[]): Promise<void> {
@@ -165,14 +167,19 @@ export function videoSource(src: string): VideoSource | null {
   if (vimeo?.[1]) return { type: 'vimeo', id: vimeo[1] }
 
   if (/^\/api\/medios\/[a-f0-9-]{36}\.(mp4|webm)$/.test(src)) return { type: 'file', src }
-  if (src.startsWith(`${UPLOADS}/`) && /\.(mp4|webm)$/i.test(src)) return { type: 'file', src }
+  if (fromLibrary(src) && /\.(mp4|webm)$/i.test(src)) return { type: 'file', src }
   return null
+}
+
+/** De la biblioteca de medios de WordPress (la real o, en la copia, la suya). */
+function fromLibrary(src: string): boolean {
+  return uploadOrigins().some((origin) => src.startsWith(origin))
 }
 
 function imageAllowed(src: string): boolean {
   return (
     /^\/api\/medios\/[a-f0-9-]{36}\.(jpg|png|webp)$/.test(src) ||
-    (src.startsWith(`${UPLOADS}/`) && /\.(jpe?g|png|webp)$/i.test(src))
+    (fromLibrary(src) && /\.(jpe?g|png|webp)$/i.test(src))
   )
 }
 

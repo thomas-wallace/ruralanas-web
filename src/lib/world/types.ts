@@ -2,11 +2,9 @@
  * Modelo del alcance de Ruralanas en el mundo: a dónde llegaron las prendas y
  * dónde hay local propio.
  *
- * Hoy el dato se declara a mano en `src/content/world-reach.ts`. El destino es
- * que lo calcule el servicio de integración a partir de los pedidos de Dolibarr
- * (09-plataforma/servicio-integracion.md), sin tocar un solo componente: por eso
- * `getWorldReach()` ya devuelve una promesa y por eso existen `orders` y
- * `since`, que el origen manual deja vacíos.
+ * El dato junta la lista que se carga en el admin (`/admin/mapa`) con los
+ * países de los pedidos pagados, que WordPress anota solo. Ver
+ * `src/lib/world/reach-store.ts`.
  */
 
 /** ISO 3166-1 alfa-2, el mismo código que usa el checkout. */
@@ -37,9 +35,7 @@ export interface ReachCountry {
    * Andorra y demás micro-estados).
    */
   node?: ReachPoint
-  /** Pedidos acumulados. Vacío mientras el origen sea manual. */
-  orders?: number
-  /** Fecha del primer envío, ISO. Vacía mientras el origen sea manual. */
+  /** Fecha del primer pedido pagado, ISO. Vacía si el país sólo está en la lista a mano. */
   since?: string
 }
 

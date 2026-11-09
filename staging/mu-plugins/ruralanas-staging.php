@@ -31,6 +31,22 @@ add_filter('upload_dir', function ($dirs) {
 	return $dirs;
 });
 
+// Lo que se sube en la copia (desde el admin de la tienda, por ejemplo) no
+// existe en el sitio real: se marca al subirlo y su dirección queda local.
+add_action('add_attachment', function ($id) {
+	update_post_meta($id, '_ruralanas_staging_local', 1);
+});
+add_filter('wp_get_attachment_url', function ($url, $id) {
+	if (!get_post_meta($id, '_ruralanas_staging_local', true)) {
+		return $url;
+	}
+	return str_replace('https://ruralanas.com/wp-content/uploads', home_url('/wp-content/uploads'), $url);
+}, 10, 2);
+
+// WordPress sólo habilita las contraseñas de aplicación con HTTPS. La copia
+// corre en http://localhost y la tienda entra con una (CONTENT_WP_USER).
+add_filter('wp_is_application_passwords_available', '__return_true');
+
 // Fuera de buscadores, pase lo que pase con los ajustes importados.
 add_filter('pre_option_blog_public', fn () => '0');
 

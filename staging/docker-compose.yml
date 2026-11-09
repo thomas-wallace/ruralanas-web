@@ -78,6 +78,8 @@ services:
       - ./mu-plugins:/var/www/html/wp-content/mu-plugins
       # El tema de checkout con el diseño de la tienda nueva, en vivo desde el repo.
       - ../wordpress/ruralanas-checkout:/var/www/html/wp-content/themes/ruralanas-checkout:ro
+      # El plugin que guarda el contenido del admin y anota los países de las ventas.
+      - ../wordpress/ruralanas-contenido:/var/www/html/wp-content/plugins/ruralanas-contenido:ro
 
   # Atrapa todos los mails que manda WordPress. Interfaz en http://localhost:8025
   mailpit:
