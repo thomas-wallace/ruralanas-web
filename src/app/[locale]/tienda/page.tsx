@@ -171,7 +171,7 @@ export default async function ShopPage({
                 vista, es la única forma de saber qué se está filtrando. */}
             <ToolbarMenu
               label={activeCategory ? activeCategory.name : dict.shop.categories}
-              active={Boolean(activeCategory)}
+              active={Boolean(activeCategory) || shopParams.soldOut}
             >
               <CategoryOptions
                 locale={locale}
@@ -179,6 +179,7 @@ export default async function ShopPage({
                 categories={categoryFacets}
                 params={shopParams}
                 totalCount={visible.length}
+                soldOutCount={soldOutCount}
               />
             </ToolbarMenu>
 
@@ -192,32 +193,6 @@ export default async function ShopPage({
               </ToolbarMenu>
             )}
 
-            {/* Agotados: fuera por defecto; un enlace los suma o los saca. */}
-            {soldOutCount > 0 && (
-              <Link
-                href={shopHref(locale, shopParams, { soldOut: !shopParams.soldOut })}
-                aria-pressed={shopParams.soldOut}
-                className={`flex items-center gap-2 rounded-sm border px-3 py-2 font-sans text-[11px] tracking-[0.06em] uppercase transition-colors ${
-                  shopParams.soldOut
-                    ? 'border-earth bg-earth text-paper'
-                    : 'border-earth/30 text-earth hover:border-earth'
-                }`}
-              >
-                <span
-                  aria-hidden="true"
-                  className={`flex h-3 w-3 items-center justify-center border ${
-                    shopParams.soldOut ? 'border-paper' : 'border-earth/50'
-                  }`}
-                >
-                  {shopParams.soldOut && (
-                    <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M2 6.5 5 9.5 10 3" />
-                    </svg>
-                  )}
-                </span>
-                {dict.shop.showSoldOut} ({soldOutCount})
-              </Link>
-            )}
           </div>
 
           {/* En móvil el buscador va primero y a todo el ancho; desde `sm`,

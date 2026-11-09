@@ -22,12 +22,15 @@ export function CategoryOptions({
   categories,
   params,
   totalCount,
+  soldOutCount = 0,
 }: {
   locale: Locale
   dict: Dictionary
   categories: CategoryFacet[]
   params: ShopParams
   totalCount: number
+  /** Piezas agotadas que hoy no se muestran. Con 0 no aparece la opción. */
+  soldOutCount?: number
 }) {
   const row = (active: boolean) =>
     `flex w-full items-center justify-between rounded-sm px-3 py-2.5 text-left text-[13px] transition-colors ${
@@ -59,6 +62,29 @@ export function CategoryOptions({
           </Link>
         )
       })}
+
+      {/* Agotados: fuera por defecto y al fondo del menú, discreto a propósito. */}
+      {soldOutCount > 0 && (
+        <Link
+          href={shopHref(locale, params, { soldOut: !params.soldOut })}
+          aria-pressed={params.soldOut}
+          className="mt-2 flex items-center gap-2 border-t border-earth/10 px-3 pt-3 pb-1.5 font-sans text-[11px] tracking-[0.06em] text-slate uppercase transition-colors hover:text-earth"
+        >
+          <span
+            aria-hidden="true"
+            className={`flex h-3 w-3 items-center justify-center border ${
+              params.soldOut ? 'border-earth bg-earth text-paper' : 'border-earth/40'
+            }`}
+          >
+            {params.soldOut && (
+              <svg width="8" height="8" viewBox="0 0 12 12" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M2 6.5 5 9.5 10 3" />
+              </svg>
+            )}
+          </span>
+          {dict.shop.showSoldOut} ({soldOutCount})
+        </Link>
+      )}
     </div>
   )
 }
